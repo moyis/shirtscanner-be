@@ -40,7 +40,11 @@ jobs:
 
       - name: Build and Test
         run: |
-          ./gradlew bootBuildImage --imageName registry.fly.io/shirtscrapper-be:${{ steps.version.outputs.version }} --publishImage
+          ./gradlew bootBuildImage --imageName registry.fly.io/shirtscrapper-be:${{ steps.version.outputs.version }}
+
+      - name: Publish Image
+        run: |
+          docker push registry.fly.io/shirtscrapper-be:${{ steps.version.outputs.version }}
 
       - name: Deploy
         env:
