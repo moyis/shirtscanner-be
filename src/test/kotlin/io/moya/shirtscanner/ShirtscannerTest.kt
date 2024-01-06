@@ -1,6 +1,6 @@
-package io.moya.shirts
+package io.moya.shirtscanner
 
-import io.moya.shirts.testsupport.AbstractIntegrationTest
+import io.moya.shirtscanner.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import org.junit.jupiter.api.Test

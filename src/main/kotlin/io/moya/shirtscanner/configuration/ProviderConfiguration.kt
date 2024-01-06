@@ -1,42 +1,42 @@
 package io.moya.shirtscanner.configuration
 
+import io.moya.shirtscanner.services.providers.ProductProvider
+import io.moya.shirtscanner.services.cache.CacheService
 import io.moya.shirtscanner.services.fetchers.DefaultFetcher
-import io.moya.shirtscanner.services.ProductProvider
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@EnableConfigurationProperties(value = [ProviderConfigurationProperties::class])
 class ProviderConfiguration(
     private val providerConfigurationProperties: ProviderConfigurationProperties,
+    private val cacheService: CacheService,
 ) {
 
     @Bean
     fun fiveBoundlessFetcher() = with(providerConfigurationProperties.fiveBoundless) {
-        ProductProvider(DefaultFetcher(url), metadata)
+        ProductProvider(DefaultFetcher(url), metadata, cacheService)
     }
 
     @Bean
     fun grkitsFetcher() = with(providerConfigurationProperties.grkits) {
-        ProductProvider(DefaultFetcher(url), metadata)
+        ProductProvider(DefaultFetcher(url), metadata, cacheService)
     }
 
     @Bean
     fun kitsggFetcher() = with(providerConfigurationProperties.kitsgg) {
-        ProductProvider(DefaultFetcher(url), metadata)
+        ProductProvider(DefaultFetcher(url), metadata, cacheService)
     }
 
     @Bean
     fun aclotzoneFetcher() = with(providerConfigurationProperties.aclotzone) {
-        ProductProvider(DefaultFetcher(url), metadata)
+        ProductProvider(DefaultFetcher(url), metadata, cacheService)
     }
 
     @Bean
     fun fofoshopFetcher() = with(providerConfigurationProperties.fofoshop) {
-        ProductProvider(DefaultFetcher(url), metadata)
+        ProductProvider(DefaultFetcher(url), metadata, cacheService)
     }
 }
 
