@@ -29,7 +29,6 @@ val jsoupVersion = "1.17.2"
 val kotlinLoggingVersion = "3.0.5"
 val wiremockVersion = "3.3.1"
 val restAssuredVersion = "5.4.0"
-val testcontainersRedisVersion = "1.6.4"
 
 dependencies {
     //Spring
@@ -52,8 +51,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
     testImplementation("io.rest-assured:kotlin-extensions:$restAssuredVersion")
-    testImplementation("org.springframework.boot:spring-boot-testcontainers")
-    testImplementation("com.redis.testcontainers:testcontainers-redis-junit:$testcontainersRedisVersion")
 }
 
 tasks.withType<KotlinCompile> {

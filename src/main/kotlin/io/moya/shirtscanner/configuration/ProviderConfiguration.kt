@@ -1,7 +1,7 @@
 package io.moya.shirtscanner.configuration
 
-import io.moya.shirtscanner.services.providers.ProductProvider
 import io.moya.shirtscanner.services.fetchers.DefaultFetcher
+import io.moya.shirtscanner.services.providers.ProductProvider
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
