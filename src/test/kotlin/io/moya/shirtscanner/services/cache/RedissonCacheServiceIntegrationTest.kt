@@ -27,7 +27,7 @@ class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
         @Test
         fun `value is saved in cache`() {
             val expectedValue = "My Value"
-            val result = subject.getAndSetIfAbsent(CACHE_KEY) { expectedValue }
+            val result = subject.computeIfAbsent(CACHE_KEY) { expectedValue }
             assertThat(result).isEqualTo(expectedValue)
             await().atMost(Duration.ofSeconds(1))
                 .pollInterval(Duration.ofMillis(100))
@@ -48,7 +48,7 @@ class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
 
         @Test
         fun `provider function is not called`() {
-            val result = subject.getAndSetIfAbsent(CACHE_KEY) { "My New Value" }
+            val result = subject.computeIfAbsent(CACHE_KEY) { "My New Value" }
             assertThat(result).isEqualTo(persistedValue)
         }
     }

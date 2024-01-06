@@ -4,7 +4,6 @@ import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 import java.time.Duration
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 @Service
 class RedissonCacheService(
@@ -13,9 +12,9 @@ class RedissonCacheService(
 
     private val executorService = Executors.newVirtualThreadPerTaskExecutor()
 
-    override fun <T> getAndSetIfAbsent(key: String, provider: () -> T) : T {
+    override fun <T> computeIfAbsent(key: String, remappingFunction: (String) -> T) : T {
         val bucket = redissonClient.getBucket<T?>(key)
-        return bucket.get() ?: provider.invoke()
+        return bucket.get() ?: remappingFunction.invoke(key)
             .also { executorService.execute { bucket.set(it, Duration.ofHours(6)) } }
     }
 }

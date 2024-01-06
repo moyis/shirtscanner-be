@@ -34,7 +34,7 @@ class ProductProviderTest {
 }
 
 private class MockCacheService : CacheService {
-    override fun <T> getAndSetIfAbsent(key: String, provider: () -> T) = provider.invoke()
+    override fun <T> computeIfAbsent(key: String, remappingFunction: (String) -> T) = remappingFunction.invoke(key)
 }
 
 private class EmptyProductFetcher(private val url: String) : ProductsFetcher {

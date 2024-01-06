@@ -1,5 +1,5 @@
 package io.moya.shirtscanner.services.cache
 
 interface CacheService {
-    fun <T> getAndSetIfAbsent(key: String, provider: () -> T) : T
+    fun <T> computeIfAbsent(key: String, remappingFunction: (String) -> T) : T
 }
