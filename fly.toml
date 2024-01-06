@@ -18,3 +18,13 @@ primary_region = "ams"
   cpu_kind = "shared"
   cpus = 1
   memory_mb = 256
+
+[[services.http_checks]]
+  interval = 10000
+  grace_period = "5s"
+  method = "get"
+  path = "/actuator/health"
+  protocol = "http"
+  restart_limit = 0
+  timeout = 2000
+  tls_skip_verify = false
