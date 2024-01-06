@@ -4,12 +4,14 @@ plugins {
     val kotlinVersion = "1.9.22"
     val springBootVersion = "3.2.1"
     val dependencyManagementVersion = "1.1.4"
+    val graalvmNativeVersion = "0.9.28"
     val testLoggerVersion = "4.0.0"
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     id("org.springframework.boot") version springBootVersion
     id("io.spring.dependency-management") version dependencyManagementVersion
+    id("org.graalvm.buildtools.native") version graalvmNativeVersion
     id("com.adarshr.test-logger") version testLoggerVersion
 }
 
@@ -26,6 +28,7 @@ repositories {
 val jsoupVersion = "1.17.2"
 val kotlinLoggingVersion = "3.0.5"
 val wiremockVersion = "3.3.1"
+val restAssuredVersion = "5.4.0"
 
 dependencies {
     //Spring
@@ -44,14 +47,10 @@ dependencies {
     //Scraping
     implementation("org.jsoup:jsoup:$jsoupVersion")
 
-    //Cache
-    implementation("org.springframework.boot:spring-boot-starter-cache")
-    implementation("com.github.ben-manes.caffeine:caffeine")
-
     //Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
-    testImplementation("io.rest-assured:kotlin-extensions:5.4.0")
+    testImplementation("io.rest-assured:kotlin-extensions:$restAssuredVersion")
 }
 
 tasks.withType<KotlinCompile> {

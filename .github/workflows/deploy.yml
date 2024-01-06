@@ -41,6 +41,10 @@ jobs:
 
       - name: Build and Test
         run: |
+          ./gradlew build
+
+      - name: Build Docker Image
+        run: |
           ./gradlew bootBuildImage --imageName registry.fly.io/shirtscanner-be:${{ steps.version.outputs.version }}
 
       - name: Publish Image

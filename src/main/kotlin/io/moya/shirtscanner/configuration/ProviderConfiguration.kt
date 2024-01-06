@@ -4,6 +4,7 @@ import io.moya.shirtscanner.services.fetchers.DefaultFetcher
 import io.moya.shirtscanner.services.ProductProvider
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -42,16 +43,22 @@ class ProviderConfiguration(
 
 @ConfigurationProperties("providers")
 data class ProviderConfigurationProperties(
+    @NestedConfigurationProperty
     val fiveBoundless: ProviderData,
+    @NestedConfigurationProperty
     val kitsgg: ProviderData,
+    @NestedConfigurationProperty
     val grkits: ProviderData,
+    @NestedConfigurationProperty
     val aclotzone: ProviderData,
+    @NestedConfigurationProperty
     val fofoshop: ProviderData,
 )
 
 data class ProviderData(
     val url: String,
     val cacheKey: String,
+    @NestedConfigurationProperty
     val metadata: ProviderMetadata,
 )
 

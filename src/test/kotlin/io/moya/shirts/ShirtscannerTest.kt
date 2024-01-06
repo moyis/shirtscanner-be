@@ -1,3 +1,5 @@
+package io.moya.shirts
+
 import io.moya.shirts.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
