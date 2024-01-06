@@ -5,7 +5,9 @@ import io.moya.shirtscanner.models.SearchResult
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
-class DefaultFetcher(private val url: String) : ProductsFetcher {
+class DefaultFetcher(
+    private val url: String,
+) : ProductsFetcher {
     override fun search(q: String): SearchResult {
         val query = """$url/Search-$q/list--1000-1-2-----r1.html"""
         val doc = Jsoup.connect(query).get()

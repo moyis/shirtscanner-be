@@ -1,6 +1,7 @@
 package io.moya.shirtscanner.services
 
 import io.moya.shirtscanner.models.ProviderResult
+import io.moya.shirtscanner.services.providers.ProductProvider
 import org.springframework.stereotype.Service
 import java.util.concurrent.Executors
 

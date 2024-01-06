@@ -1,15 +1,13 @@
 package io.moya.shirtscanner.configuration
 
+import io.moya.shirtscanner.services.providers.ProductProvider
 import io.moya.shirtscanner.services.fetchers.DefaultFetcher
-import io.moya.shirtscanner.services.ProductProvider
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@EnableConfigurationProperties(value = [ProviderConfigurationProperties::class])
 class ProviderConfiguration(
     private val providerConfigurationProperties: ProviderConfigurationProperties,
 ) {
