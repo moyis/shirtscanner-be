@@ -1,0 +1,32 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+providers:
+  kitsgg:
+    url: https://www.kitgg4.com
+    cache-key: kitsgg
+    metadata:
+      name: KitsGG
+  five-boundless:
+    url: https://www.5boundless.com
+    cache-key: 5boundless
+    metadata:
+      name: 5Boundless
+  grkits:
+    url: https://www.grkits.com
+    cache-key: grkits
+    metadata:
+      name: GRKits
+  aclotzone:
+    url: https://www.aclotzone.co
+    cache-key: aclotzone
+    metadata:
+      name: Aclotzone
+  fofoshop:
+    url: https://www.fofoshop3.com
+    cache-key: fofoshop
+    metadata:
+      name: Fofoshop
+
