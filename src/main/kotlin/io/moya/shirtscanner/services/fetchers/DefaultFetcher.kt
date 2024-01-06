@@ -2,19 +2,29 @@ package io.moya.shirtscanner.services.fetchers
 
 import io.moya.shirtscanner.models.Product
 import io.moya.shirtscanner.models.SearchResult
+import mu.KotlinLogging
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import kotlin.time.measureTimedValue
+
+private val LOG = KotlinLogging.logger { }
 
 class DefaultFetcher(
     private val url: String,
 ) : ProductsFetcher {
     override fun search(q: String): SearchResult {
         val query = """$url/Search-$q/list--1000-1-2-----r1.html"""
-        val doc = Jsoup.connect(query).get()
-        val products = doc.select("li")
-            .asSequence()
-            .mapNotNull { mapToProduct(it) }
-            .toList()
+        LOG.debug { "Fetching products from $query" }
+        val (doc, durationFetch) = measureTimedValue { Jsoup.connect(query).get() }
+        LOG.debug { "Fetching products from $query done. Took ${durationFetch.inWholeMilliseconds} ms" }
+        LOG.debug { "Start mapping from $query" }
+        val (products, durationMapping) = measureTimedValue {
+            doc.select("li")
+                .asSequence()
+                .mapNotNull { mapToProduct(it) }
+                .toList()
+        }
+        LOG.debug { "Mapping from $query done. Took ${durationMapping.inWholeMilliseconds} ms" }
 
         return SearchResult(
             queryUrl = query,
