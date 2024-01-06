@@ -1,5 +1,7 @@
 on:
   push:
+    branches-ignore:
+      - main
 
 name: Build and Test code
 jobs:
