@@ -27,7 +27,6 @@ repositories {
 
 val jsoupVersion = "1.17.2"
 val kotlinLoggingVersion = "3.0.5"
-val redissonVersion = "3.25.2"
 val wiremockVersion = "3.3.1"
 val restAssuredVersion = "5.4.0"
 val testcontainersRedisVersion = "1.6.4"
@@ -45,9 +44,6 @@ dependencies {
 
     //Logging
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
-
-    //Cache
-    implementation("org.redisson:redisson:$redissonVersion")
 
     //Scraping
     implementation("org.jsoup:jsoup:$jsoupVersion")
