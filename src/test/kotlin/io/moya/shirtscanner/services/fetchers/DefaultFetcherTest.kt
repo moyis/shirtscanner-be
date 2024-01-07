@@ -1,7 +1,9 @@
 package io.moya.shirtscanner.services.fetchers
 
+import com.github.tomakehurst.wiremock.client.WireMock.badRequest
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
+import com.github.tomakehurst.wiremock.client.WireMock.serverError
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
@@ -80,13 +82,33 @@ class DefaultFetcherTest {
         assertThat(result.queryUrl).isEqualTo("${wmRuntimeInfo.httpBaseUrl}${searchQuery(q)}")
     }
 
+    @Test
+    fun `a search returns empty products when website returns 4xx`(wmRuntimeInfo: WireMockRuntimeInfo) {
+        val q = "anything"
+        setUp4xxResponseForQuery(q)
+        val result = subject.search(q)
+        assertThat(result.products).isEmpty()
+    }
+
+    @Test
+    fun `a search returns empty products when website returns 5xx`(wmRuntimeInfo: WireMockRuntimeInfo) {
+        val q = "anything"
+        setUp5xxResponseForQuery(q)
+        val result = subject.search(q)
+        assertThat(result.products).isEmpty()
+    }
+
     private fun setUpOkResponseForQuery(q: String, provider: String? = null) {
         val body = if (provider != null) ResourceUtils.getFile("classpath:providers/$provider.html").readText() else ""
-        stubFor(get(searchQuery(q))
-                .willReturn(
-                    ok().withBody(body)
-                )
-        )
+        stubFor(get(searchQuery(q)).willReturn(ok().withBody(body)))
+    }
+
+    private fun setUp4xxResponseForQuery(q: String) {
+        stubFor(get(searchQuery(q)).willReturn(badRequest().withBody("")))
+    }
+
+    private fun setUp5xxResponseForQuery(q: String) {
+        stubFor(get(searchQuery(q)).willReturn(serverError().withBody("")))
     }
 
     private fun searchQuery(q: String) = "/Search-$q/list--1000-1-2-----r1.html"
