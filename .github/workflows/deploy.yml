@@ -52,7 +52,7 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         run: |
-          flyctl deploy -i registry.fly.io/shirtscanner-be:${{ steps.version.outputs.version }}
+          flyctl deploy -i registry.fly.io/shirtscanner-be:${{ steps.version.outputs.version }} --detach
 
       - name: Tag Version
         uses: rickstaa/action-create-tag@v1
