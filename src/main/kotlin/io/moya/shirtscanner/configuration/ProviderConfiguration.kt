@@ -13,42 +13,42 @@ class ProviderConfiguration(
 ) {
 
     @Bean
-    fun fiveBoundlessFetcher() = productProvider(providerConfigurationProperties.fiveBoundless)
+    fun fiveBoundlessFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fiveBoundless)
 
     @Bean
-    fun grkitsFetcher() = productProvider(providerConfigurationProperties.grkits)
+    fun grkitsFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.grkits)
 
     @Bean
-    fun kitsggFetcher() = productProvider(providerConfigurationProperties.kitsgg)
+    fun kitsggFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kitsgg)
 
     @Bean
-    fun aclotzoneFetcher() = productProvider(providerConfigurationProperties.aclotzone)
+    fun aclotzoneFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.aclotzone)
 
     @Bean
-    fun fofoshopFetcher() = productProvider(providerConfigurationProperties.fofoshop)
+    fun fofoshopFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fofoshop)
 
     @Bean
-    fun kotofanssFetcher() = productProvider(providerConfigurationProperties.kotofanss)
+    fun kotofanssFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kotofanss)
 
     @Bean
-    fun kegaooFetcher() = productProvider(providerConfigurationProperties.kegaoo)
+    fun kegaooFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kegaoo)
 
     @Bean
-    fun jjsportFetcher() = productProvider(providerConfigurationProperties.jjsport)
+    fun jjsportFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jjsport)
 
     @Bean
-    fun fcstore24Fetcher() = productProvider(providerConfigurationProperties.fcstore24)
+    fun fcstore24Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fcstore24)
 
     @Bean
-    fun jeofc1Fetcher() = productProvider(providerConfigurationProperties.jeofc1)
+    fun jeofc1Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jeofc1)
 
     @Bean
-    fun gkkocFetcher() = productProvider(providerConfigurationProperties.gkkoc)
+    fun gkkocFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.gkkoc)
 
     @Bean
-    fun soccerFetcher() = productProvider(providerConfigurationProperties.soccer)
+    fun soccerFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.soccer)
 
-    private fun productProvider(providerData: ProviderData) = with(providerData) { ProductProvider(DefaultFetcher(url), metadata) }
+    private fun defaultFetcherProductProvider(providerData: ProviderData) = with(providerData) { ProductProvider(DefaultFetcher(url), metadata) }
 }
 
 
