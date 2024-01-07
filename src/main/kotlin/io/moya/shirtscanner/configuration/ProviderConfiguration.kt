@@ -13,29 +13,42 @@ class ProviderConfiguration(
 ) {
 
     @Bean
-    fun fiveBoundlessFetcher() = with(providerConfigurationProperties.fiveBoundless) {
-        ProductProvider(DefaultFetcher(url), metadata)
-    }
+    fun fiveBoundlessFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fiveBoundless)
 
     @Bean
-    fun grkitsFetcher() = with(providerConfigurationProperties.grkits) {
-        ProductProvider(DefaultFetcher(url), metadata)
-    }
+    fun grkitsFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.grkits)
 
     @Bean
-    fun kitsggFetcher() = with(providerConfigurationProperties.kitsgg) {
-        ProductProvider(DefaultFetcher(url), metadata)
-    }
+    fun kitsggFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kitsgg)
 
     @Bean
-    fun aclotzoneFetcher() = with(providerConfigurationProperties.aclotzone) {
-        ProductProvider(DefaultFetcher(url), metadata)
-    }
+    fun aclotzoneFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.aclotzone)
 
     @Bean
-    fun fofoshopFetcher() = with(providerConfigurationProperties.fofoshop) {
-        ProductProvider(DefaultFetcher(url), metadata)
-    }
+    fun fofoshopFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fofoshop)
+
+    @Bean
+    fun kotofanssFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kotofanss)
+
+    @Bean
+    fun kegaooFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kegaoo)
+
+    @Bean
+    fun jjsportFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jjsport)
+
+    @Bean
+    fun fcstore24Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fcstore24)
+
+    @Bean
+    fun jeofc1Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jeofc1)
+
+    @Bean
+    fun gkkocFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.gkkoc)
+
+    @Bean
+    fun soccerFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.soccer)
+
+    private fun defaultFetcherProductProvider(providerData: ProviderData) = with(providerData) { ProductProvider(DefaultFetcher(url), metadata) }
 }
 
 
@@ -51,11 +64,24 @@ data class ProviderConfigurationProperties(
     val aclotzone: ProviderData,
     @NestedConfigurationProperty
     val fofoshop: ProviderData,
+    @NestedConfigurationProperty
+    val kotofanss: ProviderData,
+    @NestedConfigurationProperty
+    val kegaoo: ProviderData,
+    @NestedConfigurationProperty
+    val jjsport: ProviderData,
+    @NestedConfigurationProperty
+    val fcstore24: ProviderData,
+    @NestedConfigurationProperty
+    val jeofc1: ProviderData,
+    @NestedConfigurationProperty
+    val gkkoc: ProviderData,
+    @NestedConfigurationProperty
+    val soccer: ProviderData,
 )
 
 data class ProviderData(
     val url: String,
-    val cacheKey: String,
     @NestedConfigurationProperty
     val metadata: ProviderMetadata,
 )
