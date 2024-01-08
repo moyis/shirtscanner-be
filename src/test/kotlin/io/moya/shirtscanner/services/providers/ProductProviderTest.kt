@@ -3,7 +3,7 @@ package io.moya.shirtscanner.services.providers
 import io.moya.shirtscanner.configuration.ProviderMetadata
 import io.moya.shirtscanner.models.SearchResult
 import io.moya.shirtscanner.services.fetchers.ProductsFetcher
-import org.assertj.core.api.AssertionsForClassTypes
+import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -26,7 +26,7 @@ class ProductProviderTest {
     fun `product provider returns provider metadata`() {
         val q = "anything"
         val result = subject.search(q)
-        AssertionsForClassTypes.assertThat(result.providerName).isEqualTo(providerName)
+        assertThat(result.providerName).isEqualTo(providerName)
     }
 }
 

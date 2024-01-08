@@ -4,6 +4,7 @@ spring:
       enabled: true
 
 providers:
+  default-timeout: 3s
   kitsgg:
     url: https://www.kitgg4.com
     metadata:
