@@ -3,20 +3,25 @@ package io.moya.shirtscanner.services.fetchers
 import io.moya.shirtscanner.models.Product
 import io.moya.shirtscanner.models.SearchResult
 import mu.KotlinLogging
+import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
+import org.jsoup.UnsupportedMimeTypeException
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.springframework.http.HttpHeaders
+import java.net.SocketTimeoutException
+import java.time.Duration
 import kotlin.time.measureTimedValue
 
 private val LOG = KotlinLogging.logger { }
 
 class DefaultFetcher(
     private val url: String,
+    private val defaultTimeout: Duration,
 ) : ProductsFetcher {
     override fun search(q: String): SearchResult {
         val query = """$url/Search-$q/list--1000-1-2-----r1.html"""
-        val document = runCatching { fetchDocument(query) }.getOrNull() ?: return searchResult(query)
+        val document = runCatching { fetchDocument(query) }.getOrElse { handleException(it) } ?: return searchResult(query)
         val products = document.select("li")
             .asSequence()
             .mapNotNull { mapToProduct(it) }
@@ -33,6 +38,7 @@ class DefaultFetcher(
         LOG.debug { "Fetching products from $query" }
         val (document, durationFetch) = measureTimedValue {
             Jsoup.connect(query)
+                .timeout(defaultTimeout.toMillis().toInt())
                 .headers(DEFAULT_HEADERS)
                 .get()
         }
@@ -52,6 +58,17 @@ class DefaultFetcher(
             productLink = "$url$productLink",
             imageLink = imageLink
         )
+    }
+
+    private fun handleException(throwable: Throwable): Document? {
+        val baseMessage = "Exception found performing get on $url:"
+        when (throwable) {
+            is SocketTimeoutException -> LOG.warn { "$baseMessage took more than ${defaultTimeout.toMillis()}"}
+            is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode}" }
+            is UnsupportedMimeTypeException -> { LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" } }
+            else -> { LOG.error { "Unexpected exception found while performing get on $url: ${throwable.cause}" } }
+        }
+        return null
     }
 
     companion object {

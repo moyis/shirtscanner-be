@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.Duration
 
 @Configuration
 class ProviderConfiguration(
@@ -48,12 +49,19 @@ class ProviderConfiguration(
     @Bean
     fun soccerFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.soccer)
 
-    private fun defaultFetcherProductProvider(providerData: ProviderData) = with(providerData) { ProductProvider(DefaultFetcher(url), metadata) }
+    private fun defaultFetcherProductProvider(providerData: ProviderData) = with(providerData) {
+        ProductProvider(DefaultFetcher(url, getDefaultTimeout(this)), metadata)
+    }
+
+    private fun getDefaultTimeout(providerData: ProviderData): Duration {
+        return providerData.defaultTimeout ?: providerConfigurationProperties.defaultTimeout
+    }
 }
 
 
-@ConfigurationProperties("providers")
+@ConfigurationProperties("providers", ignoreUnknownFields = true)
 data class ProviderConfigurationProperties(
+    val defaultTimeout: Duration,
     @NestedConfigurationProperty
     val fiveBoundless: ProviderData,
     @NestedConfigurationProperty
@@ -84,6 +92,7 @@ data class ProviderData(
     val url: String,
     @NestedConfigurationProperty
     val metadata: ProviderMetadata,
+    val defaultTimeout: Duration? = null,
 )
 
 data class ProviderMetadata(
