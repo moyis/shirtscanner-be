@@ -14,8 +14,7 @@ class IntegrationTestConfiguration {
     fun redisContainer(registry: DynamicPropertyRegistry): RedisContainer {
         val redis = RedisContainer(DockerImageName.parse("redis:6.2.6-alpine"))
         with(registry) {
-            add("redis.host") { redis.host }
-            add("redis.port") { redis.firstMappedPort }
+            add("redis.host") { "redis://${redis.host}:${redis.firstMappedPort}" }
         }
         return redis
     }
