@@ -13,11 +13,8 @@ class RedissonCacheService(
     private val redissonClient: RedissonClient,
 ) : CacheService {
     override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T): T {
-        val value = runCatching { redissonClient.getBucket<T?>(key).get() ?: remappingFunction.invoke() }
-            .onFailure { LOG.error { "Exception found" } }
-            .getOrElse { remappingFunction.invoke() }
-        runCatching { redissonClient.getBucket<T?>(key).get() }
-            .onFailure { LOG.error { "Exception found" } }
-        return value
+        val bucket = redissonClient.getBucket<T?>(key)
+        return bucket.get() ?: remappingFunction.invoke()
+            .also { bucket.set(it, Duration.ofDays(1)) }
     }
 }
