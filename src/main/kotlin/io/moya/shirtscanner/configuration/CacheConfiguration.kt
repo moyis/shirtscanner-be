@@ -19,7 +19,7 @@ class RedisConfiguration(
         val config = with(configurationProperties) {
             Config().apply {
                 useSingleServer().apply {
-                    address = "redis://$host:$port"
+                    address = host
                 }
             }
         }
@@ -31,5 +31,4 @@ class RedisConfiguration(
 @ConfigurationProperties(prefix = "redis")
 data class RedisConfigurationProperties(
     val host: String,
-    val port: String,
 )
