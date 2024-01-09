@@ -9,7 +9,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import io.moya.shirtscanner.configuration.FetcherConfigurationProperties
-import io.moya.shirtscanner.services.cache.CacheService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,9 +17,9 @@ import org.springframework.util.ResourceUtils
 import java.time.Duration
 
 @WireMockTest
-class DefaultFetcherTest {
+class ListR1FetcherTest {
 
-    private lateinit var subject: DefaultFetcher
+    private lateinit var subject: ListR1Fetcher
     private val defaultTimeout = Duration.ofMillis(500)
     private lateinit var urlBase: String
 
@@ -29,7 +28,7 @@ class DefaultFetcherTest {
         WireMock.resetToDefault()
         val configuration = FetcherConfigurationProperties(defaultTimeout)
         urlBase = wmRuntimeInfo.httpBaseUrl
-        subject = DefaultFetcher(configuration)
+        subject = ListR1Fetcher(configuration)
     }
 
     @Test

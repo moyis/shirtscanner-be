@@ -3,7 +3,6 @@ package io.moya.shirtscanner.services.fetchers
 import io.moya.shirtscanner.configuration.FetcherConfigurationProperties
 import io.moya.shirtscanner.models.Product
 import io.moya.shirtscanner.models.SearchResult
-import io.moya.shirtscanner.services.cache.CacheService
 import mu.KotlinLogging
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
@@ -18,7 +17,7 @@ import kotlin.time.measureTimedValue
 private val LOG = KotlinLogging.logger { }
 
 @Service
-class DefaultFetcher(
+class ListR1Fetcher(
     private val configuration: FetcherConfigurationProperties,
 ) : ProductsFetcher {
     override fun search(q: String, url: String): SearchResult {

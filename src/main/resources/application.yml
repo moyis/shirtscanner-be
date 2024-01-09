@@ -4,7 +4,7 @@ spring:
       enabled: true
 
 providers:
-  default:
+  list-r-1:
     - url: https://www.kitgg4.com
       name: KitsGG
     - url: https://www.5boundless.com
@@ -30,6 +30,22 @@ providers:
       name: GKKOC
     - url: https://www.soccer03.com
       name: Soccer
+    - url: https://www.messi105.com
+      name: Messi100
+    - url: https://www.mmjerseys00.com
+      name: MMJerseys00
+    - url: https://www.lindajersey.com
+      name: LindaJersey
+    - url: https://www.halosport.cn
+      name: HaloSport
+    - url: https://www.motios1.com
+      name: Motios1
+    - url: https://www.vicksports.com
+      name: VickSports
+    - url: https://www.jshop1.com
+      name: JShop
+    - url: https://www.bqlsport.com
+      name: BQL Sports
 
 fetchers:
   default-timeout: 3s
