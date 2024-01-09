@@ -33,7 +33,7 @@ class DefaultFetcher(
 
     private fun getProducts(q: String, url: String) : List<Product> {
         val query = getQueryUrl(q, url)
-        val document = runCatching { fetchDocument(query) }.getOrElse { handleException(it, query) } ?: return emptyList()
+        val document = runCatching { fetchDocument(query) }.getOrElse { handleException(it, query) } ?: return listOf()
         return document.select("li")
             .asSequence()
             .mapNotNull { mapToProduct(it, url) }

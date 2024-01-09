@@ -33,6 +33,6 @@ class ProductProviderTest {
 private class EmptyProductFetcher : ProductsFetcher {
     override fun search(q: String, url: String) = SearchResult(
         queryUrl = "$url/search?q=$q",
-        products = emptyList()
+        products = listOf()
     )
 }
