@@ -20,11 +20,9 @@ private val LOG = KotlinLogging.logger { }
 @Service
 class DefaultFetcher(
     private val configuration: FetcherConfigurationProperties,
-    private val cacheService: CacheService,
 ) : ProductsFetcher {
     override fun search(q: String, url: String): SearchResult {
-        val cacheKey = "${url}_${q.uppercase()}"
-        val products = cacheService.computeIfAbsent(cacheKey) { getProducts(q, url)}
+        val products = getProducts(q, url)
         return SearchResult(
             queryUrl = getQueryUrl(q, url),
             products = products,

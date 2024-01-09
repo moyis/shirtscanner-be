@@ -28,9 +28,8 @@ class DefaultFetcherTest {
     fun setUp(wmRuntimeInfo: WireMockRuntimeInfo) {
         WireMock.resetToDefault()
         val configuration = FetcherConfigurationProperties(defaultTimeout)
-        val cacheService = MockCacheService()
         urlBase = wmRuntimeInfo.httpBaseUrl
-        subject = DefaultFetcher(configuration, cacheService)
+        subject = DefaultFetcher(configuration)
     }
 
     @Test
@@ -229,8 +228,4 @@ class DefaultFetcherTest {
     }
 
     private fun searchQuery(q: String) = "/Search-$q/list--1000-1-2-----r1.html"
-}
-
-private class MockCacheService : CacheService {
-    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T) = remappingFunction.invoke()
 }

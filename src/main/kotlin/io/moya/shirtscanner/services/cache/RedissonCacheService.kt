@@ -4,7 +4,6 @@ import mu.KotlinLogging
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 import java.time.Duration
-import java.util.concurrent.Executors
 
 private val LOG = KotlinLogging.logger { }
 

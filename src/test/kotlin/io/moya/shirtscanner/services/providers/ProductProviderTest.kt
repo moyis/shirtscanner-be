@@ -2,6 +2,7 @@ package io.moya.shirtscanner.services.providers
 
 import io.moya.shirtscanner.configuration.ProviderData
 import io.moya.shirtscanner.models.SearchResult
+import io.moya.shirtscanner.services.cache.CacheService
 import io.moya.shirtscanner.services.fetchers.ProductsFetcher
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -19,7 +20,7 @@ class ProductProviderTest {
 
     @BeforeEach
     fun setUp() {
-        subject = ProductProvider(productsFetcher, providerData)
+        subject = ProductProvider(productsFetcher, providerData, MockCacheService())
     }
 
     @Test
@@ -35,4 +36,8 @@ private class EmptyProductFetcher : ProductsFetcher {
         queryUrl = "$url/search?q=$q",
         products = listOf()
     )
+}
+
+private class MockCacheService : CacheService {
+    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T) = remappingFunction.invoke()
 }

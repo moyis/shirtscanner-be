@@ -1,5 +1,6 @@
 package io.moya.shirtscanner.configuration
 
+import io.moya.shirtscanner.services.cache.CacheService
 import io.moya.shirtscanner.services.fetchers.DefaultFetcher
 import io.moya.shirtscanner.services.providers.ProductProvider
 import mu.KotlinLogging
@@ -14,6 +15,7 @@ private val LOG = KotlinLogging.logger { }
 class ProviderConfiguration(
     private val config: ProviderConfigurationProperties,
     private val defaultFetcher: DefaultFetcher,
+    private val cacheService: CacheService,
 ) {
 
     @Bean
@@ -23,7 +25,7 @@ class ProviderConfiguration(
     }
 
     private fun defaultFetcherProviders(): List<ProductProvider> {
-        val providers = config.default.map { ProductProvider(defaultFetcher, it) }
+        val providers = config.default.map { ProductProvider(defaultFetcher, it, cacheService) }
         LOG.info { "Found ${providers.size} providers using DefaultFetcher::class" }
         return providers
     }
