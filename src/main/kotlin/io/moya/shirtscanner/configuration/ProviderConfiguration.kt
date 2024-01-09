@@ -1,48 +1,67 @@
 package io.moya.shirtscanner.configuration
 
-import io.moya.shirtscanner.services.providers.ProductProvider
-import io.moya.shirtscanner.services.cache.CacheService
 import io.moya.shirtscanner.services.fetchers.DefaultFetcher
+import io.moya.shirtscanner.services.providers.ProductProvider
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.Duration
 
 @Configuration
 class ProviderConfiguration(
     private val providerConfigurationProperties: ProviderConfigurationProperties,
-    private val cacheService: CacheService,
 ) {
 
     @Bean
-    fun fiveBoundlessFetcher() = with(providerConfigurationProperties.fiveBoundless) {
-        ProductProvider(DefaultFetcher(url), metadata, cacheService)
-    }
+    fun fiveBoundlessFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fiveBoundless)
 
     @Bean
-    fun grkitsFetcher() = with(providerConfigurationProperties.grkits) {
-        ProductProvider(DefaultFetcher(url), metadata, cacheService)
-    }
+    fun grkitsFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.grkits)
 
     @Bean
-    fun kitsggFetcher() = with(providerConfigurationProperties.kitsgg) {
-        ProductProvider(DefaultFetcher(url), metadata, cacheService)
-    }
+    fun kitsggFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kitsgg)
 
     @Bean
-    fun aclotzoneFetcher() = with(providerConfigurationProperties.aclotzone) {
-        ProductProvider(DefaultFetcher(url), metadata, cacheService)
-    }
+    fun aclotzoneFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.aclotzone)
 
     @Bean
-    fun fofoshopFetcher() = with(providerConfigurationProperties.fofoshop) {
-        ProductProvider(DefaultFetcher(url), metadata, cacheService)
+    fun fofoshopFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fofoshop)
+
+    @Bean
+    fun kotofanssFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kotofanss)
+
+    @Bean
+    fun kegaooFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kegaoo)
+
+    @Bean
+    fun jjsportFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jjsport)
+
+    @Bean
+    fun fcstore24Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fcstore24)
+
+    @Bean
+    fun jeofc1Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jeofc1)
+
+    @Bean
+    fun gkkocFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.gkkoc)
+
+    @Bean
+    fun soccerFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.soccer)
+
+    private fun defaultFetcherProductProvider(providerData: ProviderData) = with(providerData) {
+        ProductProvider(DefaultFetcher(url, getDefaultTimeout(this)), metadata)
+    }
+
+    private fun getDefaultTimeout(providerData: ProviderData): Duration {
+        return providerData.defaultTimeout ?: providerConfigurationProperties.defaultTimeout
     }
 }
 
 
-@ConfigurationProperties("providers")
+@ConfigurationProperties("providers", ignoreUnknownFields = true)
 data class ProviderConfigurationProperties(
+    val defaultTimeout: Duration,
     @NestedConfigurationProperty
     val fiveBoundless: ProviderData,
     @NestedConfigurationProperty
@@ -53,13 +72,27 @@ data class ProviderConfigurationProperties(
     val aclotzone: ProviderData,
     @NestedConfigurationProperty
     val fofoshop: ProviderData,
+    @NestedConfigurationProperty
+    val kotofanss: ProviderData,
+    @NestedConfigurationProperty
+    val kegaoo: ProviderData,
+    @NestedConfigurationProperty
+    val jjsport: ProviderData,
+    @NestedConfigurationProperty
+    val fcstore24: ProviderData,
+    @NestedConfigurationProperty
+    val jeofc1: ProviderData,
+    @NestedConfigurationProperty
+    val gkkoc: ProviderData,
+    @NestedConfigurationProperty
+    val soccer: ProviderData,
 )
 
 data class ProviderData(
     val url: String,
-    val cacheKey: String,
     @NestedConfigurationProperty
     val metadata: ProviderMetadata,
+    val defaultTimeout: Duration? = null,
 )
 
 data class ProviderMetadata(

@@ -2,9 +2,8 @@ package io.moya.shirtscanner.services.providers
 
 import io.moya.shirtscanner.configuration.ProviderMetadata
 import io.moya.shirtscanner.models.SearchResult
-import io.moya.shirtscanner.services.cache.CacheService
 import io.moya.shirtscanner.services.fetchers.ProductsFetcher
-import org.assertj.core.api.AssertionsForClassTypes
+import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -16,25 +15,19 @@ class ProductProviderTest {
 
     private val providerMetadata: ProviderMetadata = ProviderMetadata(providerName)
 
-    private val cacheService = MockCacheService()
-
     private lateinit var subject: ProductProvider
 
     @BeforeEach
     fun setUp() {
-        subject = ProductProvider(productsFetcher, providerMetadata, cacheService)
+        subject = ProductProvider(productsFetcher, providerMetadata)
     }
 
     @Test
     fun `product provider returns provider metadata`() {
         val q = "anything"
         val result = subject.search(q)
-        AssertionsForClassTypes.assertThat(result.providerName).isEqualTo(providerName)
+        assertThat(result.providerName).isEqualTo(providerName)
     }
-}
-
-private class MockCacheService : CacheService {
-    override fun <T> computeIfAbsent(key: String, remappingFunction: (String) -> T) = remappingFunction.invoke(key)
 }
 
 private class EmptyProductFetcher(private val url: String) : ProductsFetcher {
