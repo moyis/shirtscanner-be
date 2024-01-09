@@ -13,7 +13,9 @@ class RedissonCacheService(
 ) : CacheService {
     override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T): T {
         val bucket = redissonClient.getBucket<T?>(key)
-        return bucket.get() ?: remappingFunction.invoke()
-            .also { bucket.set(it, Duration.ofDays(1)) }
+        return runCatching { bucket.get() }
+            .onFailure { LOG.error { it.message } }
+            .getOrNull()
+            ?: remappingFunction.invoke().also { bucket.set(it, Duration.ofDays(1)) }
     }
 }

@@ -9,8 +9,9 @@ providers:
       name: KitsGG
     - url: https://www.5boundless.com
       name: 5Boundless
-    - url: https://www.grkits.com
-      name: GRKits
+## GRKits is blocking us
+##    - url: https://www.grkits.com
+##      name: GRKits
     - url: https://www.aclotzone.co
       name: Aclotzone
     - url: https://www.fofoshop3.com
