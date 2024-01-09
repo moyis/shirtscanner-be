@@ -14,7 +14,7 @@ class ProductProvider(
     private val providerData: ProviderData,
     private val cacheService: CacheService,
 ) {
-    fun search(q: String) = cacheService.computeIfAbsent(q.uppercase()) { doSearch(q) }
+    fun search(q: String) = cacheService.computeIfAbsent("${providerData.name}_${q.uppercase()}") { doSearch(q) }
 
     private fun doSearch(q: String): ProviderResult {
         LOG.info { "Starting search for provider [${providerData.name}] and query [$q]" }
