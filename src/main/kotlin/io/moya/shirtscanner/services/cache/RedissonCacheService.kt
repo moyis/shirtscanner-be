@@ -9,12 +9,9 @@ import java.util.concurrent.Executors
 class RedissonCacheService(
     private val redissonClient: RedissonClient,
 ) : CacheService {
-
-    private val executorService = Executors.newVirtualThreadPerTaskExecutor()
-
-    override fun <T> computeIfAbsent(key: String, remappingFunction: (String) -> T) : T {
-        val bucket = redissonClient.getBucket<T?>(key)
-        return bucket.get() ?: remappingFunction.invoke(key)
-            .also { executorService.execute { bucket.set(it, Duration.ofHours(6)) } }
+    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> List<T>): List<T> {
+        val bucket = redissonClient.getBucket<List<T>?>(key)
+        return bucket.get() ?: remappingFunction.invoke()
+            .also { bucket.set(it, Duration.ofHours(6)) }
     }
 }

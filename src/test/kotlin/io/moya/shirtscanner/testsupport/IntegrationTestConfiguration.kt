@@ -12,7 +12,7 @@ class IntegrationTestConfiguration {
 
     @Bean
     fun redisContainer(registry: DynamicPropertyRegistry): RedisContainer {
-        val redis = RedisContainer(DockerImageName.parse("redis:7.0.11-alpine"))
+        val redis = RedisContainer(DockerImageName.parse("redis:6.2.6-alpine"))
         with(registry) {
             add("redis.host") { redis.host }
             add("redis.port") { redis.firstMappedPort }

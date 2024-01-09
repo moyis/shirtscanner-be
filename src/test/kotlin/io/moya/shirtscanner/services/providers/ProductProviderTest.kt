@@ -1,6 +1,6 @@
 package io.moya.shirtscanner.services.providers
 
-import io.moya.shirtscanner.configuration.ProviderMetadata
+import io.moya.shirtscanner.configuration.ProviderData
 import io.moya.shirtscanner.models.SearchResult
 import io.moya.shirtscanner.services.fetchers.ProductsFetcher
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
@@ -9,17 +9,17 @@ import org.junit.jupiter.api.Test
 
 class ProductProviderTest {
 
-    private val productsFetcher = EmptyProductFetcher("localhost:9999/search%s")
+    private val productsFetcher = EmptyProductFetcher()
 
     private val providerName: String = "provider"
 
-    private val providerMetadata: ProviderMetadata = ProviderMetadata(providerName)
+    private val providerData = ProviderData("localhost:9999/search", providerName)
 
     private lateinit var subject: ProductProvider
 
     @BeforeEach
     fun setUp() {
-        subject = ProductProvider(productsFetcher, providerMetadata)
+        subject = ProductProvider(productsFetcher, providerData)
     }
 
     @Test
@@ -30,9 +30,9 @@ class ProductProviderTest {
     }
 }
 
-private class EmptyProductFetcher(private val url: String) : ProductsFetcher {
-    override fun search(q: String) = SearchResult(
-        queryUrl = url,
+private class EmptyProductFetcher : ProductsFetcher {
+    override fun search(q: String, url: String) = SearchResult(
+        queryUrl = "$url/search?q=$q",
         products = emptyList()
     )
 }

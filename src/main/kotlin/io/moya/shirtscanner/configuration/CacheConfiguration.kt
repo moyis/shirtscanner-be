@@ -28,7 +28,7 @@ class RedisConfiguration(
     }
 }
 
-@ConfigurationProperties(prefix = "redis")
+//@ConfigurationProperties(prefix = "redis")
 data class RedisConfigurationProperties(
     val host: String,
     val port: String,
