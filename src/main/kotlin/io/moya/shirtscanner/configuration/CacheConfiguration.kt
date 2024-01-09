@@ -2,10 +2,9 @@ package io.moya.shirtscanner.configuration
 
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
+import org.redisson.codec.Kryo5Codec
 import org.redisson.config.Config
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -20,6 +19,7 @@ class RedisConfiguration(
             Config().apply {
                 useSingleServer().apply {
                     address = host
+                    codec = Kryo5Codec()
                 }
             }
         }
