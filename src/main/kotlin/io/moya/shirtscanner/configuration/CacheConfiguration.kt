@@ -1,7 +1,10 @@
 package io.moya.shirtscanner.configuration
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
+import org.redisson.codec.JacksonCodec
+import org.redisson.codec.JsonJacksonCodec
 import org.redisson.codec.Kryo5Codec
 import org.redisson.codec.SnappyCodecV2
 import org.redisson.config.Config
@@ -12,6 +15,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class RedisConfiguration(
     private val configurationProperties: RedisConfigurationProperties,
+    private val objectMapper: ObjectMapper,
 ) {
 
     @Bean
@@ -20,7 +24,7 @@ class RedisConfiguration(
             Config().apply {
                 useSingleServer().apply {
                     address = host
-                    codec = SnappyCodecV2()
+                    codec = JsonJacksonCodec(objectMapper)
                 }
             }
         }
