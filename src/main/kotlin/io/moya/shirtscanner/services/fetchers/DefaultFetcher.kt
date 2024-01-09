@@ -1,7 +1,9 @@
 package io.moya.shirtscanner.services.fetchers
 
+import io.moya.shirtscanner.configuration.FetcherConfigurationProperties
 import io.moya.shirtscanner.models.Product
 import io.moya.shirtscanner.models.SearchResult
+import io.moya.shirtscanner.services.cache.CacheService
 import mu.KotlinLogging
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
@@ -9,36 +11,42 @@ import org.jsoup.UnsupportedMimeTypeException
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.springframework.http.HttpHeaders
+import org.springframework.stereotype.Service
 import java.net.SocketTimeoutException
-import java.time.Duration
 import kotlin.time.measureTimedValue
 
 private val LOG = KotlinLogging.logger { }
 
+@Service
 class DefaultFetcher(
-    private val url: String,
-    private val defaultTimeout: Duration,
+    private val configuration: FetcherConfigurationProperties,
+    private val cacheService: CacheService,
 ) : ProductsFetcher {
-    override fun search(q: String): SearchResult {
-        val query = """$url/Search-$q/list--1000-1-2-----r1.html"""
-        val document = runCatching { fetchDocument(query) }.getOrElse { handleException(it) } ?: return searchResult(query)
-        val products = document.select("li")
-            .asSequence()
-            .mapNotNull { mapToProduct(it) }
-            .toList()
-        return searchResult(query, products)
+    override fun search(q: String, url: String): SearchResult {
+        val cacheKey = "${url}_${q.uppercase()}"
+        val products = cacheService.computeIfAbsent(cacheKey) { getProducts(q, url)}
+        return SearchResult(
+            queryUrl = getQueryUrl(q, url),
+            products = products,
+        )
     }
 
-    private fun searchResult(query: String, products: List<Product> = emptyList()) = SearchResult(
-        queryUrl = query,
-        products = products,
-    )
+    private fun getProducts(q: String, url: String) : List<Product> {
+        val query = getQueryUrl(q, url)
+        val document = runCatching { fetchDocument(query) }.getOrElse { handleException(it, query) } ?: return emptyList()
+        return document.select("li")
+            .asSequence()
+            .mapNotNull { mapToProduct(it, url) }
+            .toList()
+    }
+
+    private fun getQueryUrl(q: String, url: String) = """$url/Search-$q/list--1000-1-2-----r1.html"""
 
     private fun fetchDocument(query: String): Document {
         LOG.debug { "Fetching products from $query" }
         val (document, durationFetch) = measureTimedValue {
             Jsoup.connect(query)
-                .timeout(defaultTimeout.toMillis().toInt())
+                .timeout(configuration.defaultTimeout.toMillis().toInt())
                 .headers(DEFAULT_HEADERS)
                 .get()
         }
@@ -46,7 +54,7 @@ class DefaultFetcher(
         return document
     }
 
-    private fun mapToProduct(element: Element): Product? {
+    private fun mapToProduct(element: Element, baseUrl: String): Product? {
         val a = element.selectFirst("a") ?: return null
         val price = element.getElementsByClass("price").first() ?: return null
         val imageLink = element.selectFirst("img")?.attr("src") ?: return null
@@ -55,15 +63,15 @@ class DefaultFetcher(
         return Product(
             name = name,
             price = price.text(),
-            productLink = "$url$productLink",
+            productLink = "$baseUrl$productLink",
             imageLink = imageLink
         )
     }
 
-    private fun handleException(throwable: Throwable): Document? {
+    private fun handleException(throwable: Throwable, url: String): Document? {
         val baseMessage = "Exception found performing get on $url:"
         when (throwable) {
-            is SocketTimeoutException -> LOG.warn { "$baseMessage took more than ${defaultTimeout.toMillis()}"}
+            is SocketTimeoutException -> LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}"}
             is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode}" }
             is UnsupportedMimeTypeException -> { LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" } }
             else -> { LOG.error { "Unexpected exception found while performing get on $url: ${throwable.cause}" } }

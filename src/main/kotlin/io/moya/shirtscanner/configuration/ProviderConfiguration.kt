@@ -2,99 +2,41 @@ package io.moya.shirtscanner.configuration
 
 import io.moya.shirtscanner.services.fetchers.DefaultFetcher
 import io.moya.shirtscanner.services.providers.ProductProvider
+import mu.KotlinLogging
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.time.Duration
+
+private val LOG = KotlinLogging.logger { }
 
 @Configuration
 class ProviderConfiguration(
-    private val providerConfigurationProperties: ProviderConfigurationProperties,
+    private val config: ProviderConfigurationProperties,
+    private val defaultFetcher: DefaultFetcher,
 ) {
 
     @Bean
-    fun fiveBoundlessFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fiveBoundless)
-
-    @Bean
-    fun grkitsFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.grkits)
-
-    @Bean
-    fun kitsggFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kitsgg)
-
-    @Bean
-    fun aclotzoneFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.aclotzone)
-
-    @Bean
-    fun fofoshopFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fofoshop)
-
-    @Bean
-    fun kotofanssFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kotofanss)
-
-    @Bean
-    fun kegaooFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.kegaoo)
-
-    @Bean
-    fun jjsportFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jjsport)
-
-    @Bean
-    fun fcstore24Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.fcstore24)
-
-    @Bean
-    fun jeofc1Fetcher() = defaultFetcherProductProvider(providerConfigurationProperties.jeofc1)
-
-    @Bean
-    fun gkkocFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.gkkoc)
-
-    @Bean
-    fun soccerFetcher() = defaultFetcherProductProvider(providerConfigurationProperties.soccer)
-
-    private fun defaultFetcherProductProvider(providerData: ProviderData) = with(providerData) {
-        ProductProvider(DefaultFetcher(url, getDefaultTimeout(this)), metadata)
+    fun providers(): List<ProductProvider> {
+        val defaultFetcherProviders = defaultFetcherProviders()
+        return defaultFetcherProviders
     }
 
-    private fun getDefaultTimeout(providerData: ProviderData): Duration {
-        return providerData.defaultTimeout ?: providerConfigurationProperties.defaultTimeout
+    private fun defaultFetcherProviders(): List<ProductProvider> {
+        val providers = config.default.map { ProductProvider(defaultFetcher, it) }
+        LOG.info { "Found ${providers.size} providers using DefaultFetcher::class" }
+        return providers
     }
 }
 
 
 @ConfigurationProperties("providers", ignoreUnknownFields = true)
 data class ProviderConfigurationProperties(
-    val defaultTimeout: Duration,
     @NestedConfigurationProperty
-    val fiveBoundless: ProviderData,
-    @NestedConfigurationProperty
-    val kitsgg: ProviderData,
-    @NestedConfigurationProperty
-    val grkits: ProviderData,
-    @NestedConfigurationProperty
-    val aclotzone: ProviderData,
-    @NestedConfigurationProperty
-    val fofoshop: ProviderData,
-    @NestedConfigurationProperty
-    val kotofanss: ProviderData,
-    @NestedConfigurationProperty
-    val kegaoo: ProviderData,
-    @NestedConfigurationProperty
-    val jjsport: ProviderData,
-    @NestedConfigurationProperty
-    val fcstore24: ProviderData,
-    @NestedConfigurationProperty
-    val jeofc1: ProviderData,
-    @NestedConfigurationProperty
-    val gkkoc: ProviderData,
-    @NestedConfigurationProperty
-    val soccer: ProviderData,
+    val default: List<ProviderData>,
 )
 
 data class ProviderData(
     val url: String,
-    @NestedConfigurationProperty
-    val metadata: ProviderMetadata,
-    val defaultTimeout: Duration? = null,
-)
-
-data class ProviderMetadata(
     val name: String,
 )

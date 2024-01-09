@@ -4,52 +4,31 @@ spring:
       enabled: true
 
 providers:
-  default-timeout: 3s
-  kitsgg:
-    url: https://www.kitgg4.com
-    metadata:
+  default:
+    - url: https://www.kitgg4.com
       name: KitsGG
-  five-boundless:
-    url: https://www.5boundless.com
-    metadata:
+    - url: https://www.5boundless.com
       name: 5Boundless
-  grkits:
-    url: https://www.grkits.com
-    metadata:
+    - url: https://www.grkits.com
       name: GRKits
-  aclotzone:
-    url: https://www.aclotzone.co
-    metadata:
+    - url: https://www.aclotzone.co
       name: Aclotzone
-  fofoshop:
-    url: https://www.fofoshop3.com
-    metadata:
+    - url: https://www.fofoshop3.com
       name: Fofoshop
-  kotofanss:
-    url: https://www.kotofanss.com
-    metadata:
+    - url: https://www.kotofanss.com
       name: Kotofanss
-  kegaoo:
-    url: https://www.kegaoo.cn
-    metadata:
+    - url: https://www.kegaoo.cn
       name: Kegaoo
-  jjsport:
-    url: https://www.jjsport01.com
-    metadata:
+    - url: https://www.jjsport01.com
       name: JJSport
-  fcstore24:
-    url: https://www.fcstore24.com
-    metadata:
+    - url: https://www.fcstore24.com
       name: FCstore24
-  jeofc1:
-    url: https://www.jeofc1.com
-    metadata:
+    - url: https://www.jeofc1.com
       name: JeoFc1
-  gkkoc:
-    url: https://www.gkkoc.com
-    metadata:
+    - url: https://www.gkkoc.com
       name: GKKOC
-  soccer:
-    url: https://www.soccer03.com
-    metadata:
+    - url: https://www.soccer03.com
       name: Soccer
+
+fetchers:
+  default-timeout: 3s
