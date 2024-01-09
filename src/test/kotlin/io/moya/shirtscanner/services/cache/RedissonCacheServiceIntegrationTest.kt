@@ -26,12 +26,12 @@ class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
     inner class CacheEmpty {
         @Test
         fun `value is saved in cache`() {
-            val expectedValue = listOf("My Value")
+            val expectedValue = "My Value"
             val result = subject.computeIfAbsent(CACHE_KEY) { expectedValue }
             assertThat(result).isEqualTo(expectedValue)
             await().atMost(Duration.ofSeconds(1))
                 .pollInterval(Duration.ofMillis(100))
-                .untilAsserted { assertThat(redissonClient.getBucket<List<String>?>(CACHE_KEY).get()).isEqualTo(expectedValue) }
+                .untilAsserted { assertThat(redissonClient.getBucket<String?>(CACHE_KEY).get()).isEqualTo(expectedValue) }
 
         }
     }
@@ -39,16 +39,16 @@ class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
     @Nested
     inner class HasAValue {
 
-        private val persistedValue = listOf("My Old Value")
+        private val persistedValue = "My Old Value"
 
         @BeforeEach
         fun setUp() {
-            redissonClient.getBucket<List<String>?>(CACHE_KEY).set(persistedValue)
+            redissonClient.getBucket<String?>(CACHE_KEY).set(persistedValue)
         }
 
         @Test
         fun `provider function is not called`() {
-            val result = subject.computeIfAbsent(CACHE_KEY) { listOf("My New Value") }
+            val result = subject.computeIfAbsent(CACHE_KEY) { "My New Value" }
             assertThat(result).isEqualTo(persistedValue)
         }
     }

@@ -232,5 +232,5 @@ class DefaultFetcherTest {
 }
 
 private class MockCacheService : CacheService {
-    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> List<T>) = remappingFunction.invoke()
+    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T) = remappingFunction.invoke()
 }

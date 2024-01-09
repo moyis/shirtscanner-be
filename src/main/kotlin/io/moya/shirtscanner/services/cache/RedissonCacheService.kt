@@ -9,8 +9,8 @@ import java.util.concurrent.Executors
 class RedissonCacheService(
     private val redissonClient: RedissonClient,
 ) : CacheService {
-    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> List<T>): List<T> {
-        val bucket = redissonClient.getBucket<List<T>?>(key)
+    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T): T {
+        val bucket = redissonClient.getBucket<T?>(key)
         return bucket.get() ?: remappingFunction.invoke()
             .also { bucket.set(it, Duration.ofHours(6)) }
     }
