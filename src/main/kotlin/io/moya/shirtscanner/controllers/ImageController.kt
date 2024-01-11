@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
 
 @RestController
 @RequestMapping("/v1/images")
@@ -15,10 +16,10 @@ class ImageController(
 ) {
 
     @GetMapping("/yupoo")
-    fun proxyImage(@RequestParam("path") path: String): ResponseEntity<ByteArray> = restClient.get()
+    fun proxyImage(@RequestParam("path") path: String) = restClient.get()
         .uri("https://photo.yupoo.com/$path")
         .header(HttpHeaders.REFERER, "https://yupoo.com/")
         .retrieve()
-        .toEntity(ByteArray::class.java)
+        .body<ByteArray>()
 }
 
