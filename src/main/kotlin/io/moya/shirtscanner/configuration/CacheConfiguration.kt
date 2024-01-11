@@ -1,6 +1,5 @@
 package io.moya.shirtscanner.configuration
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.redisson.Redisson
 import org.redisson.api.RedissonClient
 import org.redisson.config.Config
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class RedisConfiguration(
     private val configurationProperties: RedisConfigurationProperties,
-    private val objectMapper: ObjectMapper,
 ) {
 
     @Bean

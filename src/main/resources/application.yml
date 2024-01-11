@@ -3,15 +3,19 @@ spring:
     virtual:
       enabled: true
 
-providers:
+web-connector:
+  configuration:
+    default-timeout: 3s
+
+fetchers:
+  configuraiton:
+    yupoo:
+      image-proxy-host: "https://api.shirtscanner.com"
   list-r-1:
     - url: https://www.kitgg4.com
       name: KitsGG
     - url: https://www.5boundless.com
       name: 5Boundless
-## GRKits is blocking us
-##    - url: https://www.grkits.com
-##      name: GRKits
     - url: https://www.aclotzone.co
       name: Aclotzone
     - url: https://www.fofoshop3.com
@@ -46,6 +50,96 @@ providers:
       name: JShop
     - url: https://www.bqlsport.com
       name: BQL Sports
-
-fetchers:
-  default-timeout: 3s
+  ## GRKits is blocking us
+  ##    - url: https://www.grkits.com
+  ##      name: GRKits
+  yupoo:
+    - url: https://beonestore.x.yupoo.com
+      name: Be One
+    - url: https://viva-futbol.x.yupoo.com
+      name: Viva Futbol
+    - url: https://soccerplus.x.yupoo.com
+      name: Soccer Plus
+    - url: https://12345-67890.x.yupoo.com
+      name: 12345-67890
+    - url: https://minkang.x.yupoo.com
+      name: KANG Sports
+    - url: https://wanfing.x.yupoo.com
+      name: Wind Sports
+    - url: https://yang-jersey.x.yupoo.com
+      name: Yang Jersey
+    - url: https://wavesoccer.x.yupoo.com
+      name: Wave Soccer
+    - url: https://saikee.x.yupoo.com
+      name: Super Supplier Tim
+    - url: https://2591733560.x.yupoo.com
+      name: Adny
+    - url: https://pinhuistore.x.yupoo.com
+      name: Pinhui
+    - url: https://dixuanjersey.x.yupoo.com
+      name: Di Xuan
+    - url: https://huangqifei.x.yupoo.com
+      name: Kaite Sports
+    - url: https://goodman.x.yupoo.com
+      name: Goodman
+    - url: https://linda-soccerjerseys.x.yupoo.com
+      name: Linda
+    - url: https://rong196812.x.yupoo.com
+      name: Rong
+    - url: https://hudavidjerseys.x.yupoo.com
+      name: Hu David
+    - url: https://kingsemsport2.x.yupoo.com
+      name: King Sem
+    - url: https://kuli007.x.yupoo.com
+      name: Kuli
+    - url: https://katrinawu.x.yupoo.com
+      name: Katrina
+    - url: https://jun100200.x.yupoo.com
+      name: Jun
+    - url: https://royal-sports.x.yupoo.com
+      name: Royal Sports
+    - url: https://13249794948.x.yupoo.com
+      name: Min Lin
+    - url: https://kay342773329.x.yupoo.com
+      name: Kay
+    - url: https://jerseypremium.x.yupoo.com
+      name: Jersey Premium
+    - url: https://xiyitrade.x.yupoo.com
+      name: Xiyi
+    - url: https://retrosoccerjersey.x.yupoo.com
+      name: Retro Soccer
+    - url: https://topsoccerjersey888.x.yupoo.com
+      name: Top Soccer
+    - url: https://jerseycarnival.x.yupoo.com
+      name: Carnival
+    - url: https://aliexpressjoe.x.yupoo.com
+      name: Joe Soccer
+    - url: https://heijuanma001.x.yupoo.com
+      name: Hei Juanma
+    - url: https://sports-vip1987.x.yupoo.com
+      name: Kevin Jersey
+    - url: https://jaysoccerjersey.x.yupoo.com
+      name: Jay Sports
+    - url: https://dong9604.x.yupoo.com
+      name: Dongs
+    - url: https://soccerjerseyclub.x.yupoo.com
+      name: Soccer Club
+    - url: https://alisports.x.yupoo.com
+      name: Ali Sports
+    - url: https://1to1jerseyworld.x.yupoo.com
+      name: 1 to 1
+    - url: https://vip110120.x.yupoo.com
+      name: Tao & Xiang
+    - url: https://wuqiliang1.x.yupoo.com
+      name: Liang
+    - url: https://zherming029.x.yupoo.com
+      name: Huang - JinyueSports
+## Has a password
+##    - url: https://aaaajersey.x.yupoo.com
+##      name: AAAAJersey
+## Has password: 111222
+##    - url: https://zhouchangliang.x.yupoo.com
+##      name: Zhou
+## Has a password 88889999
+##    - url: https://vpi123.x.yupoo.com
+##      name: Blue Sky

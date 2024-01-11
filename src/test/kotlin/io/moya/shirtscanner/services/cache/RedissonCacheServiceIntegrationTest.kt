@@ -12,8 +12,6 @@ import java.time.Duration
 
 private const val CACHE_KEY = "my_key"
 
-private const val i = 1
-
 class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
 
     @Autowired
