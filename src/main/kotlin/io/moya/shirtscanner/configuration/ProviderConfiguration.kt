@@ -5,11 +5,8 @@ import io.moya.shirtscanner.services.fetchers.ListR1Fetcher
 import io.moya.shirtscanner.services.fetchers.YupooFetcher
 import io.moya.shirtscanner.services.providers.ProductProvider
 import mu.KotlinLogging
-import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.time.Duration
 
 private val LOG = KotlinLogging.logger { }
 
@@ -43,20 +40,3 @@ class ProviderConfiguration(
 }
 
 
-@ConfigurationProperties("fetchers", ignoreUnknownFields = true)
-data class FetchersConfigurationProperties(
-    @NestedConfigurationProperty
-    val listR1: List<ProviderData>,
-    @NestedConfigurationProperty
-    val yupoo: List<ProviderData>,
-)
-
-@ConfigurationProperties("fetchers.configuration")
-data class FetchersDefaultConfiguration(
-    val defaultTimeout: Duration,
-)
-
-data class ProviderData(
-    val url: String,
-    val name: String,
-)

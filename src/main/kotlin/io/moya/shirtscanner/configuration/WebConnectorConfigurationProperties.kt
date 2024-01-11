@@ -1,0 +1,9 @@
+package io.moya.shirtscanner.configuration
+
+import org.springframework.boot.context.properties.ConfigurationProperties
+import java.time.Duration
+
+@ConfigurationProperties("web-connector.configuration")
+data class WebConnectorConfigurationProperties(
+    val defaultTimeout: Duration,
+)

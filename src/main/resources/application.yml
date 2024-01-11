@@ -3,9 +3,14 @@ spring:
     virtual:
       enabled: true
 
-fetchers:
+web-connector:
   configuration:
     default-timeout: 3s
+
+fetchers:
+  configuraiton:
+    yupoo:
+      image-proxy-host: "https://api.shirtscanner.com"
   list-r-1:
     - url: https://www.kitgg4.com
       name: KitsGG

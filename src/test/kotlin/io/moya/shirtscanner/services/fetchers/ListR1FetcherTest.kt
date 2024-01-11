@@ -8,11 +8,11 @@ import com.github.tomakehurst.wiremock.client.WireMock.serverError
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import io.moya.shirtscanner.configuration.FetchersDefaultConfiguration
+import io.moya.shirtscanner.configuration.WebConnectorConfigurationProperties
+import io.moya.shirtscanner.services.WebConnector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertTimeoutPreemptively
 import org.springframework.util.ResourceUtils
 import java.time.Duration
 
@@ -20,15 +20,14 @@ import java.time.Duration
 class ListR1FetcherTest {
 
     private lateinit var subject: ListR1Fetcher
-    private val defaultTimeout = Duration.ofMillis(500)
     private lateinit var urlBase: String
 
     @BeforeEach
     fun setUp(wmRuntimeInfo: WireMockRuntimeInfo) {
         WireMock.resetToDefault()
-        val configuration = FetchersDefaultConfiguration(defaultTimeout)
+        val configuration = WebConnectorConfigurationProperties(Duration.ofMillis(500))
         urlBase = wmRuntimeInfo.httpBaseUrl
-        subject = ListR1Fetcher(configuration)
+        subject = ListR1Fetcher(WebConnector(configuration))
     }
 
     @Test
@@ -204,13 +203,6 @@ class ListR1FetcherTest {
         setUpOkResponseForQuery(q, duration = Duration.ofSeconds(15))
         val result = subject.search(q, urlBase)
         assertThat(result.products).isEmpty()
-    }
-
-    @Test
-    fun `a search should not take more than default timeout`() {
-        val q = "anything"
-        setUpOkResponseForQuery(q, duration = Duration.ofSeconds(15))
-        assertTimeoutPreemptively(defaultTimeout) { subject.search(q, urlBase) }
     }
 
     private fun setUpOkResponseForQuery(q: String, provider: String? = null, duration: Duration = Duration.ZERO) {

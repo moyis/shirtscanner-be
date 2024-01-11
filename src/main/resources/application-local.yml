@@ -1,2 +1,7 @@
 redis:
   host: redis://localhost:6379
+
+fetchers:
+  configuraiton:
+    yupoo:
+      image-proxy-host: "http://localhost:8080"
