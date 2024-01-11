@@ -2,40 +2,58 @@ package io.moya.shirtscanner.configuration
 
 import io.moya.shirtscanner.services.cache.CacheService
 import io.moya.shirtscanner.services.fetchers.ListR1Fetcher
+import io.moya.shirtscanner.services.fetchers.YupooFetcher
 import io.moya.shirtscanner.services.providers.ProductProvider
 import mu.KotlinLogging
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.Duration
 
 private val LOG = KotlinLogging.logger { }
 
 @Configuration
 class ProviderConfiguration(
-    private val config: ProviderConfigurationProperties,
+    private val config: FetchersConfigurationProperties,
     private val listR1Fetcher: ListR1Fetcher,
+    private val yupooFetcher: YupooFetcher,
     private val cacheService: CacheService,
 ) {
 
     @Bean
     fun providers(): List<ProductProvider> {
-        val defaultFetcherProviders = defaultFetcherProviders()
-        return defaultFetcherProviders
+        val listR1ProductProviders = getListR1ProductProviders()
+        val yupooFetcherProviders = getYupooProductProviders()
+        return (listR1ProductProviders + yupooFetcherProviders)
+            .map { (fetcher, providerData) -> ProductProvider(fetcher, providerData, cacheService) }
     }
 
-    private fun defaultFetcherProviders(): List<ProductProvider> {
-        val providers = config.listR1.map { ProductProvider(listR1Fetcher, it, cacheService) }
-        LOG.info { "Found ${providers.size} providers using ListR1 fetcher" }
-        return providers
+    private fun getListR1ProductProviders(): List<Pair<ListR1Fetcher, ProviderData>> {
+        val fetchersAndProviderData = config.listR1.map { listR1Fetcher to it }
+        LOG.info { "Found ${fetchersAndProviderData.size} ListR1 fetchers" }
+        return fetchersAndProviderData
+    }
+
+    private fun getYupooProductProviders(): List<Pair<YupooFetcher, ProviderData>> {
+        val fetchersAndProviderData = config.yupoo.map { yupooFetcher to it }
+        LOG.info { "Found ${fetchersAndProviderData.size} providers using Yupoo fetcher" }
+        return fetchersAndProviderData
     }
 }
 
 
-@ConfigurationProperties("providers", ignoreUnknownFields = true)
-data class ProviderConfigurationProperties(
+@ConfigurationProperties("fetchers", ignoreUnknownFields = true)
+data class FetchersConfigurationProperties(
     @NestedConfigurationProperty
     val listR1: List<ProviderData>,
+    @NestedConfigurationProperty
+    val yupoo: List<ProviderData>,
+)
+
+@ConfigurationProperties("fetchers.configuration")
+data class FetchersDefaultConfiguration(
+    val defaultTimeout: Duration,
 )
 
 data class ProviderData(

@@ -8,7 +8,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.serverError
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import io.moya.shirtscanner.configuration.FetcherConfigurationProperties
+import io.moya.shirtscanner.configuration.FetchersDefaultConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,7 +26,7 @@ class ListR1FetcherTest {
     @BeforeEach
     fun setUp(wmRuntimeInfo: WireMockRuntimeInfo) {
         WireMock.resetToDefault()
-        val configuration = FetcherConfigurationProperties(defaultTimeout)
+        val configuration = FetchersDefaultConfiguration(defaultTimeout)
         urlBase = wmRuntimeInfo.httpBaseUrl
         subject = ListR1Fetcher(configuration)
     }
@@ -214,7 +214,7 @@ class ListR1FetcherTest {
     }
 
     private fun setUpOkResponseForQuery(q: String, provider: String? = null, duration: Duration = Duration.ZERO) {
-        val body = if (provider != null) ResourceUtils.getFile("classpath:providers/$provider.html").readText() else ""
+        val body = if (provider != null) ResourceUtils.getFile("classpath:providers/list-r1/$provider.html").readText() else ""
         stubFor(get(searchQuery(q)).willReturn(ok().withFixedDelay(duration.toMillis().toInt()).withBody(body)))
     }
 

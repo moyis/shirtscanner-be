@@ -17,27 +17,39 @@ import kotlin.time.measureTimedValue
 private val LOG = KotlinLogging.logger { }
 
 @Service
-class ListR1Fetcher(
-    private val configuration: FetchersDefaultConfiguration,
-) : ProductsFetcher {
+class YupooFetcher(
+    val configuration: FetchersDefaultConfiguration
+) : ProductsFetcher{
     override fun search(q: String, url: String): SearchResult {
-        val products = getProducts(q, url)
+        val products = getProducts(q,url)
         return SearchResult(
-            queryUrl = getQueryUrl(q, url),
-            products = products,
+            queryUrl = getQueryUrl(q,url),
+            products = products
         )
     }
 
     private fun getProducts(q: String, url: String): List<Product> {
         val query = getQueryUrl(q, url)
         val document = runCatching { fetchDocument(query) }.getOrElse { handleException(it, query) } ?: return listOf()
-        return document.select("li")
+        val elementsByClass = document.getElementsByClass("album__main")
+        return elementsByClass
             .asSequence()
             .mapNotNull { mapToProduct(it, url) }
             .toList()
     }
 
-    private fun getQueryUrl(q: String, url: String) = """$url/Search-$q/list--1000-1-2-----r1.html"""
+    private fun mapToProduct(element: Element, url: String): Product? {
+        val name = element.attr("title") ?: return null
+        val productLink = element.attr("href") ?: return null
+        val imageLink = element.getElementsByClass("album__img").first()?.attr("data-src") ?: return null
+        val product = Product(
+            price = null,
+            name = name,
+            imageLink = "https:$imageLink",
+            productLink = "$url$productLink"
+        )
+        return product
+    }
 
     private fun fetchDocument(query: String): Document {
         LOG.debug { "Fetching products from $query" }
@@ -49,20 +61,6 @@ class ListR1Fetcher(
         }
         LOG.debug { "Fetching products from $query done. Took ${durationFetch.inWholeMilliseconds} ms" }
         return document
-    }
-
-    private fun mapToProduct(element: Element, baseUrl: String): Product? {
-        val a = element.selectFirst("a") ?: return null
-        val price = element.getElementsByClass("price").first() ?: return null
-        val imageLink = element.selectFirst("img")?.attr("src") ?: return null
-        val productLink = a.attr("href")
-        val name = a.attr("title")
-        return Product(
-            name = name,
-            price = price.text(),
-            productLink = "$baseUrl$productLink",
-            imageLink = imageLink
-        )
     }
 
     private fun handleException(throwable: Throwable, url: String): Document? {
@@ -81,17 +79,10 @@ class ListR1Fetcher(
         return null
     }
 
+    private fun getQueryUrl(q: String, url: String) = "$url/search/album?q=$q&uid=1&sort="
+
     companion object {
         private val DEFAULT_HEADERS = mapOf(
-            "Dnt" to "1",
-            "Sec-Ch-Ua" to """"Not_A Brand";v="8", "Chromium";v="120"""",
-            "Sec-Ch-Ua-Mobile" to "?0",
-            "Sec-Ch-Ua-Platform" to "\"macOS\"",
-            "Sec-Fetch-Dest" to "document",
-            "Sec-Fetch-Mode" to "navigate",
-            "Sec-Fetch-Site" to "same-origin",
-            "Sec-Fetch-User" to "?1",
-            "Upgrade-Insecure-Requests" to "1",
             HttpHeaders.USER_AGENT to "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         )
     }
