@@ -9,5 +9,5 @@ import org.springframework.boot.runApplication
 class Shirtscanner
 
 fun main(args: Array<String>) {
-	runApplication<Shirtscanner>(*args)
+    runApplication<Shirtscanner>(*args)
 }

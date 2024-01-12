@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class TestFixtureService {
-
     @Autowired
     private lateinit var redissonClient: RedissonClient
 

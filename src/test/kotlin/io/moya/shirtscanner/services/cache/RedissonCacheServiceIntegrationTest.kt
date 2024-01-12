@@ -13,7 +13,6 @@ import java.time.Duration
 private const val CACHE_KEY = "my_key"
 
 class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
-
     @Autowired
     private lateinit var subject: RedissonCacheService
 
@@ -30,13 +29,11 @@ class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
             await().atMost(Duration.ofSeconds(1))
                 .pollInterval(Duration.ofMillis(100))
                 .untilAsserted { assertThat(redissonClient.getBucket<String?>(CACHE_KEY).get()).isEqualTo(expectedValue) }
-
         }
     }
 
     @Nested
     inner class HasAValue {
-
         private val persistedValue = "My Old Value"
 
         @BeforeEach

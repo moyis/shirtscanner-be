@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ProductProviderTest {
-
     private val productsFetcher = EmptyProductFetcher()
 
     private val providerName: String = "provider"
@@ -32,12 +31,18 @@ class ProductProviderTest {
 }
 
 private class EmptyProductFetcher : ProductsFetcher {
-    override fun search(q: String, url: String) = SearchResult(
+    override fun search(
+        q: String,
+        url: String,
+    ) = SearchResult(
         queryUrl = "$url/search?q=$q",
-        products = listOf()
+        products = listOf(),
     )
 }
 
 private class MockCacheService : CacheService {
-    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T) = remappingFunction.invoke()
+    override fun <T> computeIfAbsent(
+        key: String,
+        remappingFunction: () -> T,
+    ) = remappingFunction.invoke()
 }

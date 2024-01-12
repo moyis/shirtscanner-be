@@ -13,14 +13,15 @@ import org.springframework.web.client.body
 @RequestMapping("/v1/images")
 class ImageController(
     private val retryTemplate: RetryTemplate,
-    private val restClient: RestClient
+    private val restClient: RestClient,
 ) {
-
     @GetMapping("/yupoo")
-    fun proxyImage(@RequestParam("path") path: String): ByteArray? =
-        retryTemplate.execute<ByteArray?, Exception> { getImageBytes(path) }
+    fun proxyImage(
+        @RequestParam("path") path: String,
+    ): ByteArray? = retryTemplate.execute<ByteArray?, Exception> { getImageBytes(path) }
 
-    private fun getImageBytes(path: String) = restClient.get()
+    private fun getImageBytes(path: String) =
+        restClient.get()
             .uri("https://photo.yupoo.com/$path")
             .header(HttpHeaders.REFERER, "https://yupoo.com/")
             .retrieve()

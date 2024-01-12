@@ -24,8 +24,9 @@ fetchers:
       name: Kotofanss
     - url: https://www.kegaoo.cn
       name: Kegaoo
-    - url: https://www.jjsport01.com
-      name: JJSport
+## Changed format
+##    - url: https://www.jjsport01.com
+##      name: JJSport
     - url: https://www.fcstore24.com
       name: FCstore24
     - url: https://www.jeofc1.com

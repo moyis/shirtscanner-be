@@ -19,7 +19,6 @@ import java.time.Duration
 
 @WireMockTest
 class YupooFetcherTest {
-
     private lateinit var subject: YupooFetcher
     private lateinit var urlBase: String
 
@@ -39,7 +38,7 @@ class YupooFetcherTest {
         assertThat(result.products).hasSize(38)
         assertThat(result.products).first().satisfies(
             { assertThat(it.name).isEqualTo("Retro 2000 Argentina home") },
-            { assertThat(it.productLink).isEqualTo("${urlBase}/albums/90802644?uid=1") },
+            { assertThat(it.productLink).isEqualTo("$urlBase/albums/90802644?uid=1") },
             { assertThat(it.price).isNull() },
             { assertThat(it.imageLink).isEqualTo("$urlBase/v1/images/yupoo?path=beonestore/116b7fcf/medium.jpg") },
         )
@@ -77,7 +76,11 @@ class YupooFetcherTest {
         assertThat(result.products).isEmpty()
     }
 
-    private fun setUpOkResponseForQuery(q: String, provider: String? = null, duration: Duration = Duration.ZERO) {
+    private fun setUpOkResponseForQuery(
+        q: String,
+        provider: String? = null,
+        duration: Duration = Duration.ZERO,
+    ) {
         val body = if (provider != null) ResourceUtils.getFile("classpath:providers/yupoo/$provider.html").readText() else ""
         stubFor(get(searchQuery(q)).willReturn(ok().withFixedDelay(duration.toMillis().toInt()).withBody(body)))
     }

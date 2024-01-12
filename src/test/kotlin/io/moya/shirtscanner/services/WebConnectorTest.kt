@@ -16,7 +16,6 @@ import java.time.Duration
 
 @WireMockTest
 class WebConnectorTest {
-
     private val defaultTimeout = Duration.ofMillis(300)
 
     private lateinit var subject: WebConnector
@@ -58,7 +57,10 @@ class WebConnectorTest {
         assertTimeoutPreemptively(defaultTimeout) { subject.fetchDocument(path) }
     }
 
-    private fun setUpOkResponseForQuery(path: String, duration: Duration = Duration.ZERO) {
+    private fun setUpOkResponseForQuery(
+        path: String,
+        duration: Duration = Duration.ZERO,
+    ) {
         stubFor(get(path).willReturn(ok().withFixedDelay(duration.toMillis().toInt()).withBody("")))
     }
 

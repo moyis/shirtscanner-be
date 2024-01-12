@@ -17,7 +17,6 @@ class ProviderConfiguration(
     private val yupooFetcher: YupooFetcher,
     private val cacheService: CacheService,
 ) {
-
     @Bean
     fun providers(): List<ProductProvider> {
         val listR1ProductProviders = getListR1ProductProviders()
@@ -38,5 +37,3 @@ class ProviderConfiguration(
         return fetchersAndProviderData
     }
 }
-
-

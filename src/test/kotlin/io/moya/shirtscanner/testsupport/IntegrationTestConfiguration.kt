@@ -8,7 +8,6 @@ import org.testcontainers.utility.DockerImageName
 
 @TestConfiguration(proxyBeanMethods = false)
 class IntegrationTestConfiguration {
-
     @Bean
     fun redisContainer(registry: DynamicPropertyRegistry): RedisContainer {
         val redis = RedisContainer(DockerImageName.parse("redis:6.2.6-alpine"))
@@ -18,4 +17,3 @@ class IntegrationTestConfiguration {
         return redis
     }
 }
-

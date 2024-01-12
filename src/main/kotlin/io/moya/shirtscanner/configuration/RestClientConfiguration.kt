@@ -7,5 +7,5 @@ import org.springframework.web.client.RestClient
 @Configuration
 class RestClientConfiguration {
     @Bean
-    fun restClient() : RestClient = RestClient.create()
+    fun restClient(): RestClient = RestClient.create()
 }

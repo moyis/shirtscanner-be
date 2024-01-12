@@ -6,7 +6,6 @@ import io.restassured.module.kotlin.extensions.When
 import org.junit.jupiter.api.Test
 
 class ShirtscannerTest : AbstractIntegrationTest() {
-
     @Test
     fun `application loads`() {
         When {

@@ -11,9 +11,10 @@ class ProductsService(
 ) {
     private val executorService = Executors.newVirtualThreadPerTaskExecutor()
 
-    fun search(q: String) = providers
-        .map { executorService.submit<ProviderResult> { it.search(q) } }
-        .map { it.get() }
-        .sortedByDescending { it.products.size }
-        .toList()
+    fun search(q: String) =
+        providers
+            .map { executorService.submit<ProviderResult> { it.search(q) } }
+            .map { it.get() }
+            .sortedByDescending { it.products.size }
+            .toList()
 }

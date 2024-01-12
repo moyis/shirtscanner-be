@@ -11,7 +11,10 @@ private val LOG = KotlinLogging.logger { }
 class RedissonCacheService(
     private val redissonClient: RedissonClient,
 ) : CacheService {
-    override fun <T> computeIfAbsent(key: String, remappingFunction: () -> T): T {
+    override fun <T> computeIfAbsent(
+        key: String,
+        remappingFunction: () -> T,
+    ): T {
         val bucket = redissonClient.getBucket<T?>(key)
         return runCatching { bucket.get() }
             .onFailure { LOG.error { it.message } }

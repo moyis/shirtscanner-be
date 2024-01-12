@@ -10,11 +10,10 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = [Shirtscanner::class, IntegrationTestConfiguration::class]
+    classes = [Shirtscanner::class, IntegrationTestConfiguration::class],
 )
 @ActiveProfiles("test")
 abstract class AbstractIntegrationTest {
-
     @LocalServerPort
     private var port: Int = 0
 

@@ -23,7 +23,7 @@ class ProductProvider(
         return ProviderResult(
             providerName = providerData.name,
             queryUrl = searchResult.queryUrl,
-            products = searchResult.products
+            products = searchResult.products,
         )
     }
 }

@@ -8,19 +8,19 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class RedisConfiguration(
+class CacheConfiguration(
     private val configurationProperties: RedisConfigurationProperties,
 ) {
-
     @Bean
     fun redisson(): RedissonClient {
-        val config = with(configurationProperties) {
-            Config().apply {
-                useSingleServer().apply {
-                    address = host
+        val config =
+            with(configurationProperties) {
+                Config().apply {
+                    useSingleServer().apply {
+                        address = host
+                    }
                 }
             }
-        }
 
         return Redisson.create(config)
     }

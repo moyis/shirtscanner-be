@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service
 class ListR1Fetcher(
     private val webConnector: WebConnector,
 ) : ProductsFetcher {
-    override fun search(q: String, url: String): SearchResult {
+    override fun search(
+        q: String,
+        url: String,
+    ): SearchResult {
         val products = getProducts(q, url)
         return SearchResult(
             queryUrl = getQueryUrl(q, url),
@@ -18,7 +21,10 @@ class ListR1Fetcher(
         )
     }
 
-    private fun getProducts(q: String, url: String): List<Product> {
+    private fun getProducts(
+        q: String,
+        url: String,
+    ): List<Product> {
         val query = getQueryUrl(q, url)
         val document = webConnector.fetchDocument(query) ?: return listOf()
         return document.select("li")
@@ -27,9 +33,15 @@ class ListR1Fetcher(
             .toList()
     }
 
-    private fun getQueryUrl(q: String, url: String) = """$url/Search-$q/list--1000-1-2-----r1.html"""
+    private fun getQueryUrl(
+        q: String,
+        url: String,
+    ) = """$url/Search-$q/list--1000-1-2-----r1.html"""
 
-    private fun mapToProduct(element: Element, baseUrl: String): Product? {
+    private fun mapToProduct(
+        element: Element,
+        baseUrl: String,
+    ): Product? {
         val a = element.selectFirst("a") ?: return null
         val price = element.getElementsByClass("price").first() ?: return null
         val imageLink = element.selectFirst("img")?.attr("src") ?: return null
