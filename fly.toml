@@ -13,11 +13,10 @@ primary_region = "ams"
   auto_start_machines = true
   min_machines_running = 0
   processes = ["app"]
-
-[http_service.concurrency]
-  type = "connections"
-  hard_limit = 200
-  soft_limit = 200
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 250
+    hard_limit = 500
 
 [[vm]]
   cpu_kind = "shared"
