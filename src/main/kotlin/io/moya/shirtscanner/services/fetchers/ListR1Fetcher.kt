@@ -16,27 +16,30 @@ class ListR1Fetcher(
     ): SearchResult {
         val products = getProducts(q, url)
         return SearchResult(
-            queryUrl = getQueryUrl(q, url),
+            queryUrl = getWebpageUrl(q, url),
             products = products,
         )
     }
 
+    private fun getDocuments(q: String, url: String) = generateSequence(1) { it + 1 }
+        .map { getWebpageUrl(q, url, it) }
+        .take(5)
+        .mapNotNull { webConnector.fetchDocument(it) }
+        .takeWhile { it.getElementsByClass("empty__emptytitle").isEmpty() }
+
     private fun getProducts(
         q: String,
         url: String,
-    ): List<Product> {
-        val query = getQueryUrl(q, url)
-        val document = webConnector.fetchDocument(query) ?: return listOf()
-        return document.select("li")
-            .asSequence()
-            .mapNotNull { mapToProduct(it, url) }
-            .toList()
-    }
+    ) = getDocuments(q, url)
+        .flatMap { it.select("li") }
+        .mapNotNull { mapToProduct(it, url) }
+        .toList()
 
-    private fun getQueryUrl(
+    private fun getWebpageUrl(
         q: String,
         url: String,
-    ) = """$url/Search-$q/list--1000-1-2-----r1.html"""
+        pageNumber: Int = 1,
+    ) = """$url/Search-$q/list--1000-1-2-----r$pageNumber.html"""
 
     private fun mapToProduct(
         element: Element,

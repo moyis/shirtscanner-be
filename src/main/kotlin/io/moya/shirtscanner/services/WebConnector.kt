@@ -7,6 +7,9 @@ import org.jsoup.Jsoup
 import org.jsoup.UnsupportedMimeTypeException
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpHeaders
+import org.springframework.retry.backoff.ExponentialBackOffPolicy
+import org.springframework.retry.policy.SimpleRetryPolicy
+import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 import java.net.SocketTimeoutException
 import kotlin.time.measureTimedValue
@@ -17,14 +20,22 @@ private val LOG = KotlinLogging.logger { }
 class WebConnector(
     private val configuration: WebConnectorConfigurationProperties,
 ) {
-    fun fetchDocument(url: String) = runCatching { doFetch(url) }.getOrElse { handleException(it, url) }
+    private val retryTemplate = RetryTemplate().apply {
+        val backOffPolicy = ExponentialBackOffPolicy()
+        backOffPolicy.initialInterval = 500L
+        setBackOffPolicy(backOffPolicy)
+
+        val retryPolicy = SimpleRetryPolicy()
+        retryPolicy.maxAttempts = 10
+        setRetryPolicy(retryPolicy)
+    }
+    fun fetchDocument(url: String) = runCatching { retryTemplate.execute<Document, Throwable>{ doFetch(url) } }.getOrElse { handleException(it, url) }
 
     private fun doFetch(url: String): Document {
         LOG.debug { "Fetching products from $url" }
         val (document, durationFetch) =
             measureTimedValue {
                 Jsoup.connect(url)
-                    .timeout(configuration.defaultTimeout.toMillis().toInt())
                     .headers(DEFAULT_HEADERS)
                     .get()
             }
@@ -39,7 +50,7 @@ class WebConnector(
         val baseMessage = "Exception found performing get on $url:"
         when (throwable) {
             is SocketTimeoutException -> LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}" }
-            is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode}" }
+            is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
             is UnsupportedMimeTypeException -> LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" }
             else -> LOG.error { "Unexpected exception found while performing get on $url: ${throwable.cause}" }
         }

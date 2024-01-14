@@ -18,7 +18,7 @@ class YupooFetcher(
     ): SearchResult {
         val products = getProducts(q, url)
         return SearchResult(
-            queryUrl = getWebpageUrl(q, url),
+            queryUrl = getWebpageUrl(q, url, 1),
             products = products,
         )
     }
@@ -26,15 +26,16 @@ class YupooFetcher(
     private fun getProducts(
         q: String,
         url: String,
-    ): List<Product> {
-        val webpage = getWebpageUrl(q, url)
-        val document = webConnector.fetchDocument(webpage) ?: return listOf()
-        val elementsByClass = document.getElementsByClass("album__main")
-        return elementsByClass
-            .asSequence()
-            .mapNotNull { mapToProduct(it, url) }
-            .toList()
-    }
+    ) = getDocuments(q, url)
+        .flatMap { it.getElementsByClass("album__main") }
+        .mapNotNull { mapToProduct(it, url) }
+        .toList()
+
+    private fun getDocuments(q: String, url: String) = generateSequence(1) { it + 1 }
+        .map { getWebpageUrl(q, url, it) }
+        .take(5)
+        .mapNotNull { webConnector.fetchDocument(it) }
+        .takeWhile { it.getElementsByClass("empty__emptytitle").isEmpty() }
 
     private fun mapToProduct(
         element: Element,
@@ -60,5 +61,6 @@ class YupooFetcher(
     private fun getWebpageUrl(
         q: String,
         url: String,
-    ) = "$url/search/album?q=$q&uid=1&sort="
+        pageNumber: Int,
+    ) = "$url/search/album?q=$q&uid=1&sort=&page=$pageNumber"
 }

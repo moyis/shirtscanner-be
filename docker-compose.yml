@@ -4,11 +4,3 @@ services:
     image: redis:6.2.6-alpine
     ports:
       - '6379:6379'
-  spring:
-    image: docker.io/library/shirtscanner:0.0.1-SNAPSHOT
-    ports:
-      - '8080:8080'
-    depends_on:
-      - cache
-    environment:
-      REDIS_HOST: 'cache:6379'
