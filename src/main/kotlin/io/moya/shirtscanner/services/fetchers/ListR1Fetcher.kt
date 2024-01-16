@@ -21,9 +21,12 @@ class ListR1Fetcher(
         )
     }
 
-    private fun getDocuments(q: String, url: String) = generateSequence(1) { it + 1 }
+    private fun getDocuments(
+        q: String,
+        url: String,
+    ) = generateSequence(1) { it + 1 }
         .map { getWebpageUrl(q, url, it) }
-        .take(5)
+        .take(3)
         .mapNotNull { webConnector.fetchDocument(it) }
         .takeWhile { it.getElementsByClass("empty__emptytitle").isEmpty() }
 
@@ -33,6 +36,7 @@ class ListR1Fetcher(
     ) = getDocuments(q, url)
         .flatMap { it.select("li") }
         .mapNotNull { mapToProduct(it, url) }
+        .distinct()
         .toList()
 
     private fun getWebpageUrl(

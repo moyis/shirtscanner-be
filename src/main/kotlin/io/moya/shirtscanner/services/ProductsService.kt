@@ -2,14 +2,14 @@ package io.moya.shirtscanner.services
 
 import io.moya.shirtscanner.models.ProviderResult
 import io.moya.shirtscanner.services.providers.ProductProvider
-import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
-private val LOG = KotlinLogging.logger {  }
+private const val PROVIDERS_EVENT_NAME = "providers"
+
 @Service
 class ProductsService(
     private val providers: List<ProductProvider>,
@@ -29,20 +29,26 @@ class ProductsService(
         return emitter
     }
 
-    private fun searchStream(q: String, emitter: SseEmitter) {
+    private fun searchStream(
+        q: String,
+        emitter: SseEmitter,
+    ) {
         val totalSent = AtomicInteger(0)
         val total = providers.size
         providers
-            .map { executorService.submit<ProviderResult> { it.search(q) } }
-            .forEach {
-                val processed = totalSent.incrementAndGet()
-                emitter.send(SseEmitter.event()
-                    .id("${UUID.randomUUID()}")
-                    .name("providers")
-                    .data(ProviderResultEvent(total = total, processed = processed, data = it.get())))
-            }
+            .map { executorService.submit { emitter.send(sseEventBuilder(data = it.search(q), processedCount = totalSent.incrementAndGet(), totalCount = total)) } }
+            .forEach { it.get() }
         emitter.complete()
     }
+
+    private fun sseEventBuilder(
+        data: ProviderResult,
+        processedCount: Int,
+        totalCount: Int,
+    ) = SseEmitter.event()
+        .id("${UUID.randomUUID()}")
+        .name(PROVIDERS_EVENT_NAME)
+        .data(ProviderResultEvent(total = totalCount, processed = processedCount, data = data))
 }
 
 data class ProviderResultEvent(
