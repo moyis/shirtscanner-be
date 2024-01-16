@@ -31,8 +31,9 @@ class WebConnector(
             setRetryPolicy(retryPolicy)
         }
 
-    fun fetchDocument(url: String) = runCatching { retryTemplate.execute<Document, Throwable> { doFetch(url) } }
-        .getOrElse { handleException(it, url) }
+    fun fetchDocument(url: String) =
+        runCatching { retryTemplate.execute<Document, Throwable> { doFetch(url) } }
+            .getOrElse { handleException(it, url) }
 
     private fun doFetch(url: String): Document {
         LOG.debug { "Fetching products from $url" }
