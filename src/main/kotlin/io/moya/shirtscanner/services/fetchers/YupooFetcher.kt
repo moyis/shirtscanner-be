@@ -36,7 +36,7 @@ class YupooFetcher(
         url: String,
     ) = generateSequence(1) { it + 1 }
         .map { getWebpageUrl(q, url, it) }
-        .take(5)
+        .take(2)
         .mapNotNull { webConnector.fetchDocument(it) }
         .takeWhile { it.getElementsByClass("empty__emptytitle").isEmpty() }
 

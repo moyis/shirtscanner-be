@@ -26,7 +26,7 @@ class ListR1Fetcher(
         url: String,
     ) = generateSequence(1) { it + 1 }
         .map { getWebpageUrl(q, url, it) }
-        .take(3)
+        .take(2)
         .mapNotNull { webConnector.fetchDocument(it) }
         .takeWhile { it.getElementsByClass("empty__emptytitle").isEmpty() }
 
