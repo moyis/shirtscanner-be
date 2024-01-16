@@ -12,6 +12,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTimeoutPreemptively
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.retry.policy.NeverRetryPolicy
+import org.springframework.retry.support.RetryTemplate
 import java.time.Duration
 
 @WireMockTest
@@ -23,7 +25,9 @@ class WebConnectorTest {
     @BeforeEach
     fun setUp() {
         reset()
-        subject = WebConnector(WebConnectorConfigurationProperties(defaultTimeout))
+        val configuration = WebConnectorConfigurationProperties(defaultTimeout)
+        val retryTemplate = RetryTemplate.builder().customPolicy(NeverRetryPolicy()).build()
+        subject = WebConnector(configuration, retryTemplate)
     }
 
     @Test

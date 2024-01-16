@@ -4,8 +4,17 @@ spring:
       enabled: true
 
 web-connector:
-  configuration:
-    default-timeout: 3s
+    default-timeout: 15s
+
+retry:
+  web-connector:
+    initial-interval: 100ms
+    multiplier: 2
+    max-interval: 1s
+    max-attempts: 10
+  image-proxy:
+    max-attempts: 2
+
 
 fetchers:
   configuraiton:
@@ -24,9 +33,9 @@ fetchers:
       name: Kotofanss
     - url: https://www.kegaoo.cn
       name: Kegaoo
-## Changed format
-##    - url: https://www.jjsport01.com
-##      name: JJSport
+    ## Changed format
+    ##    - url: https://www.jjsport01.com
+    ##      name: JJSport
     - url: https://www.fcstore24.com
       name: FCstore24
     - url: https://www.jeofc1.com

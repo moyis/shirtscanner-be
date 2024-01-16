@@ -6,7 +6,9 @@ import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.UnsupportedMimeTypeException
 import org.jsoup.nodes.Document
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
+import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 import java.net.SocketTimeoutException
 import kotlin.time.measureTimedValue
@@ -16,8 +18,12 @@ private val LOG = KotlinLogging.logger { }
 @Service
 class WebConnector(
     private val configuration: WebConnectorConfigurationProperties,
+    @Qualifier("webConnectorRetryTemplate")
+    private val retryTemplate: RetryTemplate,
 ) {
-    fun fetchDocument(url: String) = runCatching { doFetch(url) }.getOrElse { handleException(it, url) }
+    fun fetchDocument(url: String) =
+        runCatching { retryTemplate.execute<Document, Throwable> { doFetch(url) } }
+            .getOrElse { handleException(it, url) }
 
     private fun doFetch(url: String): Document {
         LOG.debug { "Fetching products from $url" }
@@ -39,7 +45,7 @@ class WebConnector(
         val baseMessage = "Exception found performing get on $url:"
         when (throwable) {
             is SocketTimeoutException -> LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}" }
-            is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode}" }
+            is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
             is UnsupportedMimeTypeException -> LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" }
             else -> LOG.error { "Unexpected exception found while performing get on $url: ${throwable.cause}" }
         }

@@ -14,6 +14,8 @@ import io.moya.shirtscanner.services.WebConnector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.retry.policy.NeverRetryPolicy
+import org.springframework.retry.support.RetryTemplate
 import org.springframework.util.ResourceUtils
 import java.time.Duration
 
@@ -25,8 +27,10 @@ class YupooFetcherTest {
     @BeforeEach
     fun setUp(wmRuntimeInfo: WireMockRuntimeInfo) {
         WireMock.resetToDefault()
-        val webConnector = WebConnector(WebConnectorConfigurationProperties(Duration.ofMillis(500)))
         urlBase = wmRuntimeInfo.httpBaseUrl
+        val configuration = WebConnectorConfigurationProperties(Duration.ofMillis(500))
+        val retryTemplate = RetryTemplate.builder().customPolicy(NeverRetryPolicy()).build()
+        val webConnector = WebConnector(configuration, retryTemplate)
         subject = YupooFetcher(webConnector, YupooFetcherConfigurationProperties(urlBase))
     }
 
@@ -93,5 +97,5 @@ class YupooFetcherTest {
         stubFor(get(searchQuery(q)).willReturn(serverError().withBody("")))
     }
 
-    private fun searchQuery(q: String) = "/search/album?q=$q&uid=1&sort="
+    private fun searchQuery(q: String) = "/search/album?q=$q&uid=1&sort=&page=1"
 }
