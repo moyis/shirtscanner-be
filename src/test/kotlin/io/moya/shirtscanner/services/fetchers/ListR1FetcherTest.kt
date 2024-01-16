@@ -13,6 +13,8 @@ import io.moya.shirtscanner.services.WebConnector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.retry.policy.NeverRetryPolicy
+import org.springframework.retry.support.RetryTemplate
 import org.springframework.util.ResourceUtils
 import java.time.Duration
 
@@ -24,9 +26,11 @@ class ListR1FetcherTest {
     @BeforeEach
     fun setUp(wmRuntimeInfo: WireMockRuntimeInfo) {
         WireMock.resetToDefault()
-        val configuration = WebConnectorConfigurationProperties(Duration.ofMillis(500))
         urlBase = wmRuntimeInfo.httpBaseUrl
-        subject = ListR1Fetcher(WebConnector(configuration))
+        val retryTemplate = RetryTemplate.builder().customPolicy(NeverRetryPolicy()).build()
+        val configuration = WebConnectorConfigurationProperties(Duration.ofMillis(500))
+        val webConnector = WebConnector(configuration, retryTemplate)
+        subject = ListR1Fetcher(webConnector)
     }
 
     @Test

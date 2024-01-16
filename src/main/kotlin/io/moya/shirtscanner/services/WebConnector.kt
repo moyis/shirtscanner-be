@@ -6,9 +6,8 @@ import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.UnsupportedMimeTypeException
 import org.jsoup.nodes.Document
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
-import org.springframework.retry.backoff.ExponentialBackOffPolicy
-import org.springframework.retry.policy.SimpleRetryPolicy
 import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 import java.net.SocketTimeoutException
@@ -19,18 +18,9 @@ private val LOG = KotlinLogging.logger { }
 @Service
 class WebConnector(
     private val configuration: WebConnectorConfigurationProperties,
+    @Qualifier("webConnectorRetryTemplate")
+    private val retryTemplate: RetryTemplate,
 ) {
-    private val retryTemplate =
-        RetryTemplate().apply {
-            val backOffPolicy = ExponentialBackOffPolicy()
-            backOffPolicy.initialInterval = 100L
-            setBackOffPolicy(backOffPolicy)
-
-            val retryPolicy = SimpleRetryPolicy()
-            retryPolicy.maxAttempts = 10
-            setRetryPolicy(retryPolicy)
-        }
-
     fun fetchDocument(url: String) =
         runCatching { retryTemplate.execute<Document, Throwable> { doFetch(url) } }
             .getOrElse { handleException(it, url) }
@@ -40,6 +30,7 @@ class WebConnector(
         val (document, durationFetch) =
             measureTimedValue {
                 Jsoup.connect(url)
+                    .timeout(configuration.defaultTimeout.toMillis().toInt())
                     .headers(DEFAULT_HEADERS)
                     .get()
             }
