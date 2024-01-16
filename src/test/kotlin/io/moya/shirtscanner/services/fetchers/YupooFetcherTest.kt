@@ -19,8 +19,6 @@ import org.springframework.retry.support.RetryTemplate
 import org.springframework.util.ResourceUtils
 import java.time.Duration
 
-private const val SEARCH_URI = "/search/album"
-
 @WireMockTest
 class YupooFetcherTest {
     private lateinit var subject: YupooFetcher
@@ -99,5 +97,5 @@ class YupooFetcherTest {
         stubFor(get(searchQuery(q)).willReturn(serverError().withBody("")))
     }
 
-    private fun searchQuery(q: String) = "${SEARCH_URI}?q=$q&uid=1&sort=&page=1"
+    private fun searchQuery(q: String) = "/search/album?q=$q&uid=1&sort=&page=1"
 }
