@@ -19,7 +19,6 @@ class ProductsController(
 
     @GetMapping("/stream")
     @CrossOrigin(origins = ["*"])
-
     fun searchStream(
         @RequestParam("q") q: String,
     ) = productsService.searchStream(q)

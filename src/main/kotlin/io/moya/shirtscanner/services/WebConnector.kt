@@ -20,16 +20,19 @@ private val LOG = KotlinLogging.logger { }
 class WebConnector(
     private val configuration: WebConnectorConfigurationProperties,
 ) {
-    private val retryTemplate = RetryTemplate().apply {
-        val backOffPolicy = ExponentialBackOffPolicy()
-        backOffPolicy.initialInterval = 500L
-        setBackOffPolicy(backOffPolicy)
+    private val retryTemplate =
+        RetryTemplate().apply {
+            val backOffPolicy = ExponentialBackOffPolicy()
+            backOffPolicy.initialInterval = 100L
+            setBackOffPolicy(backOffPolicy)
 
-        val retryPolicy = SimpleRetryPolicy()
-        retryPolicy.maxAttempts = 10
-        setRetryPolicy(retryPolicy)
-    }
-    fun fetchDocument(url: String) = runCatching { retryTemplate.execute<Document, Throwable>{ doFetch(url) } }.getOrElse { handleException(it, url) }
+            val retryPolicy = SimpleRetryPolicy()
+            retryPolicy.maxAttempts = 10
+            setRetryPolicy(retryPolicy)
+        }
+
+    fun fetchDocument(url: String) = runCatching { retryTemplate.execute<Document, Throwable> { doFetch(url) } }
+        .getOrElse { handleException(it, url) }
 
     private fun doFetch(url: String): Document {
         LOG.debug { "Fetching products from $url" }

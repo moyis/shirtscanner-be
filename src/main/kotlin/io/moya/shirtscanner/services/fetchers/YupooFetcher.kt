@@ -31,7 +31,10 @@ class YupooFetcher(
         .mapNotNull { mapToProduct(it, url) }
         .toList()
 
-    private fun getDocuments(q: String, url: String) = generateSequence(1) { it + 1 }
+    private fun getDocuments(
+        q: String,
+        url: String,
+    ) = generateSequence(1) { it + 1 }
         .map { getWebpageUrl(q, url, it) }
         .take(5)
         .mapNotNull { webConnector.fetchDocument(it) }

@@ -5,3 +5,6 @@ fetchers:
   configuraiton:
     yupoo:
       image-proxy-host: "http://localhost:8080"
+logging:
+  level:
+    io.moya.shirtscanner: debug
