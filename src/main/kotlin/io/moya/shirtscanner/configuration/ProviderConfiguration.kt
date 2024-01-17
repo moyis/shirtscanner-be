@@ -18,7 +18,7 @@ class ProviderConfiguration(
     private val cacheService: CacheService,
 ) {
     @Bean
-    fun providers(): List<ProductProvider> {
+    fun productProviders(): List<ProductProvider> {
         val listR1ProductProviders = getListR1ProductProviders()
         val yupooFetcherProviders = getYupooProductProviders()
         return (listR1ProductProviders + yupooFetcherProviders)
@@ -35,5 +35,10 @@ class ProviderConfiguration(
         val fetchersAndProviderData = config.yupoo.map { yupooFetcher to it }
         LOG.info { "Found ${fetchersAndProviderData.size} providers using Yupoo fetcher" }
         return fetchersAndProviderData
+    }
+
+    @Bean
+    fun providers(): List<ProviderData> {
+        return config.listR1 + config.yupoo
     }
 }

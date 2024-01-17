@@ -1,7 +1,12 @@
-spring:
-  main:
-    banner-mode: off
 
-logging:
-  level:
-    root: off
+
+fetchers:
+  configuraiton:
+    yupoo:
+      image-proxy-host: "https://api.shirtscanner.com"
+  list-r-1:
+    - url: ${wiremock.url}/list-r-1
+      name: ListR1 Test
+  yupoo:
+    - url: ${wiremock.url}/yupoo
+      name: Yupoo Test

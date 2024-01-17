@@ -2,6 +2,7 @@ package io.moya.shirtscanner.testsupport
 
 import io.moya.shirtscanner.Shirtscanner
 import io.restassured.RestAssured
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -21,8 +22,12 @@ abstract class AbstractIntegrationTest {
     protected lateinit var tfs: TestFixtureService
 
     @BeforeEach
-    fun setUp() {
+    fun setUpRestAssured() {
         RestAssured.port = port
+    }
+
+    @AfterEach
+    fun clear() {
         tfs.clearAll()
     }
 }

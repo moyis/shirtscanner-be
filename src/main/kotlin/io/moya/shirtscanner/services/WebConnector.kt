@@ -8,10 +8,10 @@ import org.jsoup.UnsupportedMimeTypeException
 import org.jsoup.nodes.Document
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 import java.net.SocketTimeoutException
-import kotlin.time.measureTimedValue
 
 private val LOG = KotlinLogging.logger { }
 
@@ -21,21 +21,15 @@ class WebConnector(
     @Qualifier("webConnectorRetryTemplate")
     private val retryTemplate: RetryTemplate,
 ) {
-    fun fetchDocument(url: String) =
-        runCatching { retryTemplate.execute<Document, Throwable> { doFetch(url) } }
-            .getOrElse { handleException(it, url) }
+    fun fetchDocument(url: String): Document? = runCatching { retryTemplate.execute<Document?, Throwable> { doFetch(url) } }.getOrNull()
 
-    private fun doFetch(url: String): Document {
-        LOG.debug { "Fetching products from $url" }
-        val (document, durationFetch) =
-            measureTimedValue {
-                Jsoup.connect(url)
-                    .timeout(configuration.defaultTimeout.toMillis().toInt())
-                    .headers(DEFAULT_HEADERS)
-                    .get()
-            }
-        LOG.debug { "Fetching products from $url done. Took ${durationFetch.inWholeMilliseconds} ms" }
-        return document
+    private fun doFetch(url: String): Document? {
+        return runCatching {
+            Jsoup.connect(url)
+                .timeout(configuration.defaultTimeout.toMillis().toInt())
+                .headers(DEFAULT_HEADERS)
+                .get()
+        }.getOrElse { handleException(it, url) }
     }
 
     private fun handleException(
@@ -44,8 +38,11 @@ class WebConnector(
     ): Document? {
         val baseMessage = "Exception found performing get on $url:"
         when (throwable) {
+            is HttpStatusException -> {
+                LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
+                if (throwable.statusCode == HttpStatus.TOO_MANY_REQUESTS.value()) throw throwable
+            }
             is SocketTimeoutException -> LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}" }
-            is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
             is UnsupportedMimeTypeException -> LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" }
             else -> LOG.error { "Unexpected exception found while performing get on $url: ${throwable.cause}" }
         }
