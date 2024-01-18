@@ -1,6 +1,7 @@
 package io.moya.shirtscanner.controllers
 
 import io.moya.shirtscanner.services.ProductsService
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,7 +18,7 @@ class ProductsController(
         @RequestParam("q") q: String,
     ) = productsService.search(q)
 
-    @GetMapping("/stream")
+    @GetMapping("/stream", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     @CrossOrigin(origins = ["*"])
     fun searchStream(
         @RequestParam("q") q: String,

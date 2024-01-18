@@ -26,6 +26,7 @@ repositories {
 dependencies {
     //Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.retry:spring-retry'
 
@@ -52,6 +53,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'com.redis:testcontainers-redis:2.0.1'
     testImplementation 'org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:1.0-alpha-13'
+    testImplementation 'io.projectreactor:reactor-test'
 
     //Development
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'

@@ -1,18 +1,17 @@
 package io.moya.shirtscanner.services
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.moya.shirtscanner.models.ProviderResult
 import io.moya.shirtscanner.services.providers.ProductProvider
 import org.springframework.stereotype.Service
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
-import java.util.UUID
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Sinks
 import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicInteger
-
-private const val PROVIDERS_EVENT_NAME = "providers"
 
 @Service
 class ProductsService(
     private val providers: List<ProductProvider>,
+    private val objectMapper: ObjectMapper,
 ) {
     private val executorService = Executors.newVirtualThreadPerTaskExecutor()
 
@@ -23,36 +22,19 @@ class ProductsService(
             .sortedByDescending { it.products.size }
             .toList()
 
-    fun searchStream(q: String): SseEmitter {
-        val emitter = SseEmitter(Long.MAX_VALUE)
-        executorService.submit { searchStream(q, emitter) }
-        return emitter
+    fun searchStream(q: String): Flux<ProviderResultEvent> {
+        val sink = Sinks.many().unicast().onBackpressureBuffer<ProviderResultEvent>()
+        executorService.submit { searchStream(q, sink) }
+        return sink.asFlux()
     }
 
     private fun searchStream(
         q: String,
-        emitter: SseEmitter,
+        sink: Sinks.Many<ProviderResultEvent>,
     ) {
-        val totalSent = AtomicInteger(0)
-        val total = providers.size
         providers
-            .map { executorService.submit { emitter.send(sseEventBuilder(data = it.search(q), processedCount = totalSent.incrementAndGet(), totalCount = total)) } }
+            .map { executorService.submit { sink.tryEmitNext(ProviderResultEvent(total = providers.size, data = it.search(q))) } }
             .forEach { it.get() }
-        emitter.complete()
+        sink.tryEmitComplete()
     }
-
-    private fun sseEventBuilder(
-        data: ProviderResult,
-        processedCount: Int,
-        totalCount: Int,
-    ) = SseEmitter.event()
-        .id("${UUID.randomUUID()}")
-        .name(PROVIDERS_EVENT_NAME)
-        .data(ProviderResultEvent(total = totalCount, processed = processedCount, data = data))
 }
-
-data class ProviderResultEvent(
-    val processed: Int,
-    val total: Int,
-    val data: ProviderResult,
-)
