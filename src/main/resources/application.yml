@@ -156,5 +156,5 @@ fetchers:
 
 cors:
   allowed-origins:
-    - https://*.shirtscanner.com
-    - https://shirtscanner-*-moyaf-org.vercel.app
+    - https://shirtscanner.com
+    - https://www.shirtscanner.com
