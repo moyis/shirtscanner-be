@@ -153,3 +153,8 @@ fetchers:
 ## Has a password 88889999
 ##    - url: https://vpi123.x.yupoo.com
 ##      name: Blue Sky
+
+cors:
+  allowed-origins:
+    - https://*.shirtscanner.com
+    - https://shirtscanner-*-moyaf-org.vercel.app
