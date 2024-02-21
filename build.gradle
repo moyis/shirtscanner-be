@@ -43,7 +43,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.17.2'
 
     //Redis
-    implementation 'org.redisson:redisson:3.26.1'
+    implementation 'org.redisson:redisson:3.27.0'
 
     //Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
