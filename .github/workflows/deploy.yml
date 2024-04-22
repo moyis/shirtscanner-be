@@ -58,3 +58,4 @@ jobs:
         uses: rickstaa/action-create-tag@v1
         with:
           tag: ${{ steps.version.outputs.version }}
+          github_token: ${{ secrets.DEPENDABOT_GITHUB_TOKEN }}
