@@ -21,7 +21,7 @@ fetchers:
     yupoo:
       image-proxy-host: "https://api.shirtscanner.com"
   list-r-1:
-    - url: https://www.kitgg5.com
+    - url: https://www.kitgg6.com
       name: KitsGG
     - url: https://www.5boundless.com
       name: 5Boundless
