@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.retry.support.RetryTemplate
 import java.time.Duration
 
-private const val MAX_RETRY_ATTEPMTS = 2
-
 @Configuration
 class RetryConfiguration(private val configuration: RetryConfigurationProperties) {
     @Bean

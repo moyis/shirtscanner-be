@@ -1,6 +1,5 @@
 package io.moya.shirtscanner.services
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.moya.shirtscanner.models.ProviderResult
 import io.moya.shirtscanner.services.providers.ProductProvider
 import org.springframework.stereotype.Service
@@ -11,7 +10,6 @@ import java.util.concurrent.Executors
 @Service
 class ProductsService(
     private val providers: List<ProductProvider>,
-    private val objectMapper: ObjectMapper,
 ) {
     private val executorService = Executors.newVirtualThreadPerTaskExecutor()
 

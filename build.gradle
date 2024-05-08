@@ -59,7 +59,7 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 }
 
-tasks.withType(KotlinCompile) {
+tasks.withType(KotlinCompile).configureEach {
     kotlinOptions {
         freeCompilerArgs += '-Xjsr305=strict'
         jvmTarget = '21'
