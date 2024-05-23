@@ -21,10 +21,12 @@ class ProductsService(
             .toList()
 
     fun searchStream(q: String): Flux<ProviderResultEvent> {
-        val sink = Sinks.many().unicast().onBackpressureBuffer<ProviderResultEvent>()
+        val sink = aManyUnicastSink()
         executorService.submit { searchStream(q, sink) }
         return sink.asFlux()
     }
+
+    private fun aManyUnicastSink() = Sinks.many().unicast().onBackpressureBuffer<ProviderResultEvent>()
 
     private fun searchStream(
         q: String,

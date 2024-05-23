@@ -39,11 +39,11 @@ jobs:
 
       - name: Build and Test
         run: |
-          ./gradlew build
+          ./gradlew build --scan
 
       - name: Build Docker Image
         run: |
-          ./gradlew bootBuildImage --imageName $IMAGE_NAME
+          ./gradlew bootBuildImage --imageName $IMAGE_NAME --scan
 
       - name: Deploy
         env:
