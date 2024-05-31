@@ -69,3 +69,11 @@ tasks.withType(KotlinCompile).configureEach {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.named("bootBuildImage") {
+    environment = [
+            'BP_JVM_VERSION'                : '21',
+            'BP_JVM_CDS_ENABLED'            : 'true',
+            'CDS_TRAINING_JAVA_TOOL_OPTIONS': '-Dspring.flyway.enabled=false',
+    ]
+}
