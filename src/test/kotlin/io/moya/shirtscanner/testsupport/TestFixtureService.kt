@@ -1,5 +1,6 @@
 package io.moya.shirtscanner.testsupport
 
+import io.moya.shirtscanner.configuration.ProviderStatus
 import org.redisson.api.RedissonClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -11,5 +12,13 @@ class TestFixtureService {
 
     fun clearAll() {
         redissonClient.keys.flushdb()
+    }
+
+    fun persistStatus(
+        providerName: String,
+        status: ProviderStatus,
+    ) {
+        redissonClient.getBucket<ProviderStatus>("status_${providerName.replace(" ", "_")}")
+            .set(status)
     }
 }

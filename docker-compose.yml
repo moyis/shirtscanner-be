@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   redis:
-    image: redis:6.2.6-alpine
+    image: redis/redis-stack:6.2.6-v15
     ports:
       - '6379:6379'
+      - '8001:8001'

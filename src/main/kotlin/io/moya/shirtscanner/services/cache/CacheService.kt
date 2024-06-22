@@ -5,4 +5,11 @@ interface CacheService {
         key: String,
         remappingFunction: () -> T,
     ): T
+
+    fun <T> set(
+        key: String,
+        value: T,
+    )
+
+    fun <T> getAll(vararg keys: String): MutableMap<String, T>
 }

@@ -15,3 +15,9 @@ data class ProviderData(
     val url: String,
     val name: String,
 )
+
+enum class ProviderStatus {
+    UP,
+    DOWN,
+    UNKNOWN,
+}

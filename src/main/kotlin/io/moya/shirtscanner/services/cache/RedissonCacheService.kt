@@ -21,4 +21,16 @@ class RedissonCacheService(
             .getOrNull()
             ?: remappingFunction.invoke().also { bucket.set(it, Duration.ofDays(1)) }
     }
+
+    override fun <T> set(
+        key: String,
+        value: T,
+    ) {
+        val bucket = redissonClient.getBucket<T>(key)
+        bucket.set(value)
+    }
+
+    override fun <T> getAll(vararg keys: String): MutableMap<String, T> {
+        return redissonClient.buckets.get(*keys)
+    }
 }

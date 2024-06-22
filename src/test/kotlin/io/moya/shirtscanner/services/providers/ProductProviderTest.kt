@@ -45,4 +45,12 @@ private class MockCacheService : CacheService {
         key: String,
         remappingFunction: () -> T,
     ) = remappingFunction.invoke()
+
+    override fun <T> set(
+        key: String,
+        value: T,
+    ) {
+    }
+
+    override fun <T> getAll(vararg keys: String): MutableMap<String, T> = mutableMapOf()
 }
