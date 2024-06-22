@@ -27,7 +27,7 @@ fetchers:
       name: 5Boundless
     - url: https://www.aclotzone.co
       name: Aclotzone
-    - url: https://www.fofoshop3.com
+    - url: https://www.fofoshop4.com
       name: Fofoshop
     - url: https://www.kotofanss.com
       name: Kotofanss
@@ -36,24 +36,25 @@ fetchers:
     ## Changed format
     ##    - url: https://www.jjsport01.com
     ##      name: JJSport
-    - url: https://www.fcstore24.com
-      name: FCstore24
-    - url: https://www.jeofc1.com
-      name: JeoFc1
+    - url: www.fc24shop.com
+      name: FC24Store
+    ## Down
+    ## - url: https://www.jeofc1.com
+    ##   name: JeoFc1
     - url: https://www.gkkoc.com
       name: GKKOC
-    - url: https://www.soccer03.com
+    - url: https://www.soccer04.store
       name: Soccer
     - url: https://www.messi105.com
       name: Messi100
     - url: https://www.mmjerseys00.com
       name: MMJerseys00
-    - url: https://www.lindajersey.com
+    - url: https://www.lindajersey.cn
       name: LindaJersey
     - url: https://www.halosport.cn
       name: HaloSport
-    - url: https://www.motios1.com
-      name: Motios1
+    - url: https://www.motios2.com
+      name: Motios2
     - url: https://www.vicksports.com
       name: VickSports
     - url: https://www.jshop1.com
