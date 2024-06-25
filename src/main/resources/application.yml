@@ -36,7 +36,7 @@ fetchers:
     ## Changed format
     ##    - url: https://www.jjsport01.com
     ##      name: JJSport
-    - url: www.fc24shop.com
+    - url: https://www.fc24shop.com
       name: FC24Store
     ## Down
     ## - url: https://www.jeofc1.com
