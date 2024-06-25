@@ -1,7 +1,7 @@
 package io.moya.shirtscanner.controllers
 
-import io.moya.shirtscanner.configuration.ProviderStatus
-import io.moya.shirtscanner.services.providers.ProviderResponse
+import io.moya.shirtscanner.services.providers.model.ProviderResponse
+import io.moya.shirtscanner.services.providers.model.ProviderStatus
 import io.moya.shirtscanner.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Then

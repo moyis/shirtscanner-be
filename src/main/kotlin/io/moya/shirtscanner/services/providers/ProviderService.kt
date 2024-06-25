@@ -56,14 +56,13 @@ class ProviderService(
         }.also { LOG.info { "Finished provider check for ${providerData.name} with result $it" } }
     }
 
-    private fun getStatusCode(url: String) = runCatching {
-        retryTemplate.execute<Int, Throwable> {
-            Jsoup.connect(url)
-                .timeout(Duration.ofSeconds(15).toMillis().toInt())
-                .execute()
-                .statusCode()
-        }
-    }.getOrNull()
+    private fun getStatusCode(url: String) =
+        runCatching {
+            retryTemplate.execute<Int, Throwable> {
+                Jsoup.connect(url)
+                    .timeout(Duration.ofSeconds(15).toMillis().toInt())
+                    .execute()
+                    .statusCode()
+            }
+        }.getOrNull()
 }
-
-

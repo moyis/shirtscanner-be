@@ -1,6 +1,6 @@
 package io.moya.shirtscanner.testsupport
 
-import io.moya.shirtscanner.configuration.ProviderStatus
+import io.moya.shirtscanner.services.providers.model.ProviderStatus
 import org.redisson.api.RedissonClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
