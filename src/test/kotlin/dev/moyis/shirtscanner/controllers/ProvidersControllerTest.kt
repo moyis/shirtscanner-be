@@ -7,6 +7,7 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class ProvidersControllerTest : AbstractIntegrationTest() {
@@ -31,6 +32,7 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
+    @Disabled("Provider status is disabled as costs are too high")
     fun `providers endpoint returns status for providesrs`() {
         tfs.persistStatus("ListR1 Test", ProviderStatus.UP)
         tfs.persistStatus("Yupoo Test", ProviderStatus.DOWN)

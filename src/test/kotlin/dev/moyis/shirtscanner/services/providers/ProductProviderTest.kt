@@ -2,7 +2,6 @@ package dev.moyis.shirtscanner.services.providers
 
 import dev.moyis.shirtscanner.configuration.ProviderData
 import dev.moyis.shirtscanner.models.SearchResult
-import dev.moyis.shirtscanner.services.cache.CacheService
 import dev.moyis.shirtscanner.services.fetchers.ProductsFetcher
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -19,7 +18,7 @@ class ProductProviderTest {
 
     @BeforeEach
     fun setUp() {
-        subject = ProductProvider(productsFetcher, providerData, MockCacheService())
+        subject = ProductProvider(productsFetcher, providerData)
     }
 
     @Test
@@ -38,19 +37,4 @@ private class EmptyProductFetcher : ProductsFetcher {
         queryUrl = "$url/search?q=$q",
         products = listOf(),
     )
-}
-
-private class MockCacheService : CacheService {
-    override fun <T> computeIfAbsent(
-        key: String,
-        remappingFunction: () -> T,
-    ) = remappingFunction.invoke()
-
-    override fun <T> set(
-        key: String,
-        value: T,
-    ) {
-    }
-
-    override fun <T> getAll(vararg keys: String): MutableMap<String, T> = mutableMapOf()
 }
