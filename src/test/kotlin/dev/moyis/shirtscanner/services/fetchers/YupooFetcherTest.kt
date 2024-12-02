@@ -10,7 +10,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import dev.moyis.shirtscanner.configuration.WebConnectorConfigurationProperties
 import dev.moyis.shirtscanner.configuration.YupooFetcherConfigurationProperties
-import dev.moyis.shirtscanner.services.fetchers.YupooFetcher
 import dev.moyis.shirtscanner.services.WebConnector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
