@@ -42,9 +42,6 @@ dependencies {
     //Scraping
     implementation 'org.jsoup:jsoup:1.18.3'
 
-    //Redis
-    implementation 'org.redisson:redisson:3.39.0'
-
     //Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.wiremock:wiremock-standalone:3.10.0'

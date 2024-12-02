@@ -1,6 +1,5 @@
 package dev.moyis.shirtscanner.configuration
 
-import dev.moyis.shirtscanner.services.cache.CacheService
 import dev.moyis.shirtscanner.services.fetchers.ListR1Fetcher
 import dev.moyis.shirtscanner.services.fetchers.YupooFetcher
 import dev.moyis.shirtscanner.services.providers.ProductProvider
@@ -15,14 +14,13 @@ class ProviderConfiguration(
     private val config: FetchersConfigurationProperties,
     private val listR1Fetcher: ListR1Fetcher,
     private val yupooFetcher: YupooFetcher,
-    private val cacheService: CacheService,
 ) {
     @Bean
     fun productProviders(): List<ProductProvider> {
         val listR1ProductProviders = getListR1ProductProviders()
         val yupooFetcherProviders = getYupooProductProviders()
         return (listR1ProductProviders + yupooFetcherProviders)
-            .map { (fetcher, providerData) -> ProductProvider(fetcher, providerData, cacheService) }
+            .map { (fetcher, providerData) -> ProductProvider(fetcher, providerData) }
     }
 
     private fun getListR1ProductProviders(): List<Pair<ListR1Fetcher, ProviderData>> {
