@@ -40,7 +40,8 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
             } Extract {
                 body().jsonPath().getList("", ProviderResponse::class.java)
             }
-        assertThat(providers).extracting<ProviderStatus> { it.status }
+        assertThat(providers)
+            .extracting<ProviderStatus> { it.status }
             .containsExactlyInAnyOrder(ProviderStatus.UP, ProviderStatus.DOWN)
     }
 
@@ -52,7 +53,8 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
             } Extract {
                 body().jsonPath().getList("", ProviderResponse::class.java)
             }
-        assertThat(providers).extracting<ProviderStatus> { it.status }
+        assertThat(providers)
+            .extracting<ProviderStatus> { it.status }
             .containsExactlyInAnyOrder(ProviderStatus.UNKNOWN, ProviderStatus.UNKNOWN)
     }
 }

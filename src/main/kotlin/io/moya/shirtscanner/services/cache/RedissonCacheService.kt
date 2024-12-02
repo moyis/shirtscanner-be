@@ -30,7 +30,5 @@ class RedissonCacheService(
         bucket.set(value)
     }
 
-    override fun <T> getAll(vararg keys: String): MutableMap<String, T> {
-        return redissonClient.buckets.get(*keys)
-    }
+    override fun <T> getAll(vararg keys: String): MutableMap<String, T> = redissonClient.buckets.get(*keys)
 }

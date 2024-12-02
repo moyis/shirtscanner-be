@@ -26,7 +26,8 @@ class RedissonCacheServiceIntegrationTest : AbstractIntegrationTest() {
             val expectedValue = "My Value"
             val result = subject.computeIfAbsent(CACHE_KEY) { expectedValue }
             assertThat(result).isEqualTo(expectedValue)
-            await().atMost(Duration.ofSeconds(1))
+            await()
+                .atMost(Duration.ofSeconds(1))
                 .pollInterval(Duration.ofMillis(100))
                 .untilAsserted { assertThat(redissonClient.getBucket<String?>(CACHE_KEY).get()).isEqualTo(expectedValue) }
         }

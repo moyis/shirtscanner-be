@@ -39,7 +39,8 @@ class ProviderService(
     fun checkStatus() =
         executorService.execute {
             LOG.info { "Started providers status check" }
-            providers.asSequence()
+            providers
+                .asSequence()
                 .map { it.name to getProviderStatus(it) }
                 .forEach { (name, status) -> cacheService.set("status_$name", status) }
             LOG.info { "Finished providers status check" }
@@ -59,7 +60,8 @@ class ProviderService(
     private fun getStatusCode(url: String) =
         runCatching {
             retryTemplate.execute<Int, Throwable> {
-                Jsoup.connect(url)
+                Jsoup
+                    .connect(url)
                     .timeout(Duration.ofSeconds(15).toMillis().toInt())
                     .execute()
                     .statusCode()

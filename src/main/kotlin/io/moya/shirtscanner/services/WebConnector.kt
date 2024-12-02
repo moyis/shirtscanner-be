@@ -23,14 +23,14 @@ class WebConnector(
 ) {
     fun fetchDocument(url: String): Document? = runCatching { retryTemplate.execute<Document?, Throwable> { doFetch(url) } }.getOrNull()
 
-    private fun doFetch(url: String): Document? {
-        return runCatching {
-            Jsoup.connect(url)
+    private fun doFetch(url: String): Document? =
+        runCatching {
+            Jsoup
+                .connect(url)
                 .timeout(configuration.defaultTimeout.toMillis().toInt())
                 .headers(DEFAULT_HEADERS)
                 .get()
         }.getOrElse { handleException(it, url) }
-    }
 
     private fun handleException(
         throwable: Throwable,

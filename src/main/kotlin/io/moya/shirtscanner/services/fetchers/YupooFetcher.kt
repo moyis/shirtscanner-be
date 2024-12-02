@@ -47,7 +47,9 @@ class YupooFetcher(
         val name = element.attr("title") ?: return null
         val productLink = element.attr("href") ?: return null
         val imageLink =
-            element.getElementsByClass("album__img").first()
+            element
+                .getElementsByClass("album__img")
+                .first()
                 ?.attr("data-src")
                 ?.substringAfter("photo.yupoo.com/")
                 ?: return null

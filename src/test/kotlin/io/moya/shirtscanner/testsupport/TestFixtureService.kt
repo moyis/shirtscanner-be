@@ -18,7 +18,8 @@ class TestFixtureService {
         providerName: String,
         status: ProviderStatus,
     ) {
-        redissonClient.getBucket<ProviderStatus>("status_${providerName.replace(" ", "_")}")
+        redissonClient
+            .getBucket<ProviderStatus>("status_${providerName.replace(" ", "_")}")
             .set(status)
     }
 }

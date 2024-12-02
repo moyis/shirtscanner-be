@@ -38,7 +38,5 @@ class ProviderConfiguration(
     }
 
     @Bean
-    fun providers(): List<ProviderData> {
-        return config.listR1 + config.yupoo
-    }
+    fun providers(): List<ProviderData> = config.listR1 + config.yupoo
 }

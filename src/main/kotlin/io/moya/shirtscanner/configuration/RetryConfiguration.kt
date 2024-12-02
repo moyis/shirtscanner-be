@@ -8,11 +8,14 @@ import org.springframework.retry.support.RetryTemplate
 import java.time.Duration
 
 @Configuration
-class RetryConfiguration(private val configuration: RetryConfigurationProperties) {
+class RetryConfiguration(
+    private val configuration: RetryConfigurationProperties,
+) {
     @Bean
     fun imageProxyRetryTemplate(): RetryTemplate =
         with(configuration.imageProxy) {
-            RetryTemplate.builder()
+            RetryTemplate
+                .builder()
                 .maxAttempts(maxAttempts)
                 .build()
         }
@@ -20,7 +23,8 @@ class RetryConfiguration(private val configuration: RetryConfigurationProperties
     @Bean
     fun webConnectorRetryTemplate(): RetryTemplate =
         with(configuration.webConnector) {
-            RetryTemplate.builder()
+            RetryTemplate
+                .builder()
                 .exponentialBackoff(initialInterval, multiplier, maxInterval)
                 .maxAttempts(maxAttempts)
                 .build()

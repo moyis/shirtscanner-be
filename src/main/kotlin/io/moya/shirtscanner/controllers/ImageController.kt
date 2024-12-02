@@ -23,7 +23,8 @@ class ImageController(
     ): ByteArray? = retryTemplate.execute<ByteArray?, Exception> { getImageBytes(path) }
 
     private fun getImageBytes(path: String) =
-        restClient.get()
+        restClient
+            .get()
             .uri("https://photo.yupoo.com/$path")
             .header(HttpHeaders.REFERER, "https://yupoo.com/")
             .retrieve()

@@ -10,7 +10,8 @@ class CorsConfiguration(
     private val corsConfigurationProperties: CorsConfigurationProperties,
 ) : WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
+        registry
+            .addMapping("/**")
             .allowedOrigins(*corsConfigurationProperties.allowedOrigins.toTypedArray())
     }
 }
