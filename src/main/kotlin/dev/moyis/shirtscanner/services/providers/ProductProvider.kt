@@ -12,7 +12,6 @@ class ProductProvider(
     private val productsFetcher: ProductsFetcher,
     private val providerData: ProviderData,
 ) {
-
     fun search(q: String): ProviderResult {
         LOG.info { "Starting search for provider [${providerData.name}] and query [$q]" }
         val (searchResult, duration) = measureTimedValue { productsFetcher.search(q, providerData.url) }

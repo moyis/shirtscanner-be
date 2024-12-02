@@ -12,7 +12,6 @@ private val LOG = KotlinLogging.logger { }
 class ProviderService(
     private val providers: List<ProviderData>,
 ) {
-
     fun getProviders(): List<ProviderResponse> {
         return providers.map {
             ProviderResponse(

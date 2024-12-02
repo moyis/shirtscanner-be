@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class TestFixtureService {
-
     fun clearAll() {
     }
 
@@ -13,6 +12,5 @@ class TestFixtureService {
         providerName: String,
         status: ProviderStatus,
     ) {
-
     }
 }
