@@ -1,6 +1,6 @@
 package dev.moyis.shirtscanner.infrastructure.controllers.model
 
-import dev.moyis.shirtscanner.domain.model.ProviderData
+import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
 
@@ -11,8 +11,8 @@ data class ProviderResponse(
     val status: ProviderStatus,
 ) {
     companion object {
-        fun fromProviderData(providerData: ProviderData) =
-            with(providerData) {
+        fun fromProvider(provider: Provider) =
+            with(provider) {
                 ProviderResponse(
                     url = url.toString(),
                     name = name.value,

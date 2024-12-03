@@ -1,11 +1,11 @@
-package dev.moyis.shirtscanner.domain
+package dev.moyis.shirtscanner.domain.api
 
-import dev.moyis.shirtscanner.domain.api.ProductService
+import dev.moyis.shirtscanner.domain.model.ProviderData
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.domain.model.SearchResult
 import dev.moyis.shirtscanner.domain.spi.ProductProvider
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import reactor.test.StepVerifier
@@ -20,7 +20,7 @@ class ProductServiceTest {
 
             val results = productService.search("any")
 
-            assertThat(results).isEmpty()
+            Assertions.assertThat(results).isEmpty()
         }
 
         @Test
@@ -29,7 +29,7 @@ class ProductServiceTest {
 
             val results = productService.search("any")
 
-            assertThat(results).hasSize(4)
+            Assertions.assertThat(results).hasSize(4)
         }
     }
 
@@ -58,14 +58,17 @@ class ProductServiceTest {
 }
 
 private object FakeProvider : ProductProvider {
-    override val url = URI("https://example.com/search")
-    override val name = ProviderName("FixedProvider")
-
     override fun search(query: String) =
         SearchResult(
             providerName = "FixedProvider",
             queryUrl = URI("https://example.com/search?q=$query"),
             products = emptyList(),
+        )
+
+    override fun providerData() =
+        ProviderData(
+            url = URI("https://example.com/search"),
+            name = ProviderName("FixedProvider"),
         )
 
     override fun status() = ProviderStatus.UP

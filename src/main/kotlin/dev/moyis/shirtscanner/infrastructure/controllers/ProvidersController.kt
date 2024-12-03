@@ -14,7 +14,7 @@ class ProvidersController(
     private val providerService: ProviderService,
 ) {
     @GetMapping
-    fun findAll() = providerService.findAll().map { ProviderResponse.fromProviderData(it) }
+    fun findAll() = providerService.findAll().map { ProviderResponse.fromProvider(it) }
 
     @PostMapping
     fun status(): ResponseEntity<Nothing> {

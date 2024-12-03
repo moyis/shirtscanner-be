@@ -1,24 +1,23 @@
 package dev.moyis.shirtscanner.infrastructure.repositories
 
-import dev.moyis.shirtscanner.domain.model.ProviderData
+import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.spi.ProviderRepository
 import org.springframework.stereotype.Repository
 
 @Repository
 class InMemoryProviderRepository : ProviderRepository {
-    private var repository: Map<ProviderName, ProviderData> = emptyMap()
+    private var repository: Map<ProviderName, Provider> = emptyMap()
 
-    override fun saveAll(providers: List<ProviderData>): Int {
+    override fun saveAll(providers: List<Provider>) {
         repository = providers.associateBy { it.name }
-        return repository.size
     }
 
-    override fun findAll(): List<ProviderData> = repository.values.toList()
+    override fun findAll(): List<Provider> {
+        return repository.values.toList()
+    }
 
-    override fun deleteAll(): Int {
-        val previousSize = repository.size
+    override fun deleteAll() {
         repository = emptyMap()
-        return previousSize
     }
 }

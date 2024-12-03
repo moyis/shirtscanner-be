@@ -1,6 +1,6 @@
 package dev.moyis.shirtscanner.infrastructure.controllers
 
-import dev.moyis.shirtscanner.domain.model.ProviderData
+import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.infrastructure.controllers.model.ProviderResponse
@@ -36,16 +36,8 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
     @Test
     fun `providers endpoint returns status for providers`() {
         tfs.persistProviderData(
-            ProviderData(
-                URI("https://listr1.com"),
-                ProviderName("ListR1 Test"),
-                ProviderStatus.UP,
-            ),
-            ProviderData(
-                URI("https://yupoo.com"),
-                ProviderName("Yupoo Test"),
-                ProviderStatus.DOWN,
-            ),
+            aValidProvider().copy(name = ProviderName("ListR1 Test"), status = ProviderStatus.UP),
+            aValidProvider().copy(name = ProviderName("Yupoo Test"), status = ProviderStatus.DOWN),
         )
         val providers =
             When {
@@ -59,7 +51,7 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `providers endpoint returns UNKNOWN when no status is persisted`() {
+    fun `returns status UNKNOWN when no status is persisted`() {
         val providers =
             When {
                 get("/v1/providers")
@@ -89,3 +81,10 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
             .containsOnly(ProviderStatus.DOWN)
     }
 }
+
+private fun aValidProvider() =
+    Provider(
+        name = ProviderName("ListR1 Test"),
+        url = URI("http://test.com"),
+        status = ProviderStatus.UP,
+    )

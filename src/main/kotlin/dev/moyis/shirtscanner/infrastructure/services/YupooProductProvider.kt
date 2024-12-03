@@ -1,6 +1,7 @@
 package dev.moyis.shirtscanner.infrastructure.services
 
 import dev.moyis.shirtscanner.domain.model.Product
+import dev.moyis.shirtscanner.domain.model.ProviderData
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.domain.model.SearchResult
@@ -14,8 +15,8 @@ import java.net.URI
 private val LOG = KotlinLogging.logger {}
 
 class YupooProductProvider(
-    override val url: URI,
-    override val name: ProviderName,
+    private val url: URI,
+    private val name: ProviderName,
     private val documentFetcher: DocumentFetcher,
     private val configuration: YupooProviderConfigurationProperties,
 ) : ProductProvider {
@@ -29,6 +30,13 @@ class YupooProductProvider(
             providerName = name.value,
             queryUrl = getWebpageUrl(query),
             products = products,
+        )
+    }
+
+    override fun providerData(): ProviderData {
+        return ProviderData(
+            url = url,
+            name = name,
         )
     }
 

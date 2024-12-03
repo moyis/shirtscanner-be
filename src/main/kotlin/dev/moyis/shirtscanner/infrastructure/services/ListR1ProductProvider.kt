@@ -1,6 +1,7 @@
 package dev.moyis.shirtscanner.infrastructure.services
 
 import dev.moyis.shirtscanner.domain.model.Product
+import dev.moyis.shirtscanner.domain.model.ProviderData
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.domain.model.SearchResult
@@ -13,8 +14,8 @@ import java.net.URI
 private val LOG = KotlinLogging.logger {}
 
 class ListR1ProductProvider(
-    override val url: URI,
-    override val name: ProviderName,
+    private val url: URI,
+    private val name: ProviderName,
     private val documentFetcher: DocumentFetcher,
 ) : ProductProvider {
     override fun search(query: String): SearchResult {
@@ -30,10 +31,16 @@ class ListR1ProductProvider(
         )
     }
 
-    override fun status(): ProviderStatus {
+    override fun providerData(): ProviderData {
         LOG.info { "Checking status of $name" }
-        val testDocument = documentFetcher.fetchDocument(url)
-        return if (testDocument != null) ProviderStatus.UP else ProviderStatus.DOWN
+        return ProviderData(
+            url = url,
+            name = name,
+        )
+    }
+
+    override fun status(): ProviderStatus {
+        return if (documentFetcher.fetchDocument(url) != null) ProviderStatus.UP else ProviderStatus.DOWN
     }
 
     private fun fetchDocuments(query: String): Sequence<Document> =

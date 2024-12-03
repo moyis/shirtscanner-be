@@ -1,6 +1,6 @@
 package dev.moyis.shirtscanner.testsupport
 
-import dev.moyis.shirtscanner.domain.model.ProviderData
+import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.spi.ProviderRepository
 import org.springframework.stereotype.Component
 
@@ -12,7 +12,7 @@ class TestFixtureService(
         providerRepository.deleteAll()
     }
 
-    fun persistProviderData(vararg data: ProviderData) {
+    fun persistProviderData(vararg data: Provider) {
         providerRepository.saveAll(data.toList())
     }
 }

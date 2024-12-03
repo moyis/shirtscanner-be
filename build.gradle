@@ -8,8 +8,9 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.6'
     id 'org.graalvm.buildtools.native' version '0.10.3'
 
-    id("org.jlleitschuh.gradle.ktlint") version '12.1.2'
+    id "org.jlleitschuh.gradle.ktlint" version '12.1.2'
     id 'com.adarshr.test-logger' version '4.0.0'
+    id 'info.solidsoft.pitest' version '1.15.0'
 }
 
 group = 'dev.moyis'
@@ -75,4 +76,10 @@ tasks.named("bootBuildImage") {
             'BP_JVM_CDS_ENABLED'            : 'true',
             'CDS_TRAINING_JAVA_TOOL_OPTIONS': '-Dspring.flyway.enabled=false',
     ]
+}
+
+pitest {
+    pitestVersion = "1.17.2"
+    junit5PluginVersion = "1.2.1"
+    threads = 4
 }
