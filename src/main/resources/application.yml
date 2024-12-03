@@ -3,7 +3,7 @@ spring:
     virtual:
       enabled: true
 
-web-connector:
+document-fetcher:
     default-timeout: 15s
 
 retry:
