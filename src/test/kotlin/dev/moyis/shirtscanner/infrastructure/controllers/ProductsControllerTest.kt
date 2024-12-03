@@ -10,7 +10,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ProductsControllerTest : AbstractIntegrationTest() {
-
     @Test
     fun `search products returns 200`() {
         Given {

@@ -10,12 +10,13 @@ data class SearchResultResponse(
     val products: List<ProductResponse>,
 ) {
     companion object {
-        fun fromSearchResult(searchResult: SearchResult) = with(searchResult) {
-            SearchResultResponse(
-                providerName = providerName,
-                queryUrl = queryUrl.toString(),
-                products = products.map { ProductResponse.fromProduct(it) },
-            )
-        }
+        fun fromSearchResult(searchResult: SearchResult) =
+            with(searchResult) {
+                SearchResultResponse(
+                    providerName = providerName,
+                    queryUrl = queryUrl.toString(),
+                    products = products.map { ProductResponse.fromProduct(it) },
+                )
+            }
     }
 }

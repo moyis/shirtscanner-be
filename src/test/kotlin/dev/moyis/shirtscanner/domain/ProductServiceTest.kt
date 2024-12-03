@@ -12,10 +12,8 @@ import reactor.test.StepVerifier
 import java.net.URI
 
 class ProductServiceTest {
-
     @Nested
     inner class ABlockingSearch {
-
         @Test
         fun `returns empty with no configured providers`() {
             val productService = ProductService(emptyList())
@@ -37,7 +35,6 @@ class ProductServiceTest {
 
     @Nested
     inner class AReactiveSearch {
-
         @Test
         fun `returns empty with no configured providers`() {
             val productService = ProductService(emptyList())
@@ -64,11 +61,12 @@ private object FakeProvider : ProductProvider {
     override val url = URI("https://example.com/search")
     override val name = ProviderName("FixedProvider")
 
-    override fun search(query: String) = SearchResult(
-        providerName = "FixedProvider",
-        queryUrl = URI("https://example.com/search?q=$query"),
-        products = emptyList()
-    )
+    override fun search(query: String) =
+        SearchResult(
+            providerName = "FixedProvider",
+            queryUrl = URI("https://example.com/search?q=$query"),
+            products = emptyList(),
+        )
 
     override fun status() = ProviderStatus.UP
 }

@@ -61,7 +61,10 @@ class DocumentFetcherTest {
 
     @ParameterizedTest
     @ValueSource(ints = [HttpStatus.SC_BAD_REQUEST, HttpStatus.SC_UNAUTHORIZED, HttpStatus.SC_TOO_MANY_REQUESTS, HttpStatus.SC_INTERNAL_SERVER_ERROR])
-    fun `logs default timeout on timeout`(status: Int, output: CapturedOutput) {
+    fun `logs default timeout on timeout`(
+        status: Int,
+        output: CapturedOutput,
+    ) {
         setUpResponse(path = "/search", status = status)
         val fetcher = DocumentFetcher(properties)
 
@@ -78,7 +81,7 @@ class DocumentFetcherTest {
         val body = ResourceUtils.getFile("classpath:providers/list-r1/5boundless.html").readText()
         WireMock.stubFor(
             WireMock.get(path)
-                .willReturn(WireMock.status(status).withFixedDelay(delay.toMillis().toInt()).withBody(body))
+                .willReturn(WireMock.status(status).withFixedDelay(delay.toMillis().toInt()).withBody(body)),
         )
     }
 }

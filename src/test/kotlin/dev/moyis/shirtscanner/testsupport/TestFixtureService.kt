@@ -1,7 +1,7 @@
 package dev.moyis.shirtscanner.testsupport
 
-import dev.moyis.shirtscanner.domain.spi.ProviderRepository
 import dev.moyis.shirtscanner.domain.model.ProviderData
+import dev.moyis.shirtscanner.domain.spi.ProviderRepository
 import org.springframework.stereotype.Component
 
 @Component

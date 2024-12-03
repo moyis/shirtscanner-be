@@ -11,13 +11,14 @@ data class ProductResponse(
     val imageLink: String,
 ) {
     companion object {
-        fun fromProduct(product: Product) = with(product) {
-            ProductResponse(
-                name = name,
-                price = price,
-                productLink = productLink,
-                imageLink = imageLink,
-            )
-        }
+        fun fromProduct(product: Product) =
+            with(product) {
+                ProductResponse(
+                    name = name,
+                    price = price,
+                    productLink = productLink,
+                    imageLink = imageLink,
+                )
+            }
     }
 }

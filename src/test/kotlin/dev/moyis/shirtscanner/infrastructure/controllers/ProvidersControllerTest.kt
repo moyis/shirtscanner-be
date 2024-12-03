@@ -45,7 +45,7 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
                 URI("https://yupoo.com"),
                 ProviderName("Yupoo Test"),
                 ProviderStatus.DOWN,
-            )
+            ),
         )
         val providers =
             When {

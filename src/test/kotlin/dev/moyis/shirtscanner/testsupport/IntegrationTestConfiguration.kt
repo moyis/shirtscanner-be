@@ -1,6 +1,5 @@
 package dev.moyis.shirtscanner.testsupport
 
-import com.redis.testcontainers.RedisContainer
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext

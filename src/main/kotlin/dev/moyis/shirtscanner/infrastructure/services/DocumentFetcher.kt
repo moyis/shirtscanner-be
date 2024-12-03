@@ -21,11 +21,12 @@ class DocumentFetcher(
         runCatching { doFetchDocument(uri) }
             .getOrElse { handleException(it, uri) }
 
-    private fun doFetchDocument(uri: URI): Document = Jsoup
-        .connect(uri.toASCIIString())
-        .timeout(configuration.defaultTimeout.toMillis().toInt())
-        .headers(DEFAULT_HEADERS)
-        .get()
+    private fun doFetchDocument(uri: URI): Document =
+        Jsoup
+            .connect(uri.toASCIIString())
+            .timeout(configuration.defaultTimeout.toMillis().toInt())
+            .headers(DEFAULT_HEADERS)
+            .get()
 
     private fun handleException(
         throwable: Throwable,

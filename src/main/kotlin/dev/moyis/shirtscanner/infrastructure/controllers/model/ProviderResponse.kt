@@ -11,12 +11,13 @@ data class ProviderResponse(
     val status: ProviderStatus,
 ) {
     companion object {
-        fun fromProviderData(providerData: ProviderData) = with(providerData) {
-            ProviderResponse(
-                url = url.toString(),
-                name = name.value,
-                status = status,
-            )
-        }
+        fun fromProviderData(providerData: ProviderData) =
+            with(providerData) {
+                ProviderResponse(
+                    url = url.toString(),
+                    name = name.value,
+                    status = status,
+                )
+            }
     }
 }

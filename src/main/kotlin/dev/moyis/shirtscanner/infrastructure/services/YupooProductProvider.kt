@@ -1,10 +1,10 @@
 package dev.moyis.shirtscanner.infrastructure.services
 
-import dev.moyis.shirtscanner.domain.spi.ProductProvider
 import dev.moyis.shirtscanner.domain.model.Product
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.domain.model.SearchResult
+import dev.moyis.shirtscanner.domain.spi.ProductProvider
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.YupooProviderConfigurationProperties
 import mu.KotlinLogging
 import org.jsoup.nodes.Document
@@ -20,9 +20,10 @@ class YupooProductProvider(
     private val configuration: YupooProviderConfigurationProperties,
 ) : ProductProvider {
     override fun search(query: String): SearchResult {
-        val products = fetchDocuments(query)
-            .flatMap { getProducts(it) }
-            .toList()
+        val products =
+            fetchDocuments(query)
+                .flatMap { getProducts(it) }
+                .toList()
 
         return SearchResult(
             providerName = name.value,
@@ -37,18 +38,17 @@ class YupooProductProvider(
         return if (testDocument != null) ProviderStatus.UP else ProviderStatus.DOWN
     }
 
-    private fun fetchDocuments(query: String): Sequence<Document> = (1..2).asSequence()
-        .map { getWebpageUrl(query, it) }
-        .mapNotNull { documentFetcher.fetchDocument(it) }
+    private fun fetchDocuments(query: String): Sequence<Document> =
+        (1..2).asSequence()
+            .map { getWebpageUrl(query, it) }
+            .mapNotNull { documentFetcher.fetchDocument(it) }
 
+    fun getProducts(document: Document) =
+        document.getElementsByClass("album__main")
+            .mapNotNull { mapToProduct(it) }
+            .distinct()
 
-    fun getProducts(document: Document) = document.getElementsByClass("album__main")
-        .mapNotNull { mapToProduct(it) }
-        .distinct()
-
-    private fun mapToProduct(
-        element: Element,
-    ): Product? {
+    private fun mapToProduct(element: Element): Product? {
         val name = element.attr("title") ?: return null
         val productLink = element.attr("href") ?: return null
         val imageLink =
