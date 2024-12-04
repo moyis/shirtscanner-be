@@ -13,9 +13,7 @@ class InMemoryProviderRepository : ProviderRepository {
         repository = providers.associateBy { it.name }
     }
 
-    override fun findAll(): List<Provider> {
-        return repository.values.toList()
-    }
+    override fun findAll() = repository.values.toList()
 
     override fun deleteAll() {
         repository = emptyMap()
