@@ -5,6 +5,10 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.DocumentFetcherConfigurationProperties
 import org.apache.http.HttpStatus
+import org.apache.http.HttpStatus.SC_BAD_REQUEST
+import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
+import org.apache.http.HttpStatus.SC_TOO_MANY_REQUESTS
+import org.apache.http.HttpStatus.SC_UNAUTHORIZED
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -60,7 +64,7 @@ class DocumentFetcherTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = [HttpStatus.SC_BAD_REQUEST, HttpStatus.SC_UNAUTHORIZED, HttpStatus.SC_TOO_MANY_REQUESTS, HttpStatus.SC_INTERNAL_SERVER_ERROR])
+    @ValueSource(ints = [SC_BAD_REQUEST, SC_UNAUTHORIZED, SC_TOO_MANY_REQUESTS, SC_INTERNAL_SERVER_ERROR])
     fun `logs default timeout on timeout`(
         status: Int,
         output: CapturedOutput,

@@ -70,8 +70,8 @@ class YupooProductProvider(
             Product(
                 price = null,
                 name = name,
-                imageLink = "${configuration.imageProxyHost}/v1/images/yupoo?path=$imageLink",
-                productLink = "$url$productLink",
+                imageLink = URI("${configuration.imageProxyHost}/v1/images/yupoo?path=$imageLink"),
+                productLink = URI("$url$productLink"),
             )
         return product
     }
