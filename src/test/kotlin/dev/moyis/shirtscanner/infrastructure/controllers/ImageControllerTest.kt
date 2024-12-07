@@ -9,7 +9,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ImageControllerTest : AbstractIntegrationTest() {
-
     @Test
     fun `returns 200`() {
         Given {
@@ -23,13 +22,14 @@ class ImageControllerTest : AbstractIntegrationTest() {
 
     @Test
     fun `returns image content`() {
-        val image = Given {
-            param("path", "ok.jpg")
-        } When {
-            get("/v1/images/yupoo")
-        } Extract {
-            body().asByteArray()
-        }
+        val image =
+            Given {
+                param("path", "ok.jpg")
+            } When {
+                get("/v1/images/yupoo")
+            } Extract {
+                body().asByteArray()
+            }
 
         assertThat(image).isEqualTo("image".toByteArray())
     }

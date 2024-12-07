@@ -41,7 +41,7 @@ class WebClientImageProviderTest {
             stubFor(
                 get(urlEqualTo("/image.jpg"))
                     .withHeader(REFERER, equalTo("http://localhost"))
-                    .willReturn(aResponse().withBody("image".toByteArray()))
+                    .willReturn(aResponse().withBody("image".toByteArray())),
             )
 
             val image = subject.get("image.jpg")
@@ -55,7 +55,7 @@ class WebClientImageProviderTest {
             stubFor(
                 get(urlEqualTo("/not-found.jpg"))
                     .withHeader(REFERER, equalTo("http://localhost"))
-                    .willReturn(aResponse().withStatus(404))
+                    .willReturn(aResponse().withStatus(404)),
             )
 
             val image = subject.get("/not-found.jpg")
