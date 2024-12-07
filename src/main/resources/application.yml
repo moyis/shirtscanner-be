@@ -4,17 +4,7 @@ spring:
       enabled: true
 
 document-fetcher:
-    default-timeout: 15s
-
-retry:
-  web-connector:
-    initial-interval: 100ms
-    multiplier: 2
-    max-interval: 1s
-    max-attempts: 10
-  image-proxy:
-    max-attempts: 2
-
+  default-timeout: 15s
 
 fetchers:
   configuraiton:
@@ -159,3 +149,9 @@ cors:
   allowed-origins:
     - https://shirtscanner.com
     - https://www.shirtscanner.com
+
+image-fetcher:
+  base-url: https://photo.yupoo.com/
+  referer: https://yupoo.com/
+  max-retries: 3
+  retry-delay: 1s

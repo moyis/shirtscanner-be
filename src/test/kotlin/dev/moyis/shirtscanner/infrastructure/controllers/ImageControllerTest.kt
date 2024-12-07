@@ -1,16 +1,30 @@
 package dev.moyis.shirtscanner.infrastructure.controllers
 
-import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.test.web.servlet.MockMvc
+import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
+import io.restassured.module.kotlin.extensions.Given
+import io.restassured.module.kotlin.extensions.Then
+import io.restassured.module.kotlin.extensions.When
+import org.junit.jupiter.api.Test
 
-@WebMvcTest(ImageController::class)
-@WireMockTest
-class ImageControllerTest {
+class ImageControllerTest : AbstractIntegrationTest() {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+    @Test
+    fun `returns 200`() {
+        Given {
+            param("path", "/ok.jpg")
+        } When {
+            get("/v1/images/yupoo")
+        } Then {
+            statusCode(200)
+        }
+    }
 
-
+    @Test
+    fun `returns 400 when no path param is sent`() {
+        When {
+            get("/v1/images/yupoo")
+        } Then {
+            statusCode(400)
+        }
+    }
 }

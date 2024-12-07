@@ -15,10 +15,8 @@ import org.springframework.test.web.reactive.server.returnResult
 import reactor.test.StepVerifier
 
 class ProductsControllerTest : AbstractIntegrationTest() {
-
     @Nested
     inner class ABlockingSearch {
-
         @Test
         fun `return 200`() {
             Given {
@@ -69,10 +67,8 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         }
     }
 
-
     @Nested
     inner class AReactiveSearch {
-
         @Test
         fun `return 200`() {
             webTestClient
