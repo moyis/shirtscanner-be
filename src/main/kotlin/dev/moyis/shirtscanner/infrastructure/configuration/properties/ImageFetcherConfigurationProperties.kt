@@ -8,6 +8,6 @@ import java.time.Duration
 data class ImageFetcherConfigurationProperties(
     val baseUrl: URI,
     val referer: URI,
-    val maxRetries: Int,
+    val maxRetries: Long,
     val retryDelay: Duration,
 )

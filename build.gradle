@@ -84,4 +84,10 @@ pitest {
     pitestVersion = "1.17.2"
     junit5PluginVersion = "1.2.1"
     threads = 4
+    targetClasses = [
+            'dev.moyis.shirtscanner.domain.*',
+            'dev.moyis.shirtscanner.infrastructure.controllers.*',
+            'dev.moyis.shirtscanner.infrastructure.services.*',
+            'dev.moyis.shirtscanner.infrastructure.repositories.*',
+    ]
 }

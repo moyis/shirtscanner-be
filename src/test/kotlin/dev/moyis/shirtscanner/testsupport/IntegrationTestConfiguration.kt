@@ -13,6 +13,7 @@ class IntegrationTestConfiguration : ApplicationContextInitializer<ConfigurableA
         WireMockContainer("wiremock/wiremock:3.10.0-alpine")
             .withMappingFromResource("wiremock/list-r-1.json")
             .withMappingFromResource("wiremock/yupoo.json")
+            .withMappingFromResource("wiremock/yupoo-image.json")
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         val wireMockContainer = wiremockContainer()

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.util.retry.Retry
-import java.time.Duration
 
 @Service
 class WebClientImageProvider(
@@ -17,6 +16,7 @@ class WebClientImageProvider(
     private val webClient = WebClient.create()
     private val baseUrl = config.baseUrl
     private val referrer = config.referer
+    private val retry = Retry.fixedDelay(config.maxRetries, config.retryDelay)
 
     override suspend fun get(path: String): ByteArray? {
         return webClient
@@ -25,7 +25,7 @@ class WebClientImageProvider(
             .header(HttpHeaders.REFERER, "$referrer")
             .retrieve()
             .bodyToMono<ByteArray>()
-            .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(1)))
+            .retryWhen(retry)
             .onErrorComplete()
             .awaitSingleOrNull()
     }

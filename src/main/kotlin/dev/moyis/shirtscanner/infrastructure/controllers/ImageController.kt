@@ -3,6 +3,7 @@ package dev.moyis.shirtscanner.infrastructure.controllers
 import dev.moyis.shirtscanner.domain.api.ImageService
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -19,8 +20,8 @@ class ImageController(
     @GetMapping("/yupoo")
     suspend fun proxyImage(
         @RequestParam("path") path: String,
-    ): ByteArray? =
+    ): ResponseEntity<ByteArray> =
         withContext(dispatcher) {
-            imageService.get(path)
+            ResponseEntity.ofNullable(imageService.get(path))
         }
 }
