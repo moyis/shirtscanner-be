@@ -1,0 +1,10 @@
+{
+  "request" : {
+    "url" : "/image/ok.jpg",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "image"
+  }
+}

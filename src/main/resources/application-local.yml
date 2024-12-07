@@ -1,6 +1,3 @@
-redis:
-  host: redis://localhost:6379
-
 fetchers:
   configuraiton:
     yupoo:

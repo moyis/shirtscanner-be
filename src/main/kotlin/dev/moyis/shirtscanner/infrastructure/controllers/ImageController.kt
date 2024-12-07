@@ -1,33 +1,27 @@
 package dev.moyis.shirtscanner.infrastructure.controllers
 
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.http.HttpHeaders
-import org.springframework.retry.support.RetryTemplate
+import dev.moyis.shirtscanner.domain.api.ImageService
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.withContext
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.client.RestClient
-import org.springframework.web.client.body
+import java.util.concurrent.Executors
 
 @RestController
 @RequestMapping("/v1/images")
 class ImageController(
-    @Qualifier("imageProxyRetryTemplate")
-    private val retryTemplate: RetryTemplate,
+    private val imageService: ImageService,
 ) {
-    private val restClient = RestClient.create()
+    private val dispatcher = Executors.newVirtualThreadPerTaskExecutor().asCoroutineDispatcher()
 
     @GetMapping("/yupoo")
-    fun proxyImage(
+    suspend fun proxyImage(
         @RequestParam("path") path: String,
-    ): ByteArray? = retryTemplate.execute<ByteArray?, Exception> { getImageBytes(path) }
-
-    private fun getImageBytes(path: String) =
-        restClient
-            .get()
-            .uri("https://photo.yupoo.com/$path")
-            .header(HttpHeaders.REFERER, "https://yupoo.com/")
-            .retrieve()
-            .body<ByteArray>()
+    ): ResponseEntity<ByteArray> =
+        withContext(dispatcher) {
+            ResponseEntity.ofNullable(imageService.get(path))
+        }
 }

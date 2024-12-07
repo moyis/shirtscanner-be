@@ -62,8 +62,8 @@ class ListR1ProductProvider(
         return Product(
             name = name,
             price = price.text(),
-            productLink = "$url$productLink",
-            imageLink = imageLink,
+            productLink = URI("$url$productLink"),
+            imageLink = URI(imageLink),
         )
     }
 
