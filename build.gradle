@@ -40,6 +40,9 @@ dependencies {
     //Logging
     implementation 'io.github.microutils:kotlin-logging:3.0.5'
 
+    //Cache
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
     //Scraping
     implementation 'org.jsoup:jsoup:1.18.3'
 
