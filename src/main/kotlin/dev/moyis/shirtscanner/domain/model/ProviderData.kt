@@ -16,11 +16,9 @@ data class ProviderData(
 )
 
 @RegisterReflectionForBinding
-data class ProviderStatusInformation(
-    val name: ProviderName,
-    val status: ProviderStatus,
-)
-
-@RegisterReflectionForBinding
 @JvmInline
-value class ProviderName(val value: String)
+value class ProviderName(
+    val value: String,
+) {
+    override fun toString(): String = value
+}
