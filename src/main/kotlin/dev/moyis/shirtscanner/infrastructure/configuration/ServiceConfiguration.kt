@@ -16,20 +16,20 @@ class ServiceConfiguration(
     private val imageProvider: ImageProvider,
 ) {
     @Bean
-    fun productService() =
+    fun productService(): ProductService =
         ProductService(
             productProviders = productProviders,
         )
 
     @Bean
-    fun providerService() =
+    fun providerService(): ProviderService =
         ProviderService(
             productProviders = productProviders,
             providerRepository = providerRepository,
         )
 
     @Bean
-    fun imageService() =
+    fun imageService(): ImageService =
         ImageService(
             imageProvider = imageProvider,
         )

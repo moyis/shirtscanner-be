@@ -10,7 +10,7 @@ data class SearchResultResponse(
     val products: List<ProductResponse>,
 ) {
     companion object {
-        fun fromSearchResult(searchResult: SearchResult) =
+        fun fromSearchResult(searchResult: SearchResult): SearchResultResponse =
             with(searchResult) {
                 SearchResultResponse(
                     providerName = providerName,

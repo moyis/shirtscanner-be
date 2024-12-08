@@ -7,7 +7,7 @@ data class SearchResultEventResponse(
     val data: SearchResultResponse,
 ) {
     companion object {
-        fun fromSearchResultResponse(searchResultEvent: SearchResultEvent) =
+        fun fromSearchResultResponse(searchResultEvent: SearchResultEvent): SearchResultEventResponse =
             with(searchResultEvent) {
                 SearchResultEventResponse(
                     total = total,

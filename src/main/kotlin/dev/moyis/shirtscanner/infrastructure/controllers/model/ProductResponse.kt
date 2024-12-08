@@ -12,7 +12,7 @@ data class ProductResponse(
     val imageLink: URI,
 ) {
     companion object {
-        fun fromProduct(product: Product) =
+        fun fromProduct(product: Product): ProductResponse =
             with(product) {
                 ProductResponse(
                     name = name,

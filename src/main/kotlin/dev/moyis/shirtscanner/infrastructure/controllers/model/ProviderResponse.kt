@@ -11,7 +11,7 @@ data class ProviderResponse(
     val status: ProviderStatus,
 ) {
     companion object {
-        fun fromProvider(provider: Provider) =
+        fun fromProvider(provider: Provider): ProviderResponse =
             with(provider) {
                 ProviderResponse(
                     url = url.toString(),
