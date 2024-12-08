@@ -75,12 +75,14 @@ class ProductsControllerTest : AbstractIntegrationTest() {
                 .get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
                 .exchange()
-                .expectStatus().isOk
+                .expectStatus()
+                .isOk
         }
 
         @Test
         fun `return provider names for each result`() {
-            webTestClient.get()
+            webTestClient
+                .get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
@@ -94,7 +96,8 @@ class ProductsControllerTest : AbstractIntegrationTest() {
 
         @Test
         fun `return products for each provider`() {
-            webTestClient.get()
+            webTestClient
+                .get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
@@ -108,7 +111,8 @@ class ProductsControllerTest : AbstractIntegrationTest() {
 
         @Test
         fun `return number of configured providers in each message`() {
-            webTestClient.get()
+            webTestClient
+                .get()
                 .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()

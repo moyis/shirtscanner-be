@@ -84,7 +84,8 @@ class DocumentFetcherTest {
     ) {
         val body = ResourceUtils.getFile("classpath:providers/list-r1/5boundless.html").readText()
         WireMock.stubFor(
-            WireMock.get(path)
+            WireMock
+                .get(path)
                 .willReturn(WireMock.status(status).withFixedDelay(delay.toMillis().toInt()).withBody(body)),
         )
     }

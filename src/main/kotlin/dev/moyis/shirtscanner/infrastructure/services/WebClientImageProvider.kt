@@ -18,8 +18,8 @@ class WebClientImageProvider(
     private val referrer = config.referer
     private val retry = Retry.fixedDelay(config.maxRetries, config.retryDelay)
 
-    override suspend fun get(path: String): ByteArray? {
-        return webClient
+    override suspend fun get(path: String): ByteArray? =
+        webClient
             .get()
             .uri("$baseUrl/$path")
             .header(HttpHeaders.REFERER, "$referrer")
@@ -28,5 +28,4 @@ class WebClientImageProvider(
             .retryWhen(retry)
             .onErrorComplete()
             .awaitSingleOrNull()
-    }
 }

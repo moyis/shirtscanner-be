@@ -39,17 +39,17 @@ class ListR1ProductProvider(
         )
     }
 
-    override fun status(): ProviderStatus {
-        return if (documentFetcher.fetchDocument(url) != null) ProviderStatus.UP else ProviderStatus.DOWN
-    }
+    override fun status(): ProviderStatus = if (documentFetcher.fetchDocument(url) != null) ProviderStatus.UP else ProviderStatus.DOWN
 
     private fun fetchDocuments(query: String): Sequence<Document> =
-        (1..2).asSequence()
+        (1..2)
+            .asSequence()
             .map { getWebpageUrl(query, it) }
             .mapNotNull { documentFetcher.fetchDocument(it) }
 
-    fun getProducts(document: Document) =
-        document.select("li")
+    fun getProducts(document: Document): List<Product> =
+        document
+            .select("li")
             .mapNotNull { mapToProduct(it) }
             .distinct()
 

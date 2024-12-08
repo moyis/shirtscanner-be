@@ -33,12 +33,11 @@ class YupooProductProvider(
         )
     }
 
-    override fun providerData(): ProviderData {
-        return ProviderData(
+    override fun providerData(): ProviderData =
+        ProviderData(
             url = url,
             name = name,
         )
-    }
 
     override fun status(): ProviderStatus {
         LOG.info { "Checking status of $name" }
@@ -47,12 +46,14 @@ class YupooProductProvider(
     }
 
     private fun fetchDocuments(query: String): Sequence<Document> =
-        (1..2).asSequence()
+        (1..2)
+            .asSequence()
             .map { getWebpageUrl(query, it) }
             .mapNotNull { documentFetcher.fetchDocument(it) }
 
-    fun getProducts(document: Document) =
-        document.getElementsByClass("album__main")
+    fun getProducts(document: Document): List<Product> =
+        document
+            .getElementsByClass("album__main")
             .mapNotNull { mapToProduct(it) }
             .distinct()
 

@@ -39,7 +39,8 @@ class ProductServiceTest {
         fun `returns empty with no configured providers`() {
             val productService = ProductService(emptyList())
 
-            StepVerifier.create(productService.searchStream("any"))
+            StepVerifier
+                .create(productService.searchStream("any"))
                 .expectNextCount(0)
                 .expectComplete()
                 .verify()
@@ -49,7 +50,8 @@ class ProductServiceTest {
         fun `returns a result for every configured provider`() {
             val productService = ProductService(listOf(FakeProvider, FakeProvider, FakeProvider, FakeProvider))
 
-            StepVerifier.create(productService.searchStream("any"))
+            StepVerifier
+                .create(productService.searchStream("any"))
                 .expectNextCount(4)
                 .expectComplete()
                 .verify()
