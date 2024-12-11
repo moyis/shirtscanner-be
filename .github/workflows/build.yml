@@ -23,4 +23,4 @@ jobs:
 
       - name: Build and Test
         run: |
-          ./gradlew build --scan
+          ./gradlew build
