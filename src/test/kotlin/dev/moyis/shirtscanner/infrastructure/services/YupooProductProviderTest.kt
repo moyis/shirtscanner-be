@@ -83,7 +83,12 @@ class YupooProductProviderTest {
         provider: String? = null,
         duration: Duration = Duration.ZERO,
     ) {
-        val body = if (provider != null) ResourceUtils.getFile("classpath:providers/yupoo/$provider.html").readText() else ""
+        val body =
+            if (provider != null) {
+                ResourceUtils.getFile("classpath:providers/yupoo/$provider.html").readText()
+            } else {
+                ""
+            }
         stubFor(get(searchQuery(q)).willReturn(ok().withFixedDelay(duration.toMillis().toInt()).withBody(body)))
     }
 

@@ -1,6 +1,7 @@
 package dev.moyis.shirtscanner.infrastructure.services
 
 import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.DocumentFetcherConfigurationProperties
@@ -9,7 +10,7 @@ import org.apache.http.HttpStatus.SC_BAD_REQUEST
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_TOO_MANY_REQUESTS
 import org.apache.http.HttpStatus.SC_UNAUTHORIZED
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -40,7 +41,7 @@ class DocumentFetcherTest {
 
         val document = fetcher.fetchDocument(URI("$wiremockUrl/search"))
 
-        Assertions.assertThat(document).isNotNull
+        assertThat(document).isNotNull
     }
 
     @Test
@@ -50,7 +51,7 @@ class DocumentFetcherTest {
 
         val document = fetcher.fetchDocument(URI("$wiremockUrl/search"))
 
-        Assertions.assertThat(document).isNull()
+        assertThat(document).isNull()
     }
 
     @Test
@@ -60,7 +61,7 @@ class DocumentFetcherTest {
 
         fetcher.fetchDocument(URI("$wiremockUrl/search"))
 
-        Assertions.assertThat(output).contains("took more than 100")
+        assertThat(output).contains("took more than 100")
     }
 
     @ParameterizedTest
@@ -74,7 +75,7 @@ class DocumentFetcherTest {
 
         fetcher.fetchDocument(URI("$wiremockUrl/search"))
 
-        Assertions.assertThat(output).contains("returned status code $status HTTP error fetching URL")
+        assertThat(output).contains("returned status code $status HTTP error fetching URL")
     }
 
     private fun setUpResponse(
@@ -84,8 +85,7 @@ class DocumentFetcherTest {
     ) {
         val body = ResourceUtils.getFile("classpath:providers/list-r1/5boundless.html").readText()
         WireMock.stubFor(
-            WireMock
-                .get(path)
+            get(path)
                 .willReturn(WireMock.status(status).withFixedDelay(delay.toMillis().toInt()).withBody(body)),
         )
     }

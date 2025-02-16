@@ -60,22 +60,21 @@ class YupooProductProvider(
     private fun mapToProduct(element: Element): Product? {
         val name = element.attr("title") ?: return null
         val productLink = element.attr("href") ?: return null
-        val imageLink =
-            element
-                .getElementsByClass("album__img")
-                .first()
-                ?.attr("data-src")
-                ?.substringAfter("photo.yupoo.com/")
-                ?: return null
-        val product =
-            Product(
-                price = null,
-                name = name,
-                imageLink = URI("${configuration.imageProxyHost}/v1/images/yupoo?path=$imageLink"),
-                productLink = URI("$url$productLink"),
-            )
-        return product
+        val imageLink = getImageLink(element) ?: return null
+        return Product(
+            price = null,
+            name = name,
+            imageLink = URI("${configuration.imageProxyHost}/v1/images/yupoo?path=$imageLink"),
+            productLink = URI("$url$productLink"),
+        )
     }
+
+    private fun getImageLink(element: Element): String? =
+        element
+            .getElementsByClass("album__img")
+            .first()
+            ?.attr("data-src")
+            ?.substringAfter("photo.yupoo.com/")
 
     private fun getWebpageUrl(
         query: String,

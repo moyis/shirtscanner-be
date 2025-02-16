@@ -38,7 +38,9 @@ class ProductsControllerTest : AbstractIntegrationTest() {
                 } Extract {
                     body().jsonPath().getList("", SearchResultResponse::class.java)
                 }
-            assertThat(providerResults).extracting<String> { it.providerName }.containsExactlyInAnyOrder("ListR1 Test", "Yupoo Test")
+            assertThat(providerResults)
+                .extracting<String> { it.providerName }
+                .containsExactlyInAnyOrder("ListR1 Test", "Yupoo Test")
         }
 
         @Test

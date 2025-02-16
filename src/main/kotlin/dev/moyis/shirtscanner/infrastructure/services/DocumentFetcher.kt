@@ -34,9 +34,15 @@ class DocumentFetcher(
     ): Document? {
         val baseMessage = "Exception found performing get on $url:"
         when (throwable) {
-            is HttpStatusException -> LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
-            is SocketTimeoutException -> LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}" }
-            is UnsupportedMimeTypeException -> LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" }
+            is HttpStatusException -> {
+                LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
+            }
+            is SocketTimeoutException -> {
+                LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}" }
+            }
+            is UnsupportedMimeTypeException -> {
+                LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" }
+            }
             else -> LOG.error { "Unexpected exception found while performing get on $url: ${throwable.cause}" }
         }
         return null
@@ -54,7 +60,11 @@ class DocumentFetcher(
                 "Sec-Fetch-Site" to "same-origin",
                 "Sec-Fetch-User" to "?1",
                 "Upgrade-Insecure-Requests" to "1",
-                HttpHeaders.USER_AGENT to "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                HttpHeaders.USER_AGENT to
+                    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)
+                    | AppleWebKit/537.36 (KHTML, like Gecko)
+                    |  Chrome/120.0.0.0 Safari/537.36
+                    """.trimMargin(),
             )
     }
 }
