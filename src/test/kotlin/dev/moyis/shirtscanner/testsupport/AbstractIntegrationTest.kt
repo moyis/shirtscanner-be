@@ -11,12 +11,14 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.wiremock.spring.ConfigureWireMock
+import org.wiremock.spring.EnableWireMock
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = [Shirtscanner::class],
 )
-@ContextConfiguration(initializers = [IntegrationTestConfiguration::class])
+@EnableWireMock
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
 abstract class AbstractIntegrationTest {

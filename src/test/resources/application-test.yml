@@ -3,13 +3,13 @@ fetchers:
     yupoo:
       image-proxy-host: https://api.shirtscanner.com
   list-r-1:
-    - url: ${wiremock.url}/list-r-1
+    - url: ${wiremock.server.baseUrl}/list-r-1
       name: ListR1 Test
   yupoo:
-    - url: ${wiremock.url}/yupoo
+    - url: ${wiremock.server.baseUrl}/yupoo
       name: Yupoo Test
 
 image-fetcher:
-  base-url: ${wiremock.url}/image
+  base-url: ${wiremock.server.baseUrl}/image
   max-retries: 0
   retry-delay: 0ms

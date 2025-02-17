@@ -23,7 +23,7 @@ class DocumentFetcher(
 
     private fun doFetchDocument(uri: URI): Document =
         Jsoup
-            .connect(uri.toASCIIString())
+            .connect(uri.toString())
             .timeout(configuration.defaultTimeout.toMillis().toInt())
             .headers(DEFAULT_HEADERS)
             .get()
