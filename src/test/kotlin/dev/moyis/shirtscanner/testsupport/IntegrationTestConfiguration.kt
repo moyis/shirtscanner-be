@@ -11,9 +11,9 @@ import org.wiremock.integrations.testcontainers.WireMockContainer
 class IntegrationTestConfiguration : ApplicationContextInitializer<ConfigurableApplicationContext> {
     private fun wiremockContainer(): WireMockContainer =
         WireMockContainer("wiremock/wiremock:3.11.0")
-            .withMappingFromResource("wiremock/list-r-1.json")
-            .withMappingFromResource("wiremock/yupoo.json")
-            .withMappingFromResource("wiremock/yupoo-image.json")
+            .withMappingFromResource("mappings/list-r-1.json")
+            .withMappingFromResource("mappings/yupoo.json")
+            .withMappingFromResource("mappings/yupoo-image.json")
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         val wireMockContainer = wiremockContainer()

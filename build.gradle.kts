@@ -34,10 +34,10 @@ repositories {
 
 val mockitoKotlinVersion = "5.4.0"
 val restAssuredVersion = "5.5.0"
-val wiremockVersion = "3.11.0"
 val wiremockTestContainersVersion = "1.0-alpha-14"
 val kotlinLoggingVersion = "3.0.5"
 val jsoupVersion = "1.18.3"
+val wiremockSpringBootVersion = "3.8.0"
 
 dependencies {
     // Spring
@@ -70,10 +70,8 @@ dependencies {
     testImplementation("io.rest-assured:kotlin-extensions:$restAssuredVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 
-    testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
+    testImplementation("org.wiremock.integrations:wiremock-spring-boot:$wiremockSpringBootVersion")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestContainersVersion")
-
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }
 
 kotlin {
@@ -109,8 +107,3 @@ tasks.withType<BootBuildImage> {
     )
 }
 
-detekt {
-    parallel = true
-    autoCorrect = true
-    config = files("detekt.yml")
-}
