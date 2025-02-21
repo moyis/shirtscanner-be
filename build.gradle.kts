@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
     val kotlinVersion = "2.0.10"
-    val springVersion = "3.4.2"
+    val springVersion = "3.4.3"
     val springDependencyManagementVersion = "1.1.7"
     val nativeVersion = "0.10.5"
     val testLoggerVersion = "4.0.0"
