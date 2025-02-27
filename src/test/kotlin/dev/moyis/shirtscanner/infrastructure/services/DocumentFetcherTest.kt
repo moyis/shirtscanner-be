@@ -2,6 +2,8 @@ package dev.moyis.shirtscanner.infrastructure.services
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.status
+import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.DocumentFetcherConfigurationProperties
@@ -84,9 +86,9 @@ class DocumentFetcherTest {
         status: Int = HttpStatus.SC_OK,
     ) {
         val body = ResourceUtils.getFile("classpath:providers/list-r1/5boundless.html").readText()
-        WireMock.stubFor(
+        stubFor(
             get(path)
-                .willReturn(WireMock.status(status).withFixedDelay(delay.toMillis().toInt()).withBody(body)),
+                .willReturn(status(status).withFixedDelay(delay.toMillis().toInt()).withBody(body)),
         )
     }
 }

@@ -61,10 +61,9 @@ class DocumentFetcher(
                 "Sec-Fetch-User" to "?1",
                 "Upgrade-Insecure-Requests" to "1",
                 HttpHeaders.USER_AGENT to
-                    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)
-                    | AppleWebKit/537.36 (KHTML, like Gecko)
-                    |  Chrome/120.0.0.0 Safari/537.36
-                    """.trimMargin(),
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " +
+                    "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                    "Chrome/120.0.0.0 Safari/537.36",
             )
     }
 }
