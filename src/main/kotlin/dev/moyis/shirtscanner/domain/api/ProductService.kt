@@ -28,8 +28,8 @@ class ProductService(
         sink: Sinks.Many<SearchResultEvent>,
     ) {
         productProviders
-            .map { executorService.submit<SearchResult> { it.search(query) } }
-            .forEach { sink.tryEmitNext(SearchResultEvent(productProviders.size, it.get())) }
+            .map { executorService.submit { sink.tryEmitNext(SearchResultEvent(total = productProviders.size, data = it.search(query))) } }
+            .forEach { it.get() }
         sink.tryEmitComplete()
     }
 }

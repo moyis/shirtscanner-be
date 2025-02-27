@@ -19,7 +19,7 @@ class ProductsController(
     @GetMapping
     fun search(
         @RequestParam("q") q: String,
-    ): ResponseEntity<List<SearchResultResponse>?> =
+    ): ResponseEntity<List<SearchResultResponse>> =
         productService
             .search(q)
             .map { SearchResultResponse.fromSearchResult(it) }
