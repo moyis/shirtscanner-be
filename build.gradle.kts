@@ -33,7 +33,7 @@ repositories {
 }
 
 val mockitoKotlinVersion = "5.4.0"
-val restAssuredVersion = "5.5.0"
+val restAssuredVersion = "5.5.1"
 val wiremockVersion = "3.12.0"
 val wiremockTestContainersVersion = "1.0-alpha-14"
 val kotlinLoggingVersion = "3.0.5"
