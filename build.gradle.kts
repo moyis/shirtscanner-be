@@ -16,7 +16,7 @@ plugins {
     id("org.graalvm.buildtools.native") version nativeVersion
 
     id("com.adarshr.test-logger") version testLoggerVersion
-    // id("info.solidsoft.pitest") version pitestVersion
+    id("info.solidsoft.pitest") version pitestVersion
 }
 
 group = "dev.moyis"
@@ -84,7 +84,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-/*pitest {
+pitest {
     pitestVersion = "1.17.2"
     junit5PluginVersion = "1.2.1"
     threads = 4
@@ -95,7 +95,7 @@ tasks.withType<Test> {
             "dev.moyis.shirtscanner.infrastructure.services.*",
             "dev.moyis.shirtscanner.infrastructure.repositories.*",
         )
-}*/
+}
 
 tasks.withType<BootBuildImage> {
     environment.putAll(
