@@ -238,7 +238,7 @@ class ListR1ProductProviderTest {
         duration: Duration = Duration.ZERO,
     ) {
         val body = provider?.let { ResourceUtils.getFile("classpath:providers/list-r1/$provider.html").readText() }
-        wireMock.register(get(searchQuery(q)).willReturn(ok().withFixedDelay(duration.toMillis().toInt()).withBody(body)).withHeader())
+        wireMock.register(get(searchQuery(q)).willReturn(ok().withFixedDelay(duration.toMillis().toInt()).withBody(body)))
     }
 
     private fun setUp4xxResponseForQuery(q: String) {
