@@ -35,18 +35,14 @@ class DocumentFetcher(
         val baseMessage = "Exception found performing get on $url:"
         when (throwable) {
             is HttpStatusException -> {
-                LOG.error { throwable.stackTraceToString() }
                 LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
             }
-
             is SocketTimeoutException -> {
                 LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}" }
             }
-
             is UnsupportedMimeTypeException -> {
                 LOG.warn { "$baseMessage returned unsupported mime type ${throwable.mimeType}" }
             }
-
             else -> LOG.error { "Unexpected exception found while performing get on $url: ${throwable.cause}" }
         }
         return null

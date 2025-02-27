@@ -1,13 +1,10 @@
 package dev.moyis.shirtscanner.infrastructure.services
 
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock.aResponse
-import com.github.tomakehurst.wiremock.client.WireMock.any
 import com.github.tomakehurst.wiremock.client.WireMock.badRequest
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
 import com.github.tomakehurst.wiremock.client.WireMock.serverError
-import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import dev.moyis.shirtscanner.domain.model.ProviderName
@@ -89,7 +86,11 @@ class ListR1ProductProviderTest {
             { assertThat(it.name).isEqualTo("2023 Argentina Blue Special Edition Player Version Soccer Jersey") },
             { assertThat(it.price).isEqualTo("US$ 16.00") },
             { assertThat(it.productLink.host).isEqualTo(urlBase.host) },
-            { assertThat(it.productLink.path).isEqualTo("/2023-Argentina-Blue-Special-Edition-Player-Version-Soccer-Jersey-p22397884.html") },
+            {
+                assertThat(
+                    it.productLink.path,
+                ).isEqualTo("/2023-Argentina-Blue-Special-Edition-Player-Version-Soccer-Jersey-p22397884.html")
+            },
             { assertThat(it.imageLink.host).isEqualTo("us03-imgcdn.ymcart.com") },
             { assertThat(it.imageLink.path).isEqualTo("/95755/2023/06/22/c/c/ccca7cd379f8be53.png") },
         )
@@ -104,7 +105,11 @@ class ListR1ProductProviderTest {
             { assertThat(it.name).isEqualTo("2023 Argentina Blue Special Edition Player Version Soccer Jersey") },
             { assertThat(it.price).isEqualTo("US$ 16.00") },
             { assertThat(it.productLink.host).isEqualTo(urlBase.host) },
-            { assertThat(it.productLink.path).isEqualTo("/2023-Argentina-Blue-Special-Edition-Player-Version-Soccer-Jersey-p22397840.html") },
+            {
+                assertThat(
+                    it.productLink.path,
+                ).isEqualTo("/2023-Argentina-Blue-Special-Edition-Player-Version-Soccer-Jersey-p22397840.html")
+            },
             { assertThat(it.imageLink.host).isEqualTo("us03-imgcdn.ymcart.com") },
             { assertThat(it.imageLink.path).isEqualTo("/81221/2023/06/22/f/6/f6fa467e08d6edd2.png") },
         )
