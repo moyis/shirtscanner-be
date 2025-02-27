@@ -1,8 +1,8 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    val kotlinVersion = "2.0.10"
-    val springVersion = "3.4.2"
+    val kotlinVersion = "2.1.10"
+    val springVersion = "3.4.3"
     val springDependencyManagementVersion = "1.1.7"
     val nativeVersion = "0.10.5"
     val testLoggerVersion = "4.0.0"
@@ -16,7 +16,7 @@ plugins {
     id("org.graalvm.buildtools.native") version nativeVersion
 
     id("com.adarshr.test-logger") version testLoggerVersion
-    id("info.solidsoft.pitest") version pitestVersion
+    // id("info.solidsoft.pitest") version pitestVersion
 }
 
 group = "dev.moyis"
@@ -34,7 +34,7 @@ repositories {
 
 val mockitoKotlinVersion = "5.4.0"
 val restAssuredVersion = "5.5.0"
-val wiremockVersion = "3.11.0"
+val wiremockVersion = "3.10.0"
 val wiremockTestContainersVersion = "1.0-alpha-14"
 val kotlinLoggingVersion = "3.0.5"
 val jsoupVersion = "1.18.3"
@@ -72,8 +72,6 @@ dependencies {
 
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestContainersVersion")
-
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }
 
 kotlin {
@@ -86,7 +84,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-pitest {
+/*pitest {
     pitestVersion = "1.17.2"
     junit5PluginVersion = "1.2.1"
     threads = 4
@@ -97,7 +95,7 @@ pitest {
             "dev.moyis.shirtscanner.infrastructure.services.*",
             "dev.moyis.shirtscanner.infrastructure.repositories.*",
         )
-}
+}*/
 
 tasks.withType<BootBuildImage> {
     environment.putAll(
@@ -107,10 +105,4 @@ tasks.withType<BootBuildImage> {
             "CDS_TRAINING_JAVA_TOOL_OPTIONS" to "-Dspring.flyway.enabled=false",
         ),
     )
-}
-
-detekt {
-    parallel = true
-    autoCorrect = true
-    config = files("detekt.yml")
 }

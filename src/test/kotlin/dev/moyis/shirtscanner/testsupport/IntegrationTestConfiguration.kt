@@ -10,7 +10,7 @@ import org.wiremock.integrations.testcontainers.WireMockContainer
 @TestConfiguration(proxyBeanMethods = false)
 class IntegrationTestConfiguration : ApplicationContextInitializer<ConfigurableApplicationContext> {
     private fun wiremockContainer(): WireMockContainer =
-        WireMockContainer("wiremock/wiremock:3.11.0")
+        WireMockContainer("wiremock/wiremock:3.12.0-1")
             .withMappingFromResource("wiremock/list-r-1.json")
             .withMappingFromResource("wiremock/yupoo.json")
             .withMappingFromResource("wiremock/yupoo-image.json")

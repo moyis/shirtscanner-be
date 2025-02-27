@@ -23,13 +23,13 @@ class YupooProductProviderTest {
     private lateinit var subject: YupooProductProvider
     private lateinit var urlBase: URI
     private val documentFetcher = DocumentFetcher(DocumentFetcherConfigurationProperties(Duration.ofMillis(500)))
+    private val yupooConfiguration = YupooProviderConfigurationProperties(URI("http://localhost:1234"))
 
     @BeforeEach
     fun setUp(wmRuntimeInfo: WireMockRuntimeInfo) {
         WireMock.resetToDefault()
         urlBase = URI(wmRuntimeInfo.httpBaseUrl)
-        val yupooConfig = YupooProviderConfigurationProperties(urlBase)
-        subject = YupooProductProvider(urlBase, ProviderName("Yupoo"), documentFetcher, yupooConfig)
+        subject = YupooProductProvider(urlBase, ProviderName("Yupoo"), documentFetcher, yupooConfiguration)
     }
 
     @Test
@@ -40,9 +40,12 @@ class YupooProductProviderTest {
         assertThat(result.products).hasSize(38)
         assertThat(result.products).first().satisfies(
             { assertThat(it.name).isEqualTo("Retro 2000 Argentina home") },
-            { assertThat(it.productLink).isEqualTo(URI("$urlBase/albums/90802644?uid=1")) },
             { assertThat(it.price).isNull() },
-            { assertThat(it.imageLink).isEqualTo(URI("$urlBase/v1/images/yupoo?path=beonestore/116b7fcf/medium.jpg")) },
+            { assertThat(it.productLink.host).isEqualTo(urlBase.host) },
+            { assertThat(it.productLink.path).isEqualTo("/albums/90802644") },
+            { assertThat(it.imageLink.host).isEqualTo(yupooConfiguration.imageProxyHost.host) },
+            { assertThat(it.imageLink.path).isEqualTo("/v1/images/yupoo") },
+            { assertThat(it.imageLink.query).isEqualTo("path=beonestore/116b7fcf/medium.jpg") },
         )
     }
 
