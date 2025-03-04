@@ -37,7 +37,7 @@ val restAssuredVersion = "5.5.1"
 val wiremockVersion = "3.12.0"
 val wiremockTestContainersVersion = "1.0-alpha-14"
 val kotlinLoggingVersion = "3.0.5"
-val jsoupVersion = "1.18.3"
+val jsoupVersion = "1.19.1"
 
 dependencies {
     // Spring
