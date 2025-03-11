@@ -5,12 +5,12 @@ import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.domain.model.SearchResult
 import dev.moyis.shirtscanner.domain.spi.ProductProvider
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Disabled
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import reactor.test.StepVerifier
 import java.net.URI
+import java.time.Duration
 
 class ProductServiceTest {
     @Nested
@@ -21,7 +21,7 @@ class ProductServiceTest {
 
             val results = productService.search("any")
 
-            Assertions.assertThat(results).isEmpty()
+            assertThat(results).isEmpty()
         }
 
         @Test
@@ -30,7 +30,7 @@ class ProductServiceTest {
 
             val results = productService.search("any")
 
-            Assertions.assertThat(results).hasSize(4)
+            assertThat(results).hasSize(4)
         }
     }
 
@@ -48,15 +48,14 @@ class ProductServiceTest {
         }
 
         @Test
-        @Disabled("To be fixed soon")
         fun `returns a result for every configured provider`() {
             val productService = ProductService(listOf(FakeProvider, FakeProvider, FakeProvider, FakeProvider))
 
             StepVerifier
-                .create(productService.searchStream("any"))
+                .create(productService.searchStream("any").doOnNext { println("Emitted $it") })
                 .expectNextCount(4)
                 .expectComplete()
-                .verify()
+                .verify(Duration.ofSeconds(10))
         }
     }
 }

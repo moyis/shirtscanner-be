@@ -83,7 +83,6 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         }
 
         @Test
-        @Disabled("To be fixed soon")
         fun `return provider names for each result`() {
             webTestClient
                 .get()
@@ -94,12 +93,11 @@ class ProductsControllerTest : AbstractIntegrationTest() {
                 .responseBody
                 .map { it.data.providerName }
                 .`as`(StepVerifier::create)
-                .expectNext("ListR1 Test", "Yupoo Test")
+                .expectNextSequence(setOf("Yupoo Test", "ListR1 Test"))
                 .verifyComplete()
         }
 
         @Test
-        @Disabled("To be fixed soon")
         fun `return products for each provider`() {
             webTestClient
                 .get()
@@ -110,7 +108,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
                 .responseBody
                 .map { it.data.products.size }
                 .`as`(StepVerifier::create)
-                .expectNext(100, 38)
+                .expectNextSequence(setOf(38, 100))
                 .verifyComplete()
         }
 

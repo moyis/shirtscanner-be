@@ -5,6 +5,7 @@ import dev.moyis.shirtscanner.domain.model.SearchResultEvent
 import dev.moyis.shirtscanner.domain.spi.ProductProvider
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Sinks
+import java.time.Duration
 import java.util.concurrent.Executors
 
 class ProductService(
@@ -28,8 +29,20 @@ class ProductService(
         sink: Sinks.Many<SearchResultEvent>,
     ) {
         productProviders
-            .map { executorService.submit { sink.tryEmitNext(SearchResultEvent(productProviders.size, it.search(query))) } }
-            .forEach { it.get() }
-        sink.tryEmitComplete()
+            .map {
+                executorService.submit {
+                    sink.emitNext(SearchResultEvent(productProviders.size, it.search(query)))
+                }
+            }.map { it.get() }
+
+        sink.emitComplete()
     }
+}
+
+fun <T> Sinks.Many<T & Any>.emitNext(next: T & Any) {
+    emitNext(next, Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(1)))
+}
+
+fun <T> Sinks.Many<T & Any>.emitComplete() {
+    emitComplete(Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(1)))
 }
