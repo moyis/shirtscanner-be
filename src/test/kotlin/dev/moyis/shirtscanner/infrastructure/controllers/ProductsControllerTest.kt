@@ -7,8 +7,9 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import org.apache.http.HttpStatus.SC_BAD_REQUEST
+import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
@@ -25,7 +26,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             } When {
                 get("/v1/products")
             } Then {
-                statusCode(200)
+                statusCode(SC_OK)
             }
         }
 
@@ -65,7 +66,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             When {
                 get("/v1/products")
             } Then {
-                statusCode(400)
+                statusCode(SC_BAD_REQUEST)
             }
         }
     }
@@ -132,7 +133,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             When {
                 get("/v1/products/stream")
             } Then {
-                statusCode(400)
+                statusCode(SC_BAD_REQUEST)
             }
         }
     }

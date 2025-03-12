@@ -8,6 +8,7 @@ import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.net.URI
@@ -18,7 +19,7 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
         When {
             get("/v1/providers")
         } Then {
-            statusCode(200)
+            statusCode(SC_OK)
         }
     }
 

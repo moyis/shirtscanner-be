@@ -5,6 +5,8 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import org.apache.http.HttpStatus.SC_BAD_REQUEST
+import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -16,7 +18,7 @@ class ImageControllerTest : AbstractIntegrationTest() {
         } When {
             get("/v1/images/yupoo")
         } Then {
-            statusCode(200)
+            statusCode(SC_OK)
         }
     }
 
@@ -39,7 +41,7 @@ class ImageControllerTest : AbstractIntegrationTest() {
         When {
             get("/v1/images/yupoo")
         } Then {
-            statusCode(400)
+            statusCode(SC_BAD_REQUEST)
         }
     }
 }
