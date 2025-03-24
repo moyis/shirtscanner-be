@@ -7,6 +7,9 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.test.runTest
 import org.apache.http.HttpStatus.SC_BAD_REQUEST
 import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions.assertThat
@@ -84,34 +87,40 @@ class ProductsControllerTest : AbstractIntegrationTest() {
         }
 
         @Test
-        fun `return provider names for each result`() {
-            webTestClient
-                .get()
-                .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .exchange()
-                .returnResult<SearchResultEvent>()
-                .responseBody
-                .map { it.data.providerName }
-                .`as`(StepVerifier::create)
-                .expectNextSequence(setOf("Yupoo Test", "ListR1 Test"))
-                .verifyComplete()
-        }
+        fun `return provider names for each result`() =
+            runTest {
+                val result =
+                    webTestClient
+                        .get()
+                        .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
+                        .accept(MediaType.TEXT_EVENT_STREAM)
+                        .exchange()
+                        .returnResult<SearchResultEvent>()
+                        .responseBody
+                        .map { it.data.providerName }
+                        .asFlow()
+                        .toList()
+
+                assertThat(result).containsExactlyInAnyOrder("Yupoo Test", "ListR1 Test")
+            }
 
         @Test
-        fun `return products for each provider`() {
-            webTestClient
-                .get()
-                .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .exchange()
-                .returnResult<SearchResultEvent>()
-                .responseBody
-                .map { it.data.products.size }
-                .`as`(StepVerifier::create)
-                .expectNextSequence(setOf(38, 100))
-                .verifyComplete()
-        }
+        fun `return products for each provider`() =
+            runTest {
+                val result =
+                    webTestClient
+                        .get()
+                        .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
+                        .accept(MediaType.TEXT_EVENT_STREAM)
+                        .exchange()
+                        .returnResult<SearchResultEvent>()
+                        .responseBody
+                        .map { it.data.products.size }
+                        .asFlow()
+                        .toList()
+
+                assertThat(result).containsExactlyInAnyOrder(38, 100)
+            }
 
         @Test
         fun `return number of configured providers in each message`() {
