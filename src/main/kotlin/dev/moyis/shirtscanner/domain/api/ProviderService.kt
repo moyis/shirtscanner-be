@@ -4,7 +4,9 @@ import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
 import dev.moyis.shirtscanner.domain.spi.ProductProvider
 import dev.moyis.shirtscanner.domain.spi.ProviderRepository
+import org.springframework.stereotype.Service
 
+@Service
 class ProviderService(
     private val productProviders: List<ProductProvider>,
     private val providerRepository: ProviderRepository,
