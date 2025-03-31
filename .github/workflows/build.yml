@@ -26,7 +26,7 @@ jobs:
           ./gradlew build
   build-native:
     runs-on: ubuntu-latest
-    name: Build
+    name: Build Native
     steps:
       - name: Checkout
         uses: actions/checkout@v4
