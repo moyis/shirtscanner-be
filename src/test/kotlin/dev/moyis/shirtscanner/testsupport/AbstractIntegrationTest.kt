@@ -17,7 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 )
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
-@Import(RedisTestcontainersConfiguration::class, WiremockTestcontainersConfiguration::class)
+@Import(MongoDbTestcontainersConfiguration::class, WiremockTestcontainersConfiguration::class)
 abstract class AbstractIntegrationTest {
     @LocalServerPort
     private var port: Int = 0

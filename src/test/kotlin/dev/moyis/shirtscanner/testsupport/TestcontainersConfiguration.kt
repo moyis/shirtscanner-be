@@ -1,21 +1,17 @@
 package dev.moyis.shirtscanner.testsupport
 
-import com.redis.testcontainers.RedisContainer
 import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.DynamicPropertyRegistrar
+import org.testcontainers.containers.MongoDBContainer
 import org.wiremock.integrations.testcontainers.WireMockContainer
 
 @TestConfiguration(proxyBeanMethods = false)
-class RedisTestcontainersConfiguration {
+class MongoDbTestcontainersConfiguration {
     @Bean
-    fun redis(): RedisContainer = RedisContainer("redis:7.4.2")
-
-    @Bean
-    fun redisConfiguration(container: RedisContainer) =
-        DynamicPropertyRegistrar {
-            it.add("redis.address") { container.redisURI }
-        }
+    @ServiceConnection
+    fun mongoContainer() = MongoDBContainer("mongo:8.0.6-noble")
 }
 
 @TestConfiguration(proxyBeanMethods = false)

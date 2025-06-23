@@ -58,6 +58,8 @@ dependencies {
 
     // Cache
     implementation("org.redisson:redisson:$redissonVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+
     // Scraping
     implementation("org.jsoup:jsoup:$jsoupVersion")
 
@@ -73,6 +75,7 @@ dependencies {
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestContainersVersion")
     testImplementation("com.redis:testcontainers-redis")
+    testImplementation("org.testcontainers:mongodb")
 }
 
 kotlin {
