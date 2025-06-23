@@ -35,7 +35,6 @@ repositories {
 val jsoupVersion = "1.19.1"
 val kotlinLoggingVersion = "3.0.5"
 val mockitoKotlinVersion = "5.4.0"
-val redissonVersion = "3.40.0"
 val restAssuredVersion = "5.5.1"
 val wiremockTestContainersVersion = "1.0-alpha-14"
 val wiremockVersion = "3.12.1"
@@ -57,7 +56,6 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
     // Cache
-    implementation("org.redisson:redisson:$redissonVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     // Scraping
@@ -74,7 +72,6 @@ dependencies {
 
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestContainersVersion")
-    testImplementation("com.redis:testcontainers-redis")
     testImplementation("org.testcontainers:mongodb")
 }
 
