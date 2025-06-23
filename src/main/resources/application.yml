@@ -2,6 +2,9 @@ spring:
   threads:
     virtual:
       enabled: true
+  data:
+    mongodb:
+      auto-index-creation: true
 
 document-fetcher:
   default-timeout: 15s

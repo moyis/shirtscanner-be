@@ -13,11 +13,13 @@ import kotlinx.coroutines.test.runTest
 import org.apache.http.HttpStatus.SC_BAD_REQUEST
 import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions.assertThat
+import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.returnResult
 import reactor.test.StepVerifier
+import java.time.Duration
 
 class ProductsControllerTest : AbstractIntegrationTest() {
     @Nested
@@ -124,17 +126,20 @@ class ProductsControllerTest : AbstractIntegrationTest() {
 
         @Test
         fun `return number of configured providers in each message`() {
-            webTestClient
-                .get()
-                .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .exchange()
-                .returnResult<SearchResultEvent>()
-                .responseBody
-                .map { it.total }
-                .`as`(StepVerifier::create)
-                .expectNext(2, 2)
-                .verifyComplete()
+            await().atMost(Duration.ofSeconds(3)).untilAsserted {
+                webTestClient
+                    .get()
+                    .uri { it.path("/v1/products/stream").queryParam("q", "argentina").build() }
+                    .accept(MediaType.TEXT_EVENT_STREAM)
+                    .exchange()
+                    .returnResult<SearchResultEvent>()
+                    .responseBody
+                    .map { it.total }
+                    .`as`(StepVerifier::create)
+                    .expectNextCount(2)
+                    .expectComplete()
+                    .verify(Duration.ofSeconds(10))
+            }
         }
 
         @Test

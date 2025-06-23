@@ -32,12 +32,12 @@ repositories {
     mavenCentral()
 }
 
+val jsoupVersion = "1.20.1"
+val kotlinLoggingVersion = "3.0.5"
 val mockitoKotlinVersion = "5.4.0"
 val restAssuredVersion = "5.5.5"
 val wiremockVersion = "3.13.1"
 val wiremockTestContainersVersion = "1.0-alpha-15"
-val kotlinLoggingVersion = "3.0.5"
-val jsoupVersion = "1.20.1"
 
 dependencies {
     // Spring
@@ -56,7 +56,7 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
     // Cache
-    implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     // Scraping
     implementation("org.jsoup:jsoup:$jsoupVersion")
@@ -72,6 +72,7 @@ dependencies {
 
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
     testImplementation("org.wiremock.integrations.testcontainers:wiremock-testcontainers-module:$wiremockTestContainersVersion")
+    testImplementation("org.testcontainers:mongodb")
 }
 
 kotlin {
