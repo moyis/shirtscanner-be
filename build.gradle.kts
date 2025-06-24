@@ -32,7 +32,7 @@ repositories {
     mavenCentral()
 }
 
-val jsoupVersion = "1.20.1"
+val jsoupVersion = "1.21.1"
 val kotlinLoggingVersion = "3.0.5"
 val mockitoKotlinVersion = "5.4.0"
 val restAssuredVersion = "5.5.5"
