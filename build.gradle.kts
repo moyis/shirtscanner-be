@@ -4,7 +4,7 @@ plugins {
     val kotlinVersion = "2.2.20"
     val springVersion = "3.5.6"
     val springDependencyManagementVersion = "1.1.7"
-    val nativeVersion = "0.11.1"
+    val nativeVersion = "0.11.2"
     val testLoggerVersion = "4.0.0"
     val pitestVersion = "1.15.0"
 
