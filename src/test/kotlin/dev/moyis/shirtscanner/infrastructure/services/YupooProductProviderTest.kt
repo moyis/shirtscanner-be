@@ -92,7 +92,14 @@ class YupooProductProviderTest {
             } else {
                 ""
             }
-        stubFor(get(searchQuery(q)).willReturn(ok().withFixedDelay(duration.toMillis().toInt()).withBody(body)))
+        stubFor(
+            get(searchQuery(q)).willReturn(
+                ok()
+                    .withFixedDelay(duration.toMillis().toInt())
+                    .withHeader("Content-Type", "text/html")
+                    .withBody(body),
+            ),
+        )
     }
 
     private fun setUp4xxResponseForQuery(q: String) {

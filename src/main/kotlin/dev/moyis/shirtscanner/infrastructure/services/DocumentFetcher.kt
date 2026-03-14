@@ -8,7 +8,7 @@ import org.jsoup.UnsupportedMimeTypeException
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
-import java.net.SocketTimeoutException
+import java.net.http.HttpTimeoutException
 import java.net.URI
 
 private val LOG = KotlinLogging.logger { }
@@ -37,7 +37,7 @@ class DocumentFetcher(
             is HttpStatusException -> {
                 LOG.warn { "$baseMessage returned status code ${throwable.statusCode} ${throwable.message}" }
             }
-            is SocketTimeoutException -> {
+            is HttpTimeoutException -> {
                 LOG.warn { "$baseMessage took more than ${configuration.defaultTimeout.toMillis()}" }
             }
             is UnsupportedMimeTypeException -> {

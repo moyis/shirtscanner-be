@@ -58,8 +58,8 @@ class YupooProductProvider(
             .distinct()
 
     private fun mapToProduct(element: Element): Product? {
-        val name = element.attr("title") ?: return null
-        val productLink = element.attr("href") ?: return null
+        val name = element.attr("title")
+        val productLink = element.attr("href")
         val imageLink = getImageLink(element) ?: return null
         return Product(
             price = null,

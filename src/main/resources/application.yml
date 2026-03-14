@@ -10,7 +10,7 @@ document-fetcher:
   default-timeout: 15s
 
 fetchers:
-  configuraiton:
+  configuration:
     yupoo:
       image-proxy-host: "https://api.shirtscanner.com"
   list-r-1:

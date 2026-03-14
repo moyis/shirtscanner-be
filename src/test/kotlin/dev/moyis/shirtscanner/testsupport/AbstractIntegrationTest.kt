@@ -4,12 +4,13 @@ import dev.moyis.shirtscanner.Shirtscanner
 import io.restassured.RestAssured
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.wiremock.spring.EnableWireMock
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -17,7 +18,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
 )
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
-@Import(MongoDbTestcontainersConfiguration::class, WiremockTestcontainersConfiguration::class)
+@EnableWireMock
+@Import(MongoDbTestcontainersConfiguration::class)
 abstract class AbstractIntegrationTest {
     @LocalServerPort
     private var port: Int = 0
