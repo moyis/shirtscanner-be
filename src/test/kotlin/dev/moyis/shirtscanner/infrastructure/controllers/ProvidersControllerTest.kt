@@ -3,13 +3,13 @@ package dev.moyis.shirtscanner.infrastructure.controllers
 import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
-import dev.moyis.shirtscanner.infrastructure.controllers.model.ProviderResponse
 import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
-import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
-import org.apache.http.HttpStatus.SC_OK
-import org.assertj.core.api.Assertions.assertThat
+import org.springframework.http.HttpStatus
+import org.hamcrest.Matchers.containsInAnyOrder
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.everyItem
 import org.junit.jupiter.api.Test
 import java.net.URI
 
@@ -19,19 +19,18 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
         When {
             get("/v1/providers")
         } Then {
-            statusCode(SC_OK)
+            statusCode(HttpStatus.OK.value())
         }
     }
 
     @Test
     fun `providers endpoint returns all configured providers`() {
-        val providers =
-            When {
-                get("/v1/providers")
-            } Extract {
-                body().jsonPath().getList("", ProviderResponse::class.java)
-            }
-        assertThat(providers).extracting<String> { it.name }.containsExactlyInAnyOrder("ListR1 Test", "Yupoo Test")
+        When {
+            get("/v1/providers")
+        } Then {
+            statusCode(HttpStatus.OK.value())
+            body("name", containsInAnyOrder("ListR1 Test", "Yupoo Test"))
+        }
     }
 
     @Test
@@ -40,28 +39,20 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
             aValidProvider().copy(name = ProviderName("ListR1 Test"), status = ProviderStatus.UP),
             aValidProvider().copy(name = ProviderName("Yupoo Test"), status = ProviderStatus.DOWN),
         )
-        val providers =
-            When {
-                get("/v1/providers")
-            } Extract {
-                body().jsonPath().getList("", ProviderResponse::class.java)
-            }
-        assertThat(providers)
-            .extracting<ProviderStatus> { it.status }
-            .containsExactlyInAnyOrder(ProviderStatus.UP, ProviderStatus.DOWN)
+        When {
+            get("/v1/providers")
+        } Then {
+            body("status", containsInAnyOrder("UP", "DOWN"))
+        }
     }
 
     @Test
     fun `returns status UNKNOWN when no status is persisted`() {
-        val providers =
-            When {
-                get("/v1/providers")
-            } Extract {
-                body().jsonPath().getList("", ProviderResponse::class.java)
-            }
-        assertThat(providers)
-            .extracting<ProviderStatus> { it.status }
-            .containsExactlyInAnyOrder(ProviderStatus.UNKNOWN, ProviderStatus.UNKNOWN)
+        When {
+            get("/v1/providers")
+        } Then {
+            body("status", containsInAnyOrder("UNKNOWN", "UNKNOWN"))
+        }
     }
 
     @Test
@@ -70,16 +61,11 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
             post("/v1/providers")
         }
 
-        val providers =
-            When {
-                get("/v1/providers")
-            } Extract {
-                body().jsonPath().getList("", ProviderResponse::class.java)
-            }
-
-        assertThat(providers)
-            .extracting<ProviderStatus> { it.status }
-            .containsOnly(ProviderStatus.DOWN)
+        When {
+            get("/v1/providers")
+        } Then {
+            body("status", everyItem(equalTo("DOWN")))
+        }
     }
 }
 

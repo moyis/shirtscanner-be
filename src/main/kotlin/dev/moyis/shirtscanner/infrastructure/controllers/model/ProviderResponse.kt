@@ -2,9 +2,7 @@ package dev.moyis.shirtscanner.infrastructure.controllers.model
 
 import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
-import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
 
-@RegisterReflectionForBinding
 data class ProviderResponse(
     val url: String,
     val name: String,

@@ -18,16 +18,16 @@ class MongoDbSearchResultRepository(
         fn: () -> SearchResult,
     ): SearchResult {
         val document =
-            searchResultMongoDbRepository.findByProviderNameAndQuery(providerName = providerName, query = query)
+            searchResultMongoDbRepository.findByProviderNameAndQuery(providerName = providerName.value, query = query)
                 ?: searchResultMongoDbRepository.save(
                     SearchResultDocument(
                         providerName = providerName.value,
                         query = query,
-                        searchResult = fn(),
+                        searchResult = SearchResultEmbedded.from(fn()),
                         createdAt = LocalDateTime.now(clock),
                     ),
                 )
-        return document.searchResult
+        return document.searchResult.toDomain()
     }
 
     override fun save(
@@ -39,7 +39,7 @@ class MongoDbSearchResultRepository(
             SearchResultDocument(
                 providerName = providerName.value,
                 query = query,
-                searchResult = searchResult,
+                searchResult = SearchResultEmbedded.from(searchResult),
                 createdAt = LocalDateTime.now(clock),
             ),
         )

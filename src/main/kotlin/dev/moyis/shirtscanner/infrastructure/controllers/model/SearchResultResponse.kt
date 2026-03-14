@@ -1,9 +1,7 @@
 package dev.moyis.shirtscanner.infrastructure.controllers.model
 
 import dev.moyis.shirtscanner.domain.model.SearchResult
-import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
 
-@RegisterReflectionForBinding
 data class SearchResultResponse(
     val providerName: String,
     val queryUrl: String,

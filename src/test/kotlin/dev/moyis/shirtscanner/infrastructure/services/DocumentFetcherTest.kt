@@ -7,11 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.DocumentFetcherConfigurationProperties
-import org.apache.http.HttpStatus
-import org.apache.http.HttpStatus.SC_BAD_REQUEST
-import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
-import org.apache.http.HttpStatus.SC_TOO_MANY_REQUESTS
-import org.apache.http.HttpStatus.SC_UNAUTHORIZED
+import org.springframework.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -67,7 +63,7 @@ class DocumentFetcherTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = [SC_BAD_REQUEST, SC_UNAUTHORIZED, SC_TOO_MANY_REQUESTS, SC_INTERNAL_SERVER_ERROR])
+    @ValueSource(ints = [400, 401, 429, 500])
     fun `logs default timeout on timeout`(
         status: Int,
         output: CapturedOutput,
@@ -83,12 +79,17 @@ class DocumentFetcherTest {
     private fun setUpResponse(
         path: String,
         delay: Duration = Duration.ZERO,
-        status: Int = HttpStatus.SC_OK,
+        status: Int = HttpStatus.OK.value(),
     ) {
         val body = ResourceUtils.getFile("classpath:providers/list-r1/5boundless.html").readText()
         stubFor(
             get(path)
-                .willReturn(status(status).withFixedDelay(delay.toMillis().toInt()).withBody(body)),
+                .willReturn(
+                    status(status)
+                        .withFixedDelay(delay.toMillis().toInt())
+                        .withHeader("Content-Type", "text/html")
+                        .withBody(body),
+                ),
         )
     }
 }

@@ -1,19 +1,17 @@
 package dev.moyis.shirtscanner.infrastructure.controllers
 
 import dev.moyis.shirtscanner.domain.model.SearchResultEvent
-import dev.moyis.shirtscanner.infrastructure.controllers.model.SearchResultResponse
 import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
-import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.test.runTest
-import org.apache.http.HttpStatus.SC_BAD_REQUEST
-import org.apache.http.HttpStatus.SC_OK
+import org.springframework.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.Awaitility.await
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
@@ -31,39 +29,30 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             } When {
                 get("/v1/products")
             } Then {
-                statusCode(SC_OK)
+                statusCode(HttpStatus.OK.value())
             }
         }
 
         @Test
         fun `return provider names for each result`() {
-            val providerResults =
-                Given {
-                    queryParam("q", "argentina")
-                } When {
-                    get("/v1/products")
-                } Extract {
-                    body().jsonPath().getList("", SearchResultResponse::class.java)
-                }
-            assertThat(providerResults)
-                .extracting<String> { it.providerName }
-                .containsExactlyInAnyOrder("ListR1 Test", "Yupoo Test")
+            Given {
+                queryParam("q", "argentina")
+            } When {
+                get("/v1/products")
+            } Then {
+                body("providerName", containsInAnyOrder("ListR1 Test", "Yupoo Test"))
+            }
         }
 
         @Test
         fun `return products for each provider`() {
-            val providerResults =
-                Given {
-                    queryParam("q", "argentina")
-                } When {
-                    get("/v1/products")
-                } Extract {
-                    body().jsonPath().getList("", SearchResultResponse::class.java)
-                }
-            assertThat(providerResults).satisfiesExactlyInAnyOrder(
-                { assertThat(it.products).hasSize(100) },
-                { assertThat(it.products).hasSize(38) },
-            )
+            Given {
+                queryParam("q", "argentina")
+            } When {
+                get("/v1/products")
+            } Then {
+                body("products.collect { it.size() }", containsInAnyOrder(100, 38))
+            }
         }
 
         @Test
@@ -71,7 +60,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             When {
                 get("/v1/products")
             } Then {
-                statusCode(SC_BAD_REQUEST)
+                statusCode(HttpStatus.BAD_REQUEST.value())
             }
         }
     }
@@ -147,7 +136,7 @@ class ProductsControllerTest : AbstractIntegrationTest() {
             When {
                 get("/v1/products/stream")
             } Then {
-                statusCode(SC_BAD_REQUEST)
+                statusCode(HttpStatus.BAD_REQUEST.value())
             }
         }
     }

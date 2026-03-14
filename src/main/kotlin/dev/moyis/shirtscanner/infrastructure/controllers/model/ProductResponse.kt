@@ -1,10 +1,8 @@
 package dev.moyis.shirtscanner.infrastructure.controllers.model
 
 import dev.moyis.shirtscanner.domain.model.Product
-import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
 import java.net.URI
 
-@RegisterReflectionForBinding
 data class ProductResponse(
     val name: String,
     val price: String?,

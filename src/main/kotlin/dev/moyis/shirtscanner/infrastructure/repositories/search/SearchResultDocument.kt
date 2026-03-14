@@ -1,6 +1,5 @@
 package dev.moyis.shirtscanner.infrastructure.repositories.search
 
-import dev.moyis.shirtscanner.domain.model.SearchResult
 import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
@@ -10,6 +9,6 @@ import java.time.LocalDateTime
 data class SearchResultDocument(
     val providerName: String,
     val query: String,
-    val searchResult: SearchResult,
+    val searchResult: SearchResultEmbedded,
     val createdAt: LocalDateTime,
 )

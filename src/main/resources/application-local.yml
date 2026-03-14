@@ -1,5 +1,5 @@
 fetchers:
-  configuraiton:
+  configuration:
     yupoo:
       image-proxy-host: "http://localhost:8080"
 logging:

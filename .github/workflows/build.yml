@@ -31,15 +31,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Java
-        uses: actions/setup-java@v5
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
         with:
-          distribution: temurin
           java-version: 21
+          distribution: graalvm
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Build and Test
+      - name: Build Native Image
         run: |
           ./gradlew bootBuildImage
