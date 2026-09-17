@@ -1,8 +1,8 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    val kotlinVersion = "2.3.10"
-    val springVersion = "4.0.3"
+    val kotlinVersion = "2.3.21"
+    val springVersion = "4.1.1"
     val springDependencyManagementVersion = "1.1.7"
     val nativeVersion = "0.11.4"
     val testLoggerVersion = "4.0.0"
@@ -32,11 +32,11 @@ repositories {
     mavenCentral()
 }
 
-val jsoupVersion = "1.22.1"
+val jsoupVersion = "1.23.2"
 val kotlinLoggingVersion = "3.0.5"
-val mockitoKotlinVersion = "6.2.3"
-val restAssuredVersion = "6.0.0"
-val wiremockVersion = "4.0.9"
+val mockitoKotlinVersion = "6.3.0"
+val restAssuredVersion = "6.0.1"
+val wiremockVersion = "4.2.3"
 
 dependencies {
     // Spring

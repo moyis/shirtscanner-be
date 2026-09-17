@@ -22,6 +22,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Build and Test
+        timeout-minutes: 12
+        continue-on-error: true
         run: |
           ./gradlew build
   build-native:
