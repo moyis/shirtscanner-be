@@ -13,7 +13,7 @@ plugins {
 
     id("org.springframework.boot") version springVersion
     id("io.spring.dependency-management") version springDependencyManagementVersion
-   // id("org.graalvm.buildtools.native") version nativeVersion
+    id("org.graalvm.buildtools.native") version nativeVersion
 
     id("com.adarshr.test-logger") version testLoggerVersion
     id("info.solidsoft.pitest") version pitestVersion
@@ -43,7 +43,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-starter-webmvc")
 
     // Jackson
     implementation("tools.jackson.module:jackson-module-kotlin")
@@ -56,9 +55,6 @@ dependencies {
     // Logging
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
-    // Cache
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-
     // Scraping
     implementation("org.jsoup:jsoup:$jsoupVersion")
 
@@ -69,7 +65,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
     testImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 
     // Wiremock
     testImplementation("org.wiremock.integrations:wiremock-spring-boot:$wiremockVersion")
@@ -96,6 +91,14 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.named<JavaExec>("processAot") {
+    jvmArgs("--add-opens", "java.base/java.net=ALL-UNNAMED")
+}
+
+tasks.named<JavaExec>("processTestAot") {
+    jvmArgs("--add-opens", "java.base/java.net=ALL-UNNAMED")
+}
+
 pitest {
     pitestVersion = "1.17.2"
     junit5PluginVersion = "1.2.1"
@@ -110,12 +113,12 @@ pitest {
 }
 
 tasks.withType<BootBuildImage> {
+    builder = "paketobuildpacks/builder:base"
     environment.putAll(
         mapOf(
             "BP_JVM_VERSION" to "25",
-            "BP_JVM_CDS_ENABLED" to "true",
             "BP_JLINK_ENABLED" to "true",
-            "SPRING_DATA_MONGODB_AUTO_INDEX_CREATION" to "false",
+            "BP_NATIVE_IMAGE" to "true",
         ),
     )
 }

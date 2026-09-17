@@ -4,9 +4,4 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface SearchResultMongoDbRepository : MongoRepository<SearchResultDocument, String> {
-    fun findByProviderNameAndQuery(
-        providerName: String,
-        query: String,
-    ): SearchResultDocument?
-}
+interface SearchResultMongoDbRepository : MongoRepository<SearchResultDocument, String>
