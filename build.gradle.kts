@@ -113,7 +113,7 @@ pitest {
 }
 
 tasks.withType<BootBuildImage> {
-    builder = "paketobuildpacks/builder:base"
+    builder = "paketobuildpacks/builder-jammy-base"
     environment.putAll(
         mapOf(
             "BP_JVM_VERSION" to "25",
