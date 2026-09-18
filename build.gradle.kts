@@ -32,6 +32,10 @@ repositories {
     mavenCentral()
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 val jsoupVersion = "1.23.2"
 val kotlinLoggingVersion = "3.0.5"
 val mockitoKotlinVersion = "6.3.0"
