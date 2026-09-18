@@ -1,12 +1,12 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    val kotlinVersion = "2.3.21"
+    val kotlinVersion = "2.4.20"
     val springVersion = "4.1.1"
     val springDependencyManagementVersion = "1.1.7"
-    val nativeVersion = "0.11.4"
+    val nativeVersion = "1.1.14"
     val testLoggerVersion = "4.0.0"
-    val pitestVersion = "1.19.0-rc.3"
+    val pitestVersion = "1.19.0"
 
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
@@ -100,8 +100,8 @@ tasks.named<JavaExec>("processTestAot") {
 }
 
 pitest {
-    pitestVersion = "1.17.2"
-    junit5PluginVersion = "1.2.1"
+    pitestVersion = "1.30.0"
+    junit5PluginVersion = "1.2.3"
     threads = 4
     targetClasses =
         listOf(
