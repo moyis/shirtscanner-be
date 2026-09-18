@@ -27,7 +27,7 @@ jobs:
           java-version: 25
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Build and Test
         timeout-minutes: 25
@@ -47,7 +47,7 @@ jobs:
           distribution: graalvm
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Compile Native Image
         run: |
