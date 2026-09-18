@@ -163,3 +163,13 @@ image-fetcher:
   referer: https://yupoo.com/
   max-retries: 3
   retry-delay: 1s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+
+logging:
+  level:
+    org.mongodb.driver.protocol.command: DEBUG
