@@ -3,10 +3,14 @@ package dev.moyis.shirtscanner.infrastructure.repositories.search
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.SearchResult
 import dev.moyis.shirtscanner.domain.spi.SearchResultRepository
+import mu.KotlinLogging
+import org.springframework.dao.DataAccessException
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Repository
 import java.time.Clock
 import java.time.LocalDateTime
+
+private val LOG = KotlinLogging.logger {}
 
 @Repository
 class MongoDbSearchResultRepository(
@@ -19,16 +23,28 @@ class MongoDbSearchResultRepository(
         fn: () -> SearchResult,
     ): SearchResult {
         val id = documentId(providerName.value, query)
-        val cached = searchResultMongoDbRepository.findById(id).orElse(null)
-        if (cached != null) return cached.searchResult.toDomain()
+        try {
+            val cached = searchResultMongoDbRepository.findById(id).orElse(null)
+            if (cached != null) return cached.searchResult.toDomain()
+        } catch (e: DataAccessException) {
+            LOG.warn(e) { "MongoDB unavailable; skipping search-result cache read" }
+            return fn()
+        }
 
         val computed = fn()
-        return try {
+        try {
             searchResultMongoDbRepository.insert(document(providerName.value, query, computed))
-            computed
         } catch (e: DuplicateKeyException) {
-            searchResultMongoDbRepository.findById(id).map { it.searchResult.toDomain() }.orElse(computed)
+            return try {
+                searchResultMongoDbRepository.findById(id).map { it.searchResult.toDomain() }.orElse(computed)
+            } catch (readError: DataAccessException) {
+                LOG.warn(readError) { "MongoDB unavailable after insert race; serving computed result" }
+                computed
+            }
+        } catch (e: DataAccessException) {
+            LOG.warn(e) { "MongoDB unavailable; serving computed result uncached" }
         }
+        return computed
     }
 
     override fun save(
@@ -36,11 +52,19 @@ class MongoDbSearchResultRepository(
         query: String,
         searchResult: SearchResult,
     ) {
-        searchResultMongoDbRepository.save(document(providerName.value, query, searchResult))
+        try {
+            searchResultMongoDbRepository.save(document(providerName.value, query, searchResult))
+        } catch (e: DataAccessException) {
+            LOG.warn(e) { "MongoDB unavailable; skipping search-result cache save" }
+        }
     }
 
     override fun deleteAll() {
-        searchResultMongoDbRepository.deleteAll()
+        try {
+            searchResultMongoDbRepository.deleteAll()
+        } catch (e: DataAccessException) {
+            LOG.warn(e) { "MongoDB unavailable; skipping search-result cache clear" }
+        }
     }
 
     private fun document(
