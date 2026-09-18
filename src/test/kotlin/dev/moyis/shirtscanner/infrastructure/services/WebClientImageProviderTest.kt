@@ -10,11 +10,15 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.ImageFetcherConfigurationProperties
+import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.core.io.buffer.DataBuffer
+import org.springframework.core.io.buffer.DataBufferUtils
 import org.springframework.http.HttpHeaders.REFERER
+import reactor.core.publisher.Flux
 import java.net.URI
 import java.time.Duration
 
@@ -44,13 +48,13 @@ class WebClientImageProviderTest {
                     .willReturn(aResponse().withBody("image".toByteArray())),
             )
 
-            val image = subject.get("image.jpg")
+            val image = subject.get("image.jpg").awaitBytes()
 
             assertThat(image).isEqualTo("image".toByteArray())
         }
 
     @Test
-    fun `returns null if image is unavailable`() =
+    fun `completes empty if image is unavailable`() =
         runTest {
             stubFor(
                 get(urlEqualTo("/not-found.jpg"))
@@ -58,7 +62,7 @@ class WebClientImageProviderTest {
                     .willReturn(aResponse().withStatus(404)),
             )
 
-            val image = subject.get("/not-found.jpg")
+            val image = subject.get("/not-found.jpg").awaitBytes()
 
             assertThat(image).isNull()
         }
@@ -68,10 +72,25 @@ class WebClientImageProviderTest {
         runTest {
             setUpThreeRetryScenario("/too-many-requests.jpg", "image")
 
-            val image = subject.get("/too-many-requests.jpg")
+            val image = subject.get("/too-many-requests.jpg").awaitBytes()
 
             assertThat(image).isEqualTo("image".toByteArray())
         }
+
+    private suspend fun Flux<DataBuffer>.awaitBytes(): ByteArray? {
+        val joined = DataBufferUtils.join(this).awaitSingleOrNull() ?: return null
+        return try {
+            joined.readBytes()
+        } finally {
+            DataBufferUtils.release(joined)
+        }
+    }
+
+    private fun DataBuffer.readBytes(): ByteArray {
+        val bytes = ByteArray(readableByteCount())
+        read(bytes)
+        return bytes
+    }
 
     private fun setUpThreeRetryScenario(
         path: String,

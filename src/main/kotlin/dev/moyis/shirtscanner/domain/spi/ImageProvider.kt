@@ -1,5 +1,8 @@
 package dev.moyis.shirtscanner.domain.spi
 
+import org.springframework.core.io.buffer.DataBuffer
+import reactor.core.publisher.Flux
+
 fun interface ImageProvider {
-    suspend fun get(path: String): ByteArray?
+    fun get(path: String): Flux<DataBuffer>
 }

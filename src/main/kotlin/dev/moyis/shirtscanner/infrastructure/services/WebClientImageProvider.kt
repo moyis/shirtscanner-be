@@ -2,11 +2,12 @@ package dev.moyis.shirtscanner.infrastructure.services
 
 import dev.moyis.shirtscanner.domain.spi.ImageProvider
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.ImageFetcherConfigurationProperties
-import kotlinx.coroutines.reactor.awaitSingleOrNull
+import org.springframework.core.io.buffer.DataBuffer
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.bodyToMono
+import org.springframework.web.reactive.function.client.bodyToFlux
+import reactor.core.publisher.Flux
 import reactor.util.retry.Retry
 
 @Service
@@ -18,14 +19,13 @@ class WebClientImageProvider(
     private val referrer = config.referer
     private val retry = Retry.fixedDelay(config.maxRetries, config.retryDelay)
 
-    override suspend fun get(path: String): ByteArray? =
+    override fun get(path: String): Flux<DataBuffer> =
         webClient
             .get()
             .uri("$baseUrl/$path")
             .header(HttpHeaders.REFERER, "$referrer")
             .retrieve()
-            .bodyToMono<ByteArray>()
+            .bodyToFlux(DataBuffer::class.java)
             .retryWhen(retry)
             .onErrorComplete()
-            .awaitSingleOrNull()
 }
