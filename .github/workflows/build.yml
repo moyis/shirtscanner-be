@@ -26,6 +26,11 @@ jobs:
         continue-on-error: true
         run: |
           ./gradlew build
+
+      - name: Verify dependency locks are up to date
+        run: |
+          ./gradlew dependencies --write-locks
+          git diff --exit-code -- gradle.lockfile
   build-native:
     runs-on: ubuntu-latest
     name: Build Native
