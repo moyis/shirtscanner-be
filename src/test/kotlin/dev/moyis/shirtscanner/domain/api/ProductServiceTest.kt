@@ -41,6 +41,41 @@ class ProductServiceTest {
 
             assertThat(results).hasSize(4)
         }
+
+        @Test
+        fun `serves cached results through the search result repository`() {
+            val cachedResult =
+                SearchResult(
+                    providerName = "CachedProvider",
+                    queryUrl = URI("https://example.com/cached"),
+                    products = emptyList(),
+                )
+            val repository =
+                object : SearchResultRepository {
+                    override fun computeIfAbsent(
+                        providerName: ProviderName,
+                        query: String,
+                        fn: () -> SearchResult,
+                    ): SearchResult = cachedResult
+
+                    override fun save(
+                        providerName: ProviderName,
+                        query: String,
+                        searchResult: SearchResult,
+                    ) = Unit
+
+                    override fun deleteAll() = Unit
+                }
+            val productService =
+                ProductService(
+                    productProviders = listOf(FakeProvider),
+                    searchResultRepository = repository,
+                )
+
+            val results = productService.search("any")
+
+            assertThat(results.map { it.providerName }).containsExactly("CachedProvider")
+        }
     }
 
     @Nested

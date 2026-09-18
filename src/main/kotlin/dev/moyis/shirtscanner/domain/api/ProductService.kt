@@ -19,7 +19,7 @@ class ProductService(
 
     fun search(query: String): List<SearchResult> =
         productProviders
-            .map { executorService.submit<SearchResult> { it.search(query) } }
+            .map { executorService.submit<SearchResult> { search(it, query) } }
             .map { it.get() }
 
     fun searchStream(query: String): Flux<SearchResultEvent> {
