@@ -85,6 +85,13 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 }
 
+// CVE-2026-55760 (GHSA-r4gv-qr8j-p3pg): handlebars.java FileTemplateLoader path traversal.
+// Test-only, transitively pulled in by WireMock at 4.3.1; force 4.5.2 across all configurations,
+// including plugin-created ones (e.g. tmpTestImplementation) a scoped constraint can't reach.
+configurations.all {
+    resolutionStrategy.force("com.github.jknack:handlebars:4.5.2")
+}
+
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
