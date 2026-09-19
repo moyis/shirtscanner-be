@@ -4,7 +4,6 @@ import dev.moyis.shirtscanner.domain.api.ProviderService
 import dev.moyis.shirtscanner.infrastructure.controllers.model.ProviderResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -19,10 +18,4 @@ class ProvidersController(
             .findAll()
             .map { ProviderResponse.fromProvider(it) }
             .let { ResponseEntity.ok(it) }
-
-    @PostMapping
-    fun status(): ResponseEntity<Nothing> {
-        providerService.checkStatus()
-        return ResponseEntity.ok().build()
-    }
 }
