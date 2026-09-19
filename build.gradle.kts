@@ -124,12 +124,13 @@ pitest {
 }
 
 tasks.withType<BootBuildImage> {
-    builder = "paketobuildpacks/builder-jammy-base"
+    builder = "paketobuildpacks/builder-jammy-tiny"
     environment.putAll(
         mapOf(
             "BP_JVM_VERSION" to "25",
             "BP_JLINK_ENABLED" to "true",
             "BP_NATIVE_IMAGE" to "true",
+            "BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "--gc=serial",
         ),
     )
 }

@@ -34,7 +34,7 @@ class CurlFetcherConfigurationPropertiesTest {
     fun `applies defaults when unconfigured`() {
         contextRunner.run { context ->
             val properties = context.getBean(CurlFetcherConfigurationProperties::class.java)
-            assertThat(properties.binary).isEqualTo("/usr/local/bin/curl_chrome120")
+            assertThat(properties.binary).isEqualTo("/usr/local/bin/curl-impersonate")
             assertThat(properties.defaultTimeout).isEqualTo(Duration.ofSeconds(20))
             assertThat(properties.attempts).isEqualTo(5)
             assertThat(properties.backoff).isEqualTo(Duration.ofMillis(500))
