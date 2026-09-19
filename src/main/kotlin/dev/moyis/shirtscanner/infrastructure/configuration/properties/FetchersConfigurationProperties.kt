@@ -15,4 +15,5 @@ data class FetchersConfigurationProperties(
 data class ProviderDataConfigurationProperties(
     val url: URI,
     val name: String,
+    val browserTls: Boolean = false,
 )

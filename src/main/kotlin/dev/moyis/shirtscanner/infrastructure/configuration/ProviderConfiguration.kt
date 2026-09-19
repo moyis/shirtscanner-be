@@ -4,6 +4,7 @@ import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.spi.ProductProvider
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.FetchersConfigurationProperties
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.YupooProviderConfigurationProperties
+import dev.moyis.shirtscanner.infrastructure.services.CurlImpersonatingFetcher
 import dev.moyis.shirtscanner.infrastructure.services.DocumentFetcher
 import dev.moyis.shirtscanner.infrastructure.services.ListR1ProductProvider
 import dev.moyis.shirtscanner.infrastructure.services.YupooProductProvider
@@ -17,6 +18,7 @@ private val LOG = KotlinLogging.logger { }
 class ProviderConfiguration(
     private val config: FetchersConfigurationProperties,
     private val documentFetcher: DocumentFetcher,
+    private val curlImpersonatingFetcher: CurlImpersonatingFetcher,
     private val yupooProviderConfigurationProperties: YupooProviderConfigurationProperties,
 ) {
     @Bean
@@ -32,7 +34,7 @@ class ProviderConfiguration(
                 ListR1ProductProvider(
                     name = ProviderName(it.name),
                     url = it.url,
-                    documentFetcher = documentFetcher,
+                    documentFetcher = if (it.browserTls) curlImpersonatingFetcher else documentFetcher,
                 )
             }
         LOG.info { "Initialized ${listR1ProductProvider.size} ListR1 product providers" }
