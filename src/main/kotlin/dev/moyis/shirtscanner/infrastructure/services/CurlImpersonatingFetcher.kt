@@ -15,7 +15,14 @@ class CurlImpersonatingFetcher(
     private val random: Random = Random.Default,
 ) : PageFetcher {
 
-    override fun fetchDocument(uri: URI): org.jsoup.nodes.Document? {
+    override fun fetchDocument(uri: URI): org.jsoup.nodes.Document? =
+        runCatching { fetchWithRetries(uri) }
+            .getOrElse {
+                LOG.error { "Unexpected exception fetching $uri with curl: ${it.message}" }
+                null
+            }
+
+    private fun fetchWithRetries(uri: URI): org.jsoup.nodes.Document? {
         var attempt = 0
         while (attempt < configuration.attempts) {
             val attemptDir = Files.createTempDirectory("curl-fetch-")
@@ -37,7 +44,7 @@ class CurlImpersonatingFetcher(
                     LOG.warn { "Curl exited ${result.exitCode} on $uri without an HTTP status, giving up" }
                     return null
                 }
-                val html = result.body ?: run {
+                val html = result.body?.takeIf { it.isNotBlank() } ?: run {
                     LOG.warn { "Empty body from $uri, giving up" }
                     return null
                 }
