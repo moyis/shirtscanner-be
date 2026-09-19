@@ -16,8 +16,10 @@ private val LOG = KotlinLogging.logger {}
 class ListR1ProductProvider(
     private val url: URI,
     private val name: ProviderName,
-    private val documentFetcher: DocumentFetcher,
+    private val documentFetcher: PageFetcher,
 ) : ProductProvider {
+
+    internal val fetcher: PageFetcher get() = documentFetcher
     override fun search(query: String): SearchResult {
         val products =
             fetchDocuments(query)

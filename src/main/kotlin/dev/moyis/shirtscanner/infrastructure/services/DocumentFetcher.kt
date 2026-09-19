@@ -16,8 +16,8 @@ private val LOG = KotlinLogging.logger { }
 @Service
 class DocumentFetcher(
     private val configuration: DocumentFetcherConfigurationProperties,
-) {
-    fun fetchDocument(uri: URI): Document? =
+) : PageFetcher {
+    override fun fetchDocument(uri: URI): Document? =
         runCatching { doFetchDocument(uri) }
             .getOrElse { handleException(it, uri) }
 
