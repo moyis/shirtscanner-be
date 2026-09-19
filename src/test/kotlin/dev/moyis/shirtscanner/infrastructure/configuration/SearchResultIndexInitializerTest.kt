@@ -4,6 +4,7 @@ import dev.moyis.shirtscanner.infrastructure.configuration.properties.SearchResu
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.mockito.kotlin.any
+import org.springframework.boot.DefaultApplicationArguments
 import org.springframework.dao.DataAccessResourceFailureException
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.junit.jupiter.api.Test
@@ -20,6 +21,6 @@ class SearchResultIndexInitializerTest {
             SearchResultCacheConfigurationProperties(),
         )
 
-        initializer.ensureIndexes()
+        initializer.run(DefaultApplicationArguments())
     }
 }

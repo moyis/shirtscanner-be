@@ -17,7 +17,7 @@ class CurlImpersonatingFetcherTest {
     private val runner = mock<CurlProcessRunner>()
     private val configuration =
         CurlFetcherConfigurationProperties(
-            binary = "/usr/local/bin/curl_chrome120",
+            binary = "/usr/local/bin/curl-impersonate",
             defaultTimeout = Duration.ofSeconds(20),
             attempts = 5,
             backoff = Duration.ofMillis(1),
@@ -105,6 +105,7 @@ class CurlImpersonatingFetcherTest {
             "-A",
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         )
-        assertThat(captor.firstValue.first()).isEqualTo("/usr/local/bin/curl_chrome120")
+        assertThat(captor.firstValue).contains("--ciphers", "--tls-grease", "--tls-signed-cert-timestamps")
+        assertThat(captor.firstValue.first()).isEqualTo("/usr/local/bin/curl-impersonate")
     }
 }

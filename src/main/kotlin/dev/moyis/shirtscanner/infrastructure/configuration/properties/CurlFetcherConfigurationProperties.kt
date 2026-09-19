@@ -5,7 +5,7 @@ import java.time.Duration
 
 @ConfigurationProperties("fetchers.curl")
 data class CurlFetcherConfigurationProperties(
-    val binary: String = "/usr/local/bin/curl_chrome120",
+    val binary: String = "/usr/local/bin/curl-impersonate",
     val defaultTimeout: Duration = Duration.ofSeconds(20),
     val attempts: Int = 5,
     val backoff: Duration = Duration.ofMillis(500),

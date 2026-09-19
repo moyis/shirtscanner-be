@@ -2,8 +2,9 @@ package dev.moyis.shirtscanner.infrastructure.configuration
 
 import dev.moyis.shirtscanner.infrastructure.configuration.properties.SearchResultCacheConfigurationProperties
 import dev.moyis.shirtscanner.infrastructure.repositories.search.SearchResultDocument
-import jakarta.annotation.PostConstruct
 import mu.KotlinLogging
+import org.springframework.boot.ApplicationArguments
+import org.springframework.boot.ApplicationRunner
 import org.springframework.dao.DataAccessException
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -16,9 +17,8 @@ private val LOG = KotlinLogging.logger {}
 class SearchResultIndexInitializer(
     private val mongoTemplate: MongoTemplate,
     private val searchResultCacheConfigurationProperties: SearchResultCacheConfigurationProperties,
-) {
-    @PostConstruct
-    fun ensureIndexes() {
+) : ApplicationRunner {
+    override fun run(args: ApplicationArguments) {
         try {
             mongoTemplate
                 .indexOps(SearchResultDocument::class.java)
