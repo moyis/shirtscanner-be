@@ -64,9 +64,25 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb
 
-      - name: Build Docker Image
+      - name: Build Native App Image
         run: |
-          ./gradlew bootBuildImage --imageName $IMAGE_NAME
+          ./gradlew bootBuildImage --imageName $IMAGE_NAME-app
+
+      - name: Download and verify curl-impersonate
+        run: |
+          curl -fsSL -o curl-impersonate.tar.gz "https://github.com/lexiforest/curl-impersonate/releases/download/v2.2.3/curl-impersonate-v2.2.3.x86_64-linux-gnu.tar.gz"
+          echo "ca7c8aae49e33260d3a2400db16c7737aaf04692d606a843502056b42990f989  curl-impersonate.tar.gz" | sha256sum --check -
+          mkdir curl-impersonate-extract
+          tar -xzf curl-impersonate.tar.gz -C curl-impersonate-extract curl-impersonate curl_chrome120
+          chmod +x curl-impersonate-extract/curl-impersonate curl-impersonate-extract/curl_chrome120
+
+      - name: Build Wrapper Image
+        run: |
+          CTX=$(mktemp -d)
+          cp deploy/Dockerfile "$CTX/"
+          cp curl-impersonate-extract/curl-impersonate "$CTX/"
+          cp curl-impersonate-extract/curl_chrome120 "$CTX/"
+          docker build --build-arg BASE_IMAGE=$IMAGE_NAME-app -f "$CTX/Dockerfile" -t $IMAGE_NAME "$CTX"
 
       - name: Push Docker Image
         run: |
