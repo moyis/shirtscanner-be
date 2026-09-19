@@ -3,9 +3,11 @@ package dev.moyis.shirtscanner.infrastructure.controllers
 import dev.moyis.shirtscanner.domain.model.Provider
 import dev.moyis.shirtscanner.domain.model.ProviderName
 import dev.moyis.shirtscanner.domain.model.ProviderStatus
+import dev.moyis.shirtscanner.infrastructure.scheduling.ProviderStatusScheduler
 import dev.moyis.shirtscanner.testsupport.AbstractIntegrationTest
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
@@ -14,6 +16,9 @@ import org.junit.jupiter.api.Test
 import java.net.URI
 
 class ProvidersControllerTest : AbstractIntegrationTest() {
+    @Autowired
+    protected lateinit var providerStatusScheduler: ProviderStatusScheduler
+
     @Test
     fun `providers endpoint returns 200`() {
         When {
@@ -56,10 +61,8 @@ class ProvidersControllerTest : AbstractIntegrationTest() {
     }
 
     @Test
-    fun `checks status when post providers`() {
-        When {
-            post("/v1/providers")
-        }
+    fun `checks status when refresh is scheduled`() {
+        providerStatusScheduler.refreshProviderStatus()
 
         When {
             get("/v1/providers")
