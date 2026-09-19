@@ -66,7 +66,7 @@ jobs:
 
       - name: Build Native App Image
         run: |
-          ./gradlew bootBuildImage --imageName $IMAGE_NAME-app --no-daemon
+          ./gradlew bootBuildImage --imageName shirtscanner-be-app --no-daemon
 
       - name: Download and verify curl-impersonate
         run: |
@@ -81,7 +81,7 @@ jobs:
           CTX=$(mktemp -d)
           cp deploy/Dockerfile "$CTX/"
           cp curl-impersonate-extract/curl-impersonate "$CTX/"
-          docker build --build-arg BASE_IMAGE=$IMAGE_NAME-app -f "$CTX/Dockerfile" -t $IMAGE_NAME "$CTX"
+          docker build --build-arg BASE_IMAGE=shirtscanner-be-app -f "$CTX/Dockerfile" -t $IMAGE_NAME "$CTX"
 
       - name: Push Docker Image
         run: |
