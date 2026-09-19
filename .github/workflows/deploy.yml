@@ -33,7 +33,7 @@ jobs:
       - name: Run Tests
         timeout-minutes: 25
         run: |
-          ./gradlew test
+          ./gradlew test --no-daemon
 
   deploy:
     runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
 
       - name: Build Native App Image
         run: |
-          ./gradlew bootBuildImage --imageName $IMAGE_NAME-app
+          ./gradlew bootBuildImage --imageName $IMAGE_NAME-app --no-daemon
 
       - name: Download and verify curl-impersonate
         run: |
