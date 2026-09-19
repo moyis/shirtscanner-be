@@ -60,21 +60,38 @@ fetchers:
     ## Down - domain parked for sale
     ## - url: https://www.fc24shop.com
     ##   name: FC24Store
-    ## Blocked by WAF / anti-bot gate - see investigation
-    ## - url: https://www.5boundless.com
-    ##   name: 5Boundless
-    ## - url: https://www.aclotzone.co
-    ##   name: Aclotzone
-    ## - url: https://www.fofoshop4.com
-    ##   name: Fofoshop
-    ## - url: https://www.lindajersey.cn
-    ##   name: LindaJersey
-    ## - url: https://www.halosport.cn
-    ##   name: HaloSport
+    ## Cloudflare-gated stores - fetched via bundled curl-impersonate (Chrome TLS fingerprint, HTTP/1.1, retry-on-challenge)
+    - url: https://www.kitjr.com
+      name: KitJR
+      browserTls: true
+    - url: https://www.kegaoz.com
+      name: Kegaoz
+      browserTls: true
+    - url: https://www.5boundless.com
+      name: 5Boundless
+      browserTls: true
+    - url: https://www.aclotzone.co
+      name: Aclotzone
+      browserTls: true
+    - url: https://www.lindajersey.cn
+      name: LindaJersey
+      browserTls: true
+    - url: https://www.halosport.cn
+      name: HaloSport
+      browserTls: true
+    - url: https://www.fofoshop4.com
+      name: Fofoshop
+      browserTls: true
+    ## Requires JS execution (custom cookie challenge) - not solvable by curl-impersonate
     ## - url: https://www.kegaoo.cn
     ##   name: Kegaoo
+    ## Unreachable (TCP timeouts)
     ## - url: https://www.vicksports.com
     ##   name: VickSports
+    ## Dead/unusable variants probed 2026-09-18 (chrome-H1):
+    ##   no DNS: messi102/103/104/106, jjsport25, soccer06 · bad cert: messi105/107, jjsport24
+    ##   parked (ww38 redirect): soccer02 · 404: soccer01, soccer04 · CF "Loading..." interstitial: mmjerseys, jersey88, messi108, soccer05
+    ##   wrong URL scheme ("Page Not Found"): messi101 · timeout: soccer03
     ## Changed format - search URL no longer matches ListR1 fetcher
     ## - url: https://www.jjsport01.com
     ##   name: JJSport
