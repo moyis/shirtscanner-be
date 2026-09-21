@@ -83,13 +83,12 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
     testImplementation("io.rest-assured:kotlin-extensions:$restAssuredVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-}
 
-// CVE-2026-55760 (GHSA-r4gv-qr8j-p3pg): handlebars.java FileTemplateLoader path traversal.
-// Test-only, transitively pulled in by WireMock at 4.3.1; force 4.5.2 across all configurations,
-// including plugin-created ones (e.g. tmpTestImplementation) a scoped constraint can't reach.
-configurations.all {
-    resolutionStrategy.force("com.github.jknack:handlebars:4.5.5")
+    // CVE-2026-55760 (GHSA-r4gv-qr8j-p3pg): handlebars.java FileTemplateLoader path traversal.
+    // Test-only, transitively pulled in by WireMock at 4.3.1. Declared directly so every configuration
+    // resolves 4.5.5 (highest version wins), including the Pitest plugin's detached tmpTestImplementation
+    // snapshot, which a container-level force/constraint cannot reach.
+    testImplementation("com.github.jknack:handlebars:4.5.5")
 }
 
 kotlin {
