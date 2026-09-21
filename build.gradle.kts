@@ -89,7 +89,7 @@ dependencies {
 // Test-only, transitively pulled in by WireMock at 4.3.1; force 4.5.2 across all configurations,
 // including plugin-created ones (e.g. tmpTestImplementation) a scoped constraint can't reach.
 configurations.all {
-    resolutionStrategy.force("com.github.jknack:handlebars:4.5.2")
+    resolutionStrategy.force("com.github.jknack:handlebars:4.5.5")
 }
 
 kotlin {
