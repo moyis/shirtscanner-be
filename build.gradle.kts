@@ -40,7 +40,7 @@ val jsoupVersion = "1.23.2"
 val kotlinLoggingVersion = "3.0.5"
 val mockitoKotlinVersion = "6.3.0"
 val restAssuredVersion = "6.0.1"
-val wiremockVersion = "4.2.3"
+val wiremockVersion = "4.4.1"
 
 dependencies {
     // Spring
