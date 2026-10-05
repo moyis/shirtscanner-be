@@ -1,11 +1,12 @@
 name: Sync Gradle lockfile for Dependabot
 
 on:
-  pull_request_target:
-    types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: ["Generate Gradle lockfile for Dependabot"]
+    types: [completed]
 
 concurrency:
-  group: lockfile-sync-${{ github.event.pull_request.number }}
+  group: lockfile-sync-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 permissions:
@@ -13,36 +14,40 @@ permissions:
 
 jobs:
   sync-lockfile:
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && startsWith(github.event.pull_request.head.ref, 'dependabot/gradle/') && github.event.pull_request.base.ref == 'main'
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.actor == 'dependabot[bot]' &&
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/gradle/')
     runs-on: ubuntu-latest
     name: Syncing lockfile
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.workflow_run.head_branch }}
 
-      - name: Setup Java
-        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6
+      - name: Download regenerated lockfile
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
-          distribution: temurin
-          java-version: 25
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6
-
-      - name: Regenerate dependency lockfile
-        run: |
-          ./gradlew dependencies --write-locks --no-daemon
+          name: gradle-lockfile
+          path: gradle.lockfile
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and push lockfile changes
+        env:
+          LOCKFILE_PATH: gradle.lockfile
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          if git diff --exit-code -- gradle.lockfile; then
+          set -euo pipefail
+          if git diff --exit-code -- "$LOCKFILE_PATH"; then
             echo "gradle.lockfile is up to date"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gradle.lockfile
+          git add "$LOCKFILE_PATH"
           git commit -m "chore: sync gradle.lockfile"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push origin "HEAD:$HEAD_BRANCH"
