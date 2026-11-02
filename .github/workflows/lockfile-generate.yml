@@ -23,13 +23,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Java
-        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
         with:
           distribution: temurin
           java-version: 25
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963cec38e04b3d30dcc455b5382be2fdbfb
+        uses: gradle/actions/setup-gradle@c8a326d85724fce2ae59a38810306f4a058f26a4
 
       - name: Regenerate dependency lockfile
         run: |
